@@ -16,6 +16,17 @@ router.post(
   withValidation({ body: userSchemas.login }, asyncHandler(authController.login.bind(authController)))
 );
 
+// Public password-reset flow
+router.post(
+  '/forgot-password',
+  withValidation({ body: userSchemas.forgotPassword }, asyncHandler(authController.forgotPassword.bind(authController)))
+);
+
+router.post(
+  '/reset-password',
+  withValidation({ body: userSchemas.resetPassword }, asyncHandler(authController.resetPassword.bind(authController)))
+);
+
 router.post(
   '/refresh',
   asyncHandler(authController.refresh.bind(authController))

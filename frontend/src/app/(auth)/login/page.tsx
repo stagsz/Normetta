@@ -101,6 +101,12 @@ export default function LoginPage() {
                 />
                 <label htmlFor="remember-me" className="ml-2 text-sm text-[var(--text-muted)]">Remember me</label>
               </div>
+              <Link
+                href="/forgot-password"
+                className="text-sm text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium transition-colors"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
