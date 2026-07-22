@@ -242,8 +242,13 @@ model User {
   betaInvitesCreated BetaInvite[] @relation("BetaInviteCreatedBy")
   betaInviteUsages   BetaInviteUsage[]
 
+  // Password reset (hashed token only; raw token is emailed to the user)
+  resetPasswordToken   String?   @map("reset_password_token")
+  resetPasswordExpires DateTime? @map("reset_password_expires")
+
   @@index([organizationId])
   @@index([emailDomain])
+  @@index([resetPasswordToken])
   @@map("users")
 }
 

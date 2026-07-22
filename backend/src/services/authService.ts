@@ -1,9 +1,11 @@
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../config/database';
 import { config } from '../config';
 import { AuthenticationError, AuthorizationError, ValidationError, NotFoundError } from '../utils/errors';
 import { UserRole } from '../types/enums';
+import { emailService } from './emailService';
 
 interface TokenPayload {
   userId: string;
@@ -34,6 +36,7 @@ interface UserWithOrg {
 
 export class AuthService {
   private static readonly SALT_ROUNDS = 12;
+  private static readonly RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
   /**
    * Register a new user

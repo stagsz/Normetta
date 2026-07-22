@@ -209,6 +209,15 @@ export const userSchemas = {
     currentPassword: z.string().min(1),
     newPassword: z.string().min(8).max(100),
   }),
+
+  // Public password-reset flow
+  forgotPassword: z.object({
+    email: z.string().email('Invalid email'),
+  }),
+  resetPassword: z.object({
+    token: z.string().min(1, 'Reset token is required'),
+    newPassword: z.string().min(8).max(100),
+  }),
 };
 
 // -----------------------------------------------------------------------------
