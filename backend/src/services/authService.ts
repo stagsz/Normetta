@@ -241,6 +241,116 @@ export class AuthService {
   }
 
   /**
+   * Request a password reset. Generates a single-use, time-limited token,
+   * stores only its SHA-256 hash, and emails the raw token as a reset link.
+   * Always resolves (never throws) so the response cannot leak whether an
+   * account exists for the given email.
+   * @returns devResetToken in development for local testing convenience.
+   */
+  async requestPasswordReset(email: string): Promise<{ devResetToken?: string }> {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (user) {
+      const token = crypto.randomBytes(32).toString('hex');
+      const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+      const expiresAt = new Date(Date.now() + AuthService.RESET_TOKEN_TTL_MS);
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          resetPasswordToken: hashedToken,
+          resetPasswordExpires: expiresAt,
+        },
+      });
+
+      const resetUrl = `${config.email.appUrl}/reset-password?token=${token}`;
+      await this.sendPasswordResetEmail(user.email, user.firstName, resetUrl);
+
+      // Dev convenience: surface the raw token so the link can be opened
+      // without a working SMTP server. Never returned in production.
+      if (config.isDevelopment) {
+        return { devResetToken: token };
+      }
+    }
+
+    return {};
+  }
+
+  /**
+   * Complete a password reset. Verifies the (hashed) token and expiry, then
+   * replaces the password hash and consumes the token so it cannot be reused.
+   */
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await prisma.user.findFirst({
+      where: { resetPasswordToken: hashedToken },
+    });
+
+    if (
+      !user ||
+      !user.resetPasswordExpires ||
+      user.resetPasswordExpires < new Date()
+    ) {
+      throw new AuthenticationError('Invalid or expired reset token');
+    }
+
+    const newPasswordHash = await bcrypt.hash(newPassword, AuthService.SALT_ROUNDS);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: newPasswordHash,
+        resetPasswordToken: null,
+        resetPasswordExpires: null,
+      },
+    });
+  }
+
+  /**
+   * Build and send the password-reset email.
+   */
+  private async sendPasswordResetEmail(
+    to: string,
+    firstName: string,
+    resetUrl: string
+  ): Promise<void> {
+    const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
+    const html = `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1f2937;">
+        <div style="text-align: center; padding: 32px 0 16px;">
+          <div style="display: inline-block; width: 56px; height: 56px; border-radius: 14px; background: #0d9488; line-height: 56px; font-size: 26px; color: #fff; font-weight: 700;">A</div>
+        </div>
+        <h1 style="font-size: 20px; text-align: center; color: #0f172a; margin: 0 0 8px;">Reset your AuditFlow password</h1>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6;">${greeting}</p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6;">
+          We received a request to reset the password for your AuditFlow account.
+          This link is valid for <strong>1 hour</strong>. If you didn't request this,
+          you can safely ignore this email — your password won't change.
+        </p>
+        <div style="text-align: center; margin: 28px 0;">
+          <a href="${resetUrl}" style="background: #0d9488; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; display: inline-block;">Reset my password</a>
+        </div>
+        <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">
+          Or paste this link into your browser:<br/>
+          <a href="${resetUrl}" style="color: #0d9488; word-break: break-all;">${resetUrl}</a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 16px;" />
+        <p style="color: #94a3b8; font-size: 12px; text-align: center;">AuditFlow &middot; ISO 9001 Quality Management</p>
+      </div>
+    `;
+
+    const text = `${greeting}\n\nWe received a request to reset your AuditFlow password. This link is valid for 1 hour:\n${resetUrl}\n\nIf you didn't request this, you can ignore this email.`;
+
+    await emailService.sendEmail({
+      to,
+      subject: 'Reset your AuditFlow password',
+      html,
+      text,
+    });
+  }
+
+  /**
    * Generate access and refresh tokens
    */
   private generateTokens(payload: TokenPayload): AuthTokens {
