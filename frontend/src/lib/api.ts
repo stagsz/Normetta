@@ -339,6 +339,8 @@ export const onboardingApi = {
     divisions: { name: string }[];
     departments: { name: string; divisionIndex?: number }[];
     roles: { name: string; permissionLevel: string }[];
+    /** Cloudflare Turnstile token; required by the backend when Turnstile is configured. */
+    turnstileToken?: string;
   }) => api.post('/onboarding/setup', data),
   checkSlug: (slug: string) => api.get(`/onboarding/check-slug/${slug}`),
   setupOrg: (data: {

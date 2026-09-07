@@ -70,6 +70,13 @@ export const config = {
     model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-5',
   },
 
+  // Cloudflare Turnstile (bot challenge on the trial-signup form).
+  // When the secret is unset, verification is skipped and a warning is logged
+  // once, so local dev and tests run without Cloudflare keys.
+  turnstile: {
+    secretKey: process.env.TURNSTILE_SECRET_KEY || '',
+  },
+
   // Email
   email: {
     smtpHost: process.env.SMTP_HOST || '',

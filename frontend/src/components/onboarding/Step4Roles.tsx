@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
+import Turnstile, { turnstileEnabled } from '@/components/Turnstile';
 import { useOnboardingStore, PermissionLevel } from '@/stores/onboardingStore';
 import { onboardingApi } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -22,6 +23,16 @@ export default function Step4Roles() {
   const [inputValue, setInputValue] = useState('');
   const [permissionLevel, setPermissionLevel] = useState<PermissionLevel>('AUDITOR');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Turnstile guards account creation only. Logged-in users hit setup-org,
+  // which is already authenticated, so they get no challenge.
+  const [needsChallenge, setNeedsChallenge] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReset, setTurnstileReset] = useState(0);
+
+  useEffect(() => {
+    setNeedsChallenge(turnstileEnabled && !localStorage.getItem('accessToken'));
+  }, []);
 
   const handleAdd = () => {
     const name = inputValue.trim();
@@ -61,7 +72,11 @@ export default function Step4Roles() {
         const res = await onboardingApi.setupOrg(orgData);
         inviteUrl = res.data.data.inviteUrl ?? '';
       } else {
-        const res = await onboardingApi.setup({ ...store.personal, ...orgData });
+        const res = await onboardingApi.setup({
+          ...store.personal,
+          ...orgData,
+          turnstileToken: turnstileToken ?? undefined,
+        });
         const { user, accessToken, refreshToken } = res.data.data;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
@@ -72,10 +87,17 @@ export default function Step4Roles() {
       store.setInviteUrl(inviteUrl);
       store.setStep(6);
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        'Setup failed. Please try again.';
+      // AppErrors arrive as { success: false, error: { code, message } };
+      // setup-org's inline 401 uses a flat { success: false, message }.
+      const data = (err as { response?: { data?: { error?: { message?: string }; message?: string } } })
+        ?.response?.data;
+      const msg = data?.error?.message ?? data?.message ?? 'Setup failed. Please try again.';
       toast.error(msg);
+      // Turnstile tokens are single-use; issue a fresh one before a retry.
+      if (needsChallenge) {
+        setTurnstileToken(null);
+        setTurnstileReset((n) => n + 1);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -133,11 +155,21 @@ export default function Step4Roles() {
         </ul>
       )}
 
+      {needsChallenge && (
+        <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} className="pt-2" />
+      )}
+
       <div className="flex gap-2 pt-2">
         <Button type="button" variant="outline" className="flex-1" onClick={() => store.setStep(4)}>
           Back
         </Button>
-        <Button type="button" className="flex-1" onClick={handleFinish} loading={isSubmitting}>
+        <Button
+          type="button"
+          className="flex-1"
+          onClick={handleFinish}
+          loading={isSubmitting}
+          disabled={needsChallenge && !turnstileToken}
+        >
           Finish Setup
         </Button>
       </div>

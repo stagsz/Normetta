@@ -6,6 +6,10 @@
 - npm workspaces: `npm install`
 - Backend env: `backend/.env`
 - Frontend env: `frontend/.env.local`
+- Cloudflare Turnstile is optional locally. Leave `TURNSTILE_SECRET_KEY` and
+  `NEXT_PUBLIC_TURNSTILE_SITE_KEY` unset to skip the signup challenge, or use
+  Cloudflare's test keys (site `1x00000000000000000000AA`, secret
+  `1x0000000000000000000000000000000AA`) to exercise the always-pass path.
 
 ## Run
 

@@ -1,9 +1,23 @@
 import { Request, Response } from 'express';
 import { onboardingService } from '../services/onboardingService';
+import { verifyTurnstileToken } from '../services/turnstileService';
+
+type SetupBody = Parameters<typeof onboardingService.setupOrganization>[0] & {
+  turnstileToken?: string;
+};
+
+/** Client IP for Turnstile: Cloudflare header first, then Express (trust proxy is on). */
+function clientIp(req: Request): string | undefined {
+  const cf = req.headers['cf-connecting-ip'];
+  if (typeof cf === 'string' && cf) return cf;
+  return req.ip;
+}
 
 export class OnboardingController {
   async setup(req: Request, res: Response): Promise<void> {
-    const result = await onboardingService.setupOrganization(req.body);
+    const { turnstileToken, ...data } = req.body as SetupBody;
+    await verifyTurnstileToken(turnstileToken, clientIp(req));
+    const result = await onboardingService.setupOrganization(data);
     res.status(201).json({ success: true, data: result });
   }
 

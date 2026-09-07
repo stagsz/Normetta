@@ -181,12 +181,21 @@ DATABASE_URL          # Supabase connection pooling URL
 DIRECT_URL            # Supabase direct connection URL (for migrations)
 JWT_SECRET            # JWT signing secret
 NODE_ENV              # production
+TURNSTILE_SECRET_KEY  # Cloudflare Turnstile secret; unset = signup bot check disabled (warning logged)
 ```
 
 ### Frontend (Vercel env)
 ```
-NEXT_PUBLIC_API_URL   # Backend API base URL
+NEXT_PUBLIC_API_URL             # Backend API base URL
+NEXT_PUBLIC_TURNSTILE_SITE_KEY  # Cloudflare Turnstile site key; unset = widget hidden
 ```
+
+### Turnstile on signup
+- Widget renders in the last onboarding step (`Step4Roles.tsx`), only for the
+  new-account path. Token is sent as `turnstileToken` with `POST /onboarding/setup`.
+- Backend verifies in `onboardingController.setup` via `services/turnstileService.ts`
+  before any account is created. Rejected token = 403, Cloudflare unreachable = 503.
+- Both keys must be set together in Vercel or signups fail with "Human verification required".
 
 ---
 

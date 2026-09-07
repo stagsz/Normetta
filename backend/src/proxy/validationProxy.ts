@@ -312,6 +312,10 @@ export const onboardingSchemas = {
         permissionLevel: z.enum(['MANAGER', 'AUDITOR', 'DEPT_HEAD', 'VIEWER']),
       })
     ),
+    // Cloudflare Turnstile response token. Required by the controller when
+    // TURNSTILE_SECRET_KEY is configured; optional at the schema level so
+    // environments without Turnstile keep working.
+    turnstileToken: z.string().max(4096).optional(),
   }),
   setupOrg: z.object({
     company: z.object({
