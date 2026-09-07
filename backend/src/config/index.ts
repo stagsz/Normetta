@@ -75,6 +75,12 @@ export const config = {
   // once, so local dev and tests run without Cloudflare keys.
   turnstile: {
     secretKey: process.env.TURNSTILE_SECRET_KEY || '',
+    // Hostnames the widget may be served from. Cloudflare echoes the page
+    // hostname in the siteverify response; anything else is rejected.
+    allowedHostnames: (process.env.TURNSTILE_ALLOWED_HOSTNAMES || 'normetta.com,www.normetta.com')
+      .split(',')
+      .map((h) => h.trim().toLowerCase())
+      .filter(Boolean),
   },
 
   // Email

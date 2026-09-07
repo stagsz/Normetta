@@ -20,8 +20,12 @@ const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render
 export const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
 export const turnstileEnabled = TURNSTILE_SITE_KEY.length > 0;
 
+/** Must match TURNSTILE_SIGNUP_ACTION on the backend; siteverify echoes it. */
+export const TURNSTILE_SIGNUP_ACTION = 'signup';
+
 interface TurnstileRenderOptions {
   sitekey: string;
+  action?: string;
   callback: (token: string) => void;
   'expired-callback'?: () => void;
   'error-callback'?: () => void;
@@ -63,6 +67,7 @@ export default function Turnstile({ onToken, resetKey = 0, className }: Turnstil
     if (!el || !api || widgetIdRef.current !== null) return;
     widgetIdRef.current = api.render(el, {
       sitekey: TURNSTILE_SITE_KEY,
+      action: TURNSTILE_SIGNUP_ACTION,
       theme: 'auto',
       size: 'flexible',
       callback: (token) => onTokenRef.current(token),
