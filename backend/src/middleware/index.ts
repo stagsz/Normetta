@@ -1,1 +1,0 @@
-export { tenantContext } from './tenantContext';
