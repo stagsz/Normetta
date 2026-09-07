@@ -1,0 +1,462 @@
+/* ══════════════════════════════════════════════════════════
+   Editorial Dashboard — Brutalist / Magazine Layout
+   ══════════════════════════════════════════════════════════ */
+
+:root {
+  --ed-bg-dark: #070707;
+  --ed-yellow: #FFC000;
+  --ed-red: #F23A12;
+  --ed-white: #F4F4F4;
+  --ed-text-dark: #1A1A1A;
+  --ed-text-light: #E0E0E0;
+  --ed-border-subtle: rgba(26, 26, 26, 0.1);
+  --ed-arch-width: 340px;
+  --ed-arch-radius: calc(var(--ed-arch-width) / 2);
+  --ed-shadow-soft: 0 24px 48px rgba(0, 0, 0, 0.6);
+  --ed-shadow-card: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Canvas grid ── */
+.ed-canvas {
+  display: grid;
+  grid-template-columns: var(--ed-arch-width) 1fr var(--ed-arch-width);
+  gap: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+}
+
+/* ── Shared module base ── */
+.ed-module {
+  position: relative;
+  box-shadow: var(--ed-shadow-soft);
+  color: var(--ed-text-dark);
+}
+
+/* ── Meta tag (small mono labels) ── */
+.ed-meta {
+  font-family: var(--font-space-mono), 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+/* ── Superscript clause numbers ── */
+.ed-sup {
+  font-family: var(--font-space-mono), 'Space Mono', monospace;
+  font-size: 0.6rem;
+  margin-left: 2px;
+  position: relative;
+  top: -0.5em;
+}
+
+/* ── STATUS TICKET (yellow header bar) ── */
+.ed-ticket {
+  background-color: var(--ed-yellow);
+  grid-column: 1 / 3;
+  padding: 2.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.ed-ticket::before {
+  content: '';
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-color: var(--ed-bg-dark);
+  border-radius: 50%;
+}
+
+.ed-ticket__title-area {
+  margin-left: 2rem;
+}
+
+.ed-ticket h1 {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+  color: var(--ed-text-dark);
+}
+
+.ed-ticket h1 em {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-style: italic;
+}
+
+.ed-ticket__score {
+  text-align: right;
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+}
+
+.ed-ticket__score-number {
+  font-size: 3.5rem;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  color: var(--ed-text-dark);
+}
+
+/* ── NAV ARCH (left pill nav) ── */
+.ed-nav-arch {
+  background-color: var(--ed-white);
+  width: var(--ed-arch-width);
+  border-radius: 0 0 var(--ed-arch-radius) var(--ed-arch-radius);
+  padding: 3rem;
+  padding-bottom: 6rem;
+  z-index: 5;
+  margin-top: -1rem;
+  height: max-content;
+  position: relative;
+}
+
+.ed-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 0;
+}
+
+.ed-nav-list li a {
+  text-decoration: none;
+  color: var(--ed-text-dark);
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  display: block;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  letter-spacing: -0.03em;
+}
+
+.ed-nav-list li a:hover {
+  opacity: 0.6;
+  transform: translateX(4px);
+}
+
+.ed-nav-list li:nth-child(even) a {
+  font-style: italic;
+}
+
+.ed-nav-list li.active a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.ed-nav-arch__bottom-meta {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ── ASSESSMENT BOARD (main content) ── */
+.ed-board {
+  background-color: var(--ed-white);
+  padding: 3rem;
+  margin-top: -2rem;
+  z-index: 4;
+  min-height: 600px;
+}
+
+.ed-board__header {
+  border-bottom: 1px solid var(--ed-border-subtle);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ed-board__header h2 {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ed-text-dark);
+}
+
+/* ── CHECK ITEM rows ── */
+.ed-check-item {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--ed-border-subtle);
+  align-items: flex-start;
+}
+
+.ed-check-item:last-child {
+  border-bottom: none;
+}
+
+.ed-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--ed-text-dark);
+  margin-top: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.ed-checkbox:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
+}
+
+.ed-checkbox.done {
+  background: var(--ed-text-dark);
+}
+
+.ed-check-content h3 {
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--ed-text-dark);
+}
+
+.ed-check-content p {
+  font-size: 0.85rem;
+  color: rgba(26, 26, 26, 0.7);
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+/* ── Status badges ── */
+.ed-badge {
+  font-family: var(--font-space-mono), 'Space Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--ed-text-dark);
+  text-transform: uppercase;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.ed-badge--review {
+  border-style: dashed;
+}
+
+.ed-badge--action {
+  border-color: var(--ed-red);
+  color: var(--ed-red);
+}
+
+.ed-badge--compliant {
+  border-color: var(--ed-text-dark);
+  color: var(--ed-text-dark);
+}
+
+/* ── METRIC ARCH (right red pill) ── */
+.ed-metric-arch {
+  background-color: var(--ed-red);
+  width: var(--ed-arch-width);
+  border-radius: 0 0 var(--ed-arch-radius) var(--ed-arch-radius);
+  padding: 3rem;
+  padding-bottom: 8rem;
+  z-index: 6;
+  margin-top: 4rem;
+  position: relative;
+  overflow: hidden;
+  height: max-content;
+}
+
+.ed-metric-arch .ed-meta {
+  margin-bottom: 2rem;
+  display: block;
+}
+
+.ed-massive-number {
+  font-family: var(--font-sans, 'Inter'), sans-serif;
+  font-weight: 800;
+  font-size: 16rem;
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+  color: rgba(26, 26, 26, 0.95);
+  margin-left: -2rem;
+  position: relative;
+  z-index: 2;
+  user-select: none;
+}
+
+.ed-metric-label {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 2rem;
+  font-style: italic;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 2;
+  color: var(--ed-text-dark);
+}
+
+.ed-metric-arch__bottom-meta {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+}
+
+/* ── Back link (top-left) ── */
+.ed-back-link {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  z-index: 100;
+  font-family: var(--font-space-mono), 'Space Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ed-text-light);
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ed-back-link:hover {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .ed-canvas {
+    grid-template-columns: var(--ed-arch-width) 1fr;
+  }
+
+  .ed-metric-arch {
+    grid-column: 2;
+    border-radius: var(--ed-arch-radius) var(--ed-arch-radius) 0 0;
+    margin-top: -2rem;
+    padding-bottom: 3rem;
+    padding-top: 8rem;
+  }
+
+  .ed-massive-number {
+    font-size: 12rem;
+  }
+}
+
+@media (max-width: 860px) {
+  :root {
+    --ed-arch-width: 280px;
+  }
+
+  .ed-canvas {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .ed-ticket {
+    grid-column: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .ed-ticket__score {
+    text-align: left;
+  }
+
+  .ed-nav-arch {
+    width: 100%;
+    border-radius: 0 0 2rem 2rem;
+    margin-top: 0;
+    padding: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .ed-nav-list li a {
+    font-size: 1.6rem;
+  }
+
+  .ed-nav-arch__bottom-meta {
+    position: static;
+    transform: none;
+    margin-top: 2rem;
+  }
+
+  .ed-board {
+    margin-top: 0;
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .ed-metric-arch {
+    width: 100%;
+    grid-column: 1;
+    border-radius: 2rem 2rem 0 0;
+    margin-top: 0;
+    padding: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .ed-massive-number {
+    font-size: 10rem;
+    margin-left: -1rem;
+  }
+
+  .ed-metric-arch__bottom-meta {
+    position: static;
+    margin-top: 2rem;
+  }
+
+  .ed-check-item {
+    grid-template-columns: 24px 1fr;
+    gap: 1rem;
+  }
+
+  .ed-badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ── Entrance animations ── */
+@keyframes ed-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ed-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ed-animate-in {
+  animation: ed-slide-up 0.6s ease-out both;
+}
+
+.ed-animate-in-delay-1 {
+  animation: ed-slide-up 0.6s ease-out 0.1s both;
+}
+
+.ed-animate-in-delay-2 {
+  animation: ed-slide-up 0.6s ease-out 0.2s both;
+}
+
+.ed-animate-in-delay-3 {
+  animation: ed-slide-up 0.6s ease-out 0.3s both;
+}

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISO 9001 — Editorial Overview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070707;
+            --primary-yellow: #FFC000;
+            --primary-red: #F23A12;
+            --primary-white: #F4F4F4;
+            --text-dark: #1A1A1A;
+            --text-light: #E0E0E0;
+            --border-subtle: rgba(26, 26, 26, 0.1);
+            --font-serif: 'Playfair Display', serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-sans: 'Inter', sans-serif;
+            --arch-width: 340px;
+            --arch-radius: calc(var(--arch-width) / 2);
+            --shadow-soft: 0 24px 48px rgba(0, 0, 0, 0.6);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 4rem 2rem;
+            overflow-x: hidden;
+        }
+
+        /* ── Back link ── */
+        .back-link {
+            position: fixed; top: 2rem; left: 2rem; z-index: 100;
+            font-family: var(--font-mono); font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-light); text-decoration: none;
+            opacity: 0.5; transition: opacity 0.3s;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .back-link:hover { opacity: 1; }
+        .back-link svg { width: 14px; height: 14px; }
+
+        /* ── Canvas ── */
+        .dashboard-canvas {
+            display: grid;
+            grid-template-columns: var(--arch-width) 1fr var(--arch-width);
+            gap: 2rem;
+            max-width: 1400px;
+            width: 100%;
+        }
+        .module { position: relative; box-shadow: var(--shadow-soft); color: var(--text-dark); }
+        .meta-tag { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
+        sup { font-family: var(--font-mono); font-size: 0.6rem; margin-left: 2px; top: -0.5em; }
+
+        /* ── STATUS TICKET ── */
+        .status-ticket {
+            background-color: var(--primary-yellow); grid-column: 1 / 3;
+            padding: 2.5rem 3rem; display: flex; justify-content: space-between;
+            align-items: center; z-index: 10; animation: slide-up 0.6s ease-out both;
+        }
+        .status-ticket::before {
+            content: ''; position: absolute; left: 2rem; top: 50%;
+            transform: translateY(-50%); width: 14px; height: 14px;
+            background-color: var(--bg-dark); border-radius: 50%;
+        }
+        .status-ticket .title-area { margin-left: 2rem; }
+        .status-ticket h1 { font-family: var(--font-serif); font-weight: 400; font-size: 2.5rem; letter-spacing: -0.02em; }
+        .status-ticket h1 i { font-family: var(--font-serif); font-style: italic; }
+        .progress-indicator { text-align: right; font-family: var(--font-serif); }
+        .progress-indicator .score { font-size: 3.5rem; line-height: 1; font-weight: 400; letter-spacing: -0.05em; }
+
+        /* ── NAV ARCH ── */
+        .nav-arch {
+            background-color: var(--primary-white); width: var(--arch-width);
+            border-radius: 0 0 var(--arch-radius) var(--arch-radius);
+            padding: 3rem; padding-bottom: 6rem; z-index: 5; margin-top: -1rem;
+            height: max-content; animation: slide-up 0.6s ease-out 0.1s both;
+        }
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+        .nav-list li a {
+            text-decoration: none; color: var(--text-dark);
+            font-family: var(--font-serif); font-size: 2.2rem; line-height: 1.1;
+            display: block; transition: opacity 0.3s, transform 0.2s;
+            letter-spacing: -0.03em; cursor: pointer;
+        }
+        .nav-list li a:hover { opacity: 0.6; transform: translateX(4px); }
+        .nav-list li:nth-child(even) a { font-style: italic; }
+        .nav-list li.active a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+        .nav-arch .bottom-meta { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); }
+
+        /* ── ASSESSMENT BOARD ── */
+        .assessment-board {
+            background-color: var(--primary-white); padding: 3rem;
+            margin-top: -2rem; z-index: 4; min-height: 600px;
+            animation: slide-up 0.6s ease-out 0.2s both;
+        }
+        .board-header {
+            border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;
+            margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: baseline;
+        }
+        .board-header h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; }
+        .check-item {
+            display: grid; grid-template-columns: 24px 1fr auto;
+            gap: 1.5rem; padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-subtle); align-items: flex-start;
+        }
+        .check-item:last-child { border-bottom: none; }
+        .check-box {
+            width: 20px; height: 20px; border: 1px solid var(--text-dark);
+            margin-top: 2px; cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .check-box:hover { background: rgba(0,0,0,0.05); transform: scale(1.1); }
+        .check-box.done { background: var(--text-dark); }
+        .check-content h3 { font-family: var(--font-sans); font-weight: 500; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .check-content p { font-family: var(--font-sans); font-size: 0.85rem; color: rgba(26, 26, 26, 0.7); line-height: 1.5; max-width: 400px; }
+        .status-badge {
+            font-family: var(--font-mono); font-size: 0.7rem;
+            padding: 0.25rem 0.5rem; border: 1px solid var(--text-dark);
+            text-transform: uppercase; white-space: nowrap; height: fit-content;
+        }
+        .status-badge.review { border-style: dashed; }
+        .status-badge.action { border-color: var(--primary-red); color: var(--primary-red); }
+
+        /* ── METRIC ARCH ── */
+        .metric-arch {
+            background-color: var(--primary-red); width: var(--arch-width);
+            border-radius: 0 0 var(--arch-radius) var(--arch-radius);
+            padding: 3rem; padding-bottom: 8rem; z-index: 6;
+            margin-top: 4rem; overflow: hidden; height: max-content;
+            animation: slide-up 0.6s ease-out 0.3s both;
+        }
+        .metric-arch .meta-tag { margin-bottom: 2rem; display: block; }
+        .massive-number {
+            font-family: var(--font-sans); font-weight: 800;
+            font-size: 16rem; line-height: 0.8; letter-spacing: -0.08em;
+            color: rgba(26, 26, 26, 0.95); margin-left: -2rem; z-index: 2;
+            transition: all 0.4s ease;
+        }
+        .metric-label {
+            font-family: var(--font-serif); font-size: 2rem;
+            font-style: italic; margin-top: 1rem; z-index: 2; color: var(--text-dark);
+        }
+        .metric-arch .bottom-meta { position: absolute; bottom: 3rem; left: 3rem; }
+
+        /* ── Animations ── */
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1200px) {
+            .dashboard-canvas { grid-template-columns: var(--arch-width) 1fr; }
+            .metric-arch {
+                grid-column: 2; border-radius: var(--arch-radius) var(--arch-radius) 0 0;
+                margin-top: -2rem; padding-bottom: 3rem; padding-top: 8rem;
+            }
+            .massive-number { font-size: 12rem; }
+        }
+        @media (max-width: 860px) {
+            :root { --arch-width: 280px; }
+            .dashboard-canvas { grid-template-columns: 1fr; gap: 1rem; }
+            .status-ticket { grid-column: 1; flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 2rem; }
+            .progress-indicator { text-align: left; }
+            .nav-arch { width: 100%; border-radius: 0 0 2rem 2rem; margin-top: 0; padding: 2rem 2rem 3rem; }
+            .nav-list li a { font-size: 1.6rem; }
+            .nav-arch .bottom-meta { position: static; transform: none; margin-top: 2rem; }
+            .assessment-board { margin-top: 0; padding: 2rem; min-height: auto; }
+            .metric-arch {
+                width: 100%; grid-column: 1; border-radius: 2rem 2rem 0 0;
+                margin-top: 0; padding: 2rem 2rem 4rem; padding-top: 4rem;
+            }
+            .massive-number { font-size: 10rem; margin-left: -1rem; }
+            .metric-arch .bottom-meta { position: static; margin-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <a href="/dashboard" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Dashboard
+    </a>
+
+    <div class="dashboard-canvas" id="app">
+        <!-- STATUS TICKET -->
+        <header class="module status-ticket">
+            <div class="title-area">
+                <span class="meta-tag">ISO 9001:2015</span>
+                <h1>Quality <i>Management</i></h1>
+            </div>
+            <div class="progress-indicator">
+                <span class="meta-tag">Readiness Score</span>
+                <div class="score" id="score">74<sup>%</sup></div>
+            </div>
+        </header>
+
+        <!-- NAV ARCH -->
+        <aside class="module nav-arch">
+            <span class="meta-tag">Clauses 04-10</span>
+            <ul class="nav-list" id="nav-list">
+                <li data-clause="ctx"><a href="#">Context<sup>04</sup></a></li>
+                <li data-clause="ldr"><a href="#">Leadership<sup>05</sup></a></li>
+                <li data-clause="pln"><a href="#">Planning<sup>06</sup></a></li>
+                <li data-clause="sup" class="active"><a href="#">Support<sup>07</sup></a></li>
+                <li data-clause="ops"><a href="#">Operation<sup>08</sup></a></li>
+                <li data-clause="evl"><a href="#">Evaluation<sup>09</sup></a></li>
+                <li data-clause="imp"><a href="#">Improvement<sup>10</sup></a></li>
+            </ul>
+            <span class="meta-tag bottom-meta">Auditor_Req</span>
+        </aside>
+
+        <!-- ASSESSMENT BOARD -->
+        <main class="module assessment-board" id="board"></main>
+
+        <!-- METRIC ARCH -->
+        <aside class="module metric-arch">
+            <span class="meta-tag">Non-Conformities</span>
+            <div class="massive-number" id="open-count">8</div>
+            <div class="metric-label">Open Actions</div>
+            <span class="meta-tag bottom-meta">Critical_Path</span>
+        </aside>
+    </div>
+
+    <script>
+        // ── Data ──
+        const clauseData = {
+            ctx: {
+                title: 'Clause 04', italic: 'Context', meta: 'Organizational Context',
+                items: [
+                    { id: 'c4-1', title: '4.1 Understanding the Organization', desc: "Determine external and internal issues relevant to the organization's purpose and strategic direction.", status: 'compliant', done: true },
+                    { id: 'c4-2', title: '4.2 Interested Parties', desc: 'Determine the interested parties relevant to the QMS and the requirements of these interested parties.', status: 'compliant', done: true },
+                    { id: 'c4-3', title: '4.3 Scope of the QMS', desc: 'Determine the boundaries and applicability of the QMS to establish its scope.', status: 'review', done: false },
+                    { id: 'c4-4', title: '4.4 QMS and Its Processes', desc: 'Establish, implement, maintain and continually improve a QMS, including the processes needed.', status: 'action', done: false },
+                ]
+            },
+            ldr: {
+                title: 'Clause 05', italic: 'Leadership', meta: 'Leadership Commitment',
+                items: [
+                    { id: 'c5-1', title: '5.1.1 Leadership & Commitment', desc: 'Top management shall demonstrate leadership and commitment with respect to the QMS.', status: 'compliant', done: true },
+                    { id: 'c5-2', title: '5.1.2 Customer Focus', desc: 'Ensure customer and applicable statutory/regulatory requirements are determined and met.', status: 'review', done: false },
+                    { id: 'c5-3', title: '5.2 Quality Policy', desc: 'Establish, implement, and maintain a quality policy appropriate to the purpose of the organization.', status: 'compliant', done: true },
+                    { id: 'c5-4', title: '5.3 Roles & Authorities', desc: 'Ensure responsibilities and authorities for relevant roles are assigned and communicated.', status: 'action', done: false },
+                ]
+            },
+            pln: {
+                title: 'Clause 06', italic: 'Planning', meta: 'Risk-Based Thinking',
+                items: [
+                    { id: 'c6-1', title: '6.1 Actions to Address Risks', desc: 'Determine the risks and opportunities that need to be addressed.', status: 'review', done: false },
+                    { id: 'c6-2', title: '6.2 Quality Objectives', desc: 'Establish quality objectives at relevant functions, levels and processes.', status: 'compliant', done: true },
+                    { id: 'c6-3', title: '6.3 Planning of Changes', desc: 'Changes shall be carried out in a planned manner.', status: 'action', done: false },
+                ]
+            },
+            sup: {
+                title: 'Clause 07', italic: 'Support', meta: 'Resource Allocation',
+                items: [
+                    { id: 'c7-1', title: '7.1.1 General Resources', desc: 'Determine and provide resources needed for the establishment, implementation, maintenance and continual improvement of the QMS.', status: 'compliant', done: true },
+                    { id: 'c7-2', title: '7.1.2 People', desc: 'Determine and provide the persons necessary for the effective implementation of its QMS and for the operation and control of its processes.', status: 'review', done: false },
+                    { id: 'c7-3', title: '7.1.3 Infrastructure', desc: 'Determine, provide and maintain the infrastructure necessary for the operation of processes.', status: 'compliant', done: true },
+                    { id: 'c7-5', title: '7.1.5 Monitoring & Measuring', desc: 'Determine and provide the resources needed to ensure valid and reliable results when monitoring or measuring.', status: 'action', done: false },
+                ]
+            },
+            ops: {
+                title: 'Clause 08', italic: 'Operation', meta: 'Operational Planning',
+                items: [
+                    { id: 'c8-1', title: '8.1 Operational Planning & Control', desc: 'Plan, implement and control the processes needed for the provision of products and services.', status: 'compliant', done: true },
+                    { id: 'c8-2', title: '8.2 Requirements for Products & Services', desc: 'Establish processes for communicating with customers and determining requirements.', status: 'compliant', done: true },
+                    { id: 'c8-4', title: '8.4 Control of External Processes', desc: 'Ensure that externally provided processes, products and services conform to requirements.', status: 'review', done: false },
+                    { id: 'c8-5', title: '8.5 Production & Service Provision', desc: 'Implement production and service provision under controlled conditions.', status: 'action', done: false },
+                ]
+            },
+            evl: {
+                title: 'Clause 09', italic: 'Evaluation', meta: 'Performance Evaluation',
+                items: [
+                    { id: 'c9-1', title: '9.1 Monitoring & Measurement', desc: 'Determine what needs to be monitored and measured.', status: 'review', done: false },
+                    { id: 'c9-2', title: '9.2 Internal Audit', desc: 'Conduct internal audits at planned intervals.', status: 'compliant', done: true },
+                    { id: 'c9-3', title: '9.3 Management Review', desc: "Review the organization's QMS at planned intervals.", status: 'compliant', done: true },
+                ]
+            },
+            imp: {
+                title: 'Clause 10', italic: 'Improvement', meta: 'Continual Improvement',
+                items: [
+                    { id: 'c10-1', title: '10.1 General', desc: 'Determine and select opportunities for improvement.', status: 'compliant', done: true },
+                    { id: 'c10-2', title: '10.2 Nonconformity & Corrective Action', desc: 'When a nonconformity occurs, react to it and evaluate the need for action.', status: 'review', done: false },
+                    { id: 'c10-3', title: '10.3 Continual Improvement', desc: 'Continually improve the suitability, adequacy and effectiveness of the QMS.', status: 'action', done: false },
+                ]
+            }
+        };
+
+        let activeClause = 'sup';
+
+        // ── Compute ──
+        function computeScore() {
+            let total = 0, done = 0;
+            for (const c of Object.values(clauseData)) {
+                for (const q of c.items) { total++; if (q.done) done++; }
+            }
+            return total > 0 ? Math.round((done / total) * 100) : 0;
+        }
+
+        function countOpen() {
+            let count = 0;
+            for (const c of Object.values(clauseData)) {
+                for (const q of c.items) { if (!q.done) count++; }
+            }
+            return count;
+        }
+
+        // ── Render ──
+        function renderBoard() {
+            const d = clauseData[activeClause];
+            const board = document.getElementById('board');
+            board.innerHTML = `
+                <div class="board-header">
+                    <h2>${d.title}: <i>${d.italic}</i></h2>
+                    <span class="meta-tag">${d.meta}</span>
+                </div>
+                <div class="checklist">
+                    ${d.items.map(item => `
+                        <div class="check-item">
+                            <div class="check-box ${item.done ? 'done' : ''}"
+                                 tabindex="0" role="checkbox" aria-checked="${item.done}"
+                                 data-id="${item.id}"></div>
+                            <div class="check-content">
+                                <h3>${item.title}</h3>
+                                <p>${item.desc}</p>
+                            </div>
+                            <div class="status-badge ${item.status === 'review' ? 'review' : ''} ${item.status === 'action' ? 'action' : ''}">
+                                ${item.status === 'compliant' ? 'Compliant' : item.status === 'review' ? 'Review' : 'Action'}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Checkbox handlers
+            board.querySelectorAll('.check-box').forEach(box => {
+                const handler = () => {
+                    const id = box.dataset.id;
+                    const item = d.items.find(i => i.id === id);
+                    if (item) {
+                        item.done = !item.done;
+                        if (item.done) item.status = 'compliant';
+                        updateMetrics();
+                        renderBoard();
+                    }
+                };
+                box.addEventListener('click', handler);
+                box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
+            });
+        }
+
+        function updateMetrics() {
+            document.getElementById('score').innerHTML = computeScore() + '<sup>%</sup>';
+            const openEl = document.getElementById('open-count');
+            openEl.textContent = countOpen();
+        }
+
+        // ── Nav handlers ──
+        document.getElementById('nav-list').addEventListener('click', e => {
+            const link = e.target.closest('a');
+            if (!link) return;
+            e.preventDefault();
+            const li = link.closest('li');
+            const clause = li.dataset.clause;
+            if (!clause || !clauseData[clause]) return;
+            activeClause = clause;
+            document.querySelectorAll('#nav-list li').forEach(el => el.classList.remove('active'));
+            li.classList.add('active');
+            renderBoard();
+        });
+
+        // ── Init ──
+        renderBoard();
+        updateMetrics();
+    </script>
+</body>
+</html>

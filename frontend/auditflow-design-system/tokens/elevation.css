@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Normetta — Elevation: radii, borders, shadows  ·  dark "precision" theme
+   Depth on dark is built from three layers:
+     1. a 1px inset top highlight (the specular "gloss" edge)
+     2. a tight contact shadow
+     3. a wide ambient shadow (+ optional brand glow on interactive pieces)
+   ========================================================================== */
+
+:root {
+  /* Corner radii — precise, not pill-soft */
+  --radius-xs:   3px;
+  --radius-sm:   5px;
+  --radius-md:   8px;    /* default card / control */
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-pill: 999px;
+
+  /* Border widths */
+  --border-hairline: 1px;
+  --border-thick:    1.5px;
+
+  /* Specular top edge — include FIRST in any composed shadow for gloss */
+  --gloss: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  /* Shadows — layered ink, always paired with the gloss inset */
+  --shadow-xs: var(--gloss),
+               0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-sm: var(--gloss),
+               0 1px 2px rgba(0, 0, 0, 0.35),
+               0 3px 8px rgba(0, 0, 0, 0.28);
+  --shadow-md: var(--gloss),
+               0 2px 4px rgba(0, 0, 0, 0.35),
+               0 10px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: var(--gloss),
+               0 4px 8px rgba(0, 0, 0, 0.4),
+               0 24px 56px rgba(0, 0, 0, 0.5);
+  --shadow-focus: var(--ring);
+
+  /* Brand glow — add to hover states of interactive / hero elements */
+  --shadow-glow:    0 8px 24px rgba(20, 184, 166, 0.18);
+  --shadow-glow-lg: 0 12px 40px rgba(20, 184, 166, 0.28);
+
+  /* Inset for sunken wells / inputs */
+  --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);   /* @kind other */
+  --ease-emphasized: cubic-bezier(0.2, 0.7, 0.3, 1); /* @kind other */
+  --dur-fast:   120ms;  /* @kind other */
+  --dur-medium: 200ms;  /* @kind other */
+  --dur-slow:   320ms;  /* @kind other */
+}
+
+/* Light theme — soft ink-tinted shadows; the specular edge brightens */
+[data-theme='light'] {
+  --gloss: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+
+  --shadow-xs: var(--gloss),
+               0 1px 2px rgba(20, 35, 31, 0.06);
+  --shadow-sm: var(--gloss),
+               0 1px 2px rgba(20, 35, 31, 0.06),
+               0 3px 8px rgba(20, 35, 31, 0.06);
+  --shadow-md: var(--gloss),
+               0 2px 4px rgba(20, 35, 31, 0.05),
+               0 10px 24px rgba(20, 35, 31, 0.09);
+  --shadow-lg: var(--gloss),
+               0 4px 8px rgba(20, 35, 31, 0.06),
+               0 24px 56px rgba(20, 35, 31, 0.14);
+
+  --shadow-glow:    0 8px 24px rgba(15, 118, 110, 0.14);
+  --shadow-glow-lg: 0 12px 40px rgba(15, 118, 110, 0.20);
+
+  --shadow-inset: inset 0 1px 3px rgba(20, 35, 31, 0.10);
+}

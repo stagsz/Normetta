@@ -1,0 +1,553 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// PostgreSQL native enums for type safety at the database level
+enum UserRole {
+  SYSTEM_ADMIN
+  QUALITY_MANAGER
+  INTERNAL_AUDITOR
+  DEPARTMENT_HEAD
+  VIEWER
+}
+
+enum AssessmentStatus {
+  DRAFT
+  IN_PROGRESS
+  UNDER_REVIEW
+  COMPLETED
+  ARCHIVED
+}
+
+enum AuditType {
+  INTERNAL
+  EXTERNAL
+  SURVEILLANCE
+  CERTIFICATION
+}
+
+enum TeamMemberRole {
+  LEAD_AUDITOR
+  AUDITOR
+  OBSERVER
+}
+
+enum Severity {
+  MINOR
+  MAJOR
+  CRITICAL
+}
+
+enum NCRStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum ActionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  VERIFIED
+}
+
+enum PermissionLevel {
+  ADMIN
+  MANAGER
+  AUDITOR
+  DEPT_HEAD
+  VIEWER
+}
+
+enum InviteStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BetaInviteStatus {
+  ACTIVE
+  EXPIRED
+  USED_UP
+  REVOKED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum EvidenceType {
+  DOCUMENT
+  IMAGE
+  LINK
+}
+
+// Organization readiness profile — captured during onboarding, used to
+// tailor recommended assessment scope and guidance depth.
+enum CompanySize {
+  MICRO  // 1-10 employees
+  SMALL  // 11-50
+  MEDIUM // 51-200
+  LARGE  // 200+
+}
+
+enum QMSStatus {
+  NONE       // no quality management system yet
+  BUILDING   // actively building one
+  INFORMAL   // informal/ad-hoc practices, not documented
+  DOCUMENTED // documented QMS in place
+}
+
+enum CertificationStatus {
+  NOT_CERTIFIED
+  IN_PROGRESS
+  CERTIFIED_SURVEILLANCE  // certified, awaiting/undergoing surveillance audit
+  CERTIFIED_RECERTIFYING  // certified, due for recertification
+}
+
+enum StandardsKnowledgeLevel {
+  NONE
+  BASIC
+  TRAINED
+  CERTIFIED_AUDITOR
+}
+
+model Organization {
+  id            String   @id @default(uuid())
+  name          String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  slug          String?  @unique
+  setupComplete Boolean  @default(false)
+  industry      String?
+  country       String?
+  allowedDomains Json?   @default("[]")
+
+  users         User[]
+  assessments   Assessment[]
+  templates     AssessmentTemplate[]
+  divisions     Division[]
+  departments   Department[]
+  orgRoles      OrgRole[]
+  invites       UserOrgInvite[]
+  betaInvites   BetaInvite[]
+  profile       OrganizationProfile?
+
+  @@map("organizations")
+}
+
+model OrganizationProfile {
+  id                      String                   @id @default(uuid())
+  companySize             CompanySize?             @map("company_size")
+  qmsStatus               QMSStatus?                @map("qms_status")
+  certificationStatus     CertificationStatus?     @map("certification_status")
+  lastAuditSummary        String?                  @map("last_audit_summary") // free text: when it was + how it went
+  improvementNotes        String?                  @map("improvement_notes") // free text: what they want to improve
+  standardsKnowledgeLevel StandardsKnowledgeLevel? @map("standards_knowledge_level")
+  hoursPerWeek            Int?                     @map("hours_per_week")
+
+  // Reserved for the future AI-interview phase — structured extraction from
+  // the free-text answers above (priority clauses, pain points, etc.) and
+  // the interview transcript. Unused until that phase ships.
+  aiProfile               Json?                    @map("ai_profile")
+  interviewTranscript     Json?                    @map("interview_transcript")
+
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               DateTime                 @updatedAt @map("updated_at")
+
+  organizationId          String                   @unique @map("organization_id")
+  organization            Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_profiles")
+}
+
+model AssessmentTemplate {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  isDefault     Boolean  @default(false)
+
+  // Section selection for shorter assessments
+  // If null, includes all sections (full assessment)
+  includedClauses  Json?  // Array of clause numbers, e.g., ["4", "5", "8"]
+  includedSections Json?  // Array of specific section IDs for granular control
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  assessments    Assessment[]
+
+  @@index([organizationId])
+  @@map("assessment_templates")
+}
+
+model ISOStandardSection {
+  id            String   @id @default(uuid())
+  sectionNumber String   @unique
+  title         String
+  description   String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  parentId      String?
+  parent        ISOStandardSection?  @relation("SectionHierarchy", fields: [parentId], references: [id])
+  children      ISOStandardSection[] @relation("SectionHierarchy")
+
+  questions     AuditQuestion[]
+  responses     QuestionResponse[]
+
+  @@index([parentId])
+  @@map("iso_standard_sections")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  emailDomain     String   @default("") @db.VarChar(255)
+  passwordHash    String
+  firstName       String
+  lastName        String
+  role            UserRole  @default(VIEWER)
+  isActive        Boolean   @default(true)
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  assessments       Assessment[]
+  responses         QuestionResponse[]
+  teamMemberships   AssessmentTeamMember[]
+  uploadedEvidence  Evidence[]
+  assignedActions   CorrectiveAction[] @relation("AssignedActions")
+  verifiedActions   CorrectiveAction[] @relation("VerifiedActions")
+  refreshToken      String?
+  orgRoleId         String?
+  orgRole           OrgRole?       @relation(fields: [orgRoleId], references: [id])
+  invites           UserOrgInvite[]
+  betaInvitesCreated BetaInvite[] @relation("BetaInviteCreatedBy")
+  betaInviteUsages   BetaInviteUsage[]
+
+  // Password reset (hashed token only; raw token is emailed to the user)
+  resetPasswordToken   String?   @map("reset_password_token")
+  resetPasswordExpires DateTime? @map("reset_password_expires")
+
+  @@index([organizationId])
+  @@index([emailDomain])
+  @@index([resetPasswordToken])
+  @@map("users")
+}
+
+model Assessment {
+  id              String           @id @default(uuid())
+  title           String
+  description     String?
+  status          AssessmentStatus @default(DRAFT)
+  auditType       AuditType        @default(INTERNAL)
+  scope           String?
+  objectives      Json?
+  overallScore    Float?
+  sectionScores   Json?
+  scheduledDate   DateTime?
+  dueDate         DateTime?
+  completedDate   DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  leadAuditorId   String
+  leadAuditor     User @relation(fields: [leadAuditorId], references: [id])
+
+  templateId      String?
+  template        AssessmentTemplate? @relation(fields: [templateId], references: [id])
+
+  previousAssessmentId String?
+  previousAssessment   Assessment? @relation("AssessmentHistory", fields: [previousAssessmentId], references: [id])
+  followUpAssessments  Assessment[] @relation("AssessmentHistory")
+
+  responses        QuestionResponse[]
+  teamMembers      AssessmentTeamMember[]
+  nonConformities  NonConformity[]
+
+  @@index([organizationId])
+  @@index([templateId])
+  @@index([previousAssessmentId])
+  @@map("assessments")
+}
+
+model AssessmentTeamMember {
+  id           String         @id @default(uuid())
+  role         TeamMemberRole @default(AUDITOR)
+  createdAt    DateTime       @default(now())
+
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  userId       String
+  user         User @relation(fields: [userId], references: [id])
+
+  @@unique([assessmentId, userId])
+  @@index([assessmentId])
+  @@index([userId])
+  @@map("assessment_team_members")
+}
+
+model AuditQuestion {
+  id                String    @id @default(uuid())
+  questionNumber    String    @unique
+  questionText      String
+  guidance          String?
+  score0Criteria    String?   // N/A - Not Applicable
+  score1Criteria    String?   // Non-compliant
+  score2Criteria    String?   // Initial
+  score3Criteria    String?   // Developing
+  score4Criteria    String?   // Established
+  score5Criteria    String?   // Optimizing
+  standardReference String?
+  isActive          Boolean   @default(true)
+  order             Int       @default(0)
+  createdAt         DateTime  @default(now())
+
+  sectionId         String?
+  section           ISOStandardSection? @relation(fields: [sectionId], references: [id])
+
+  responses         QuestionResponse[]
+
+  @@index([sectionId])
+  @@map("audit_questions")
+}
+
+model QuestionResponse {
+  id              String    @id @default(uuid())
+  score           Int?
+  justification   String?
+  isDraft         Boolean   @default(true)
+  actionProposal  String?
+  conclusion      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  assessmentId    String
+  assessment      Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  questionId      String
+  question        AuditQuestion @relation(fields: [questionId], references: [id])
+
+  userId          String
+  user            User @relation(fields: [userId], references: [id])
+
+  sectionId       String?
+  section         ISOStandardSection? @relation(fields: [sectionId], references: [id])
+
+  evidence        Evidence[]
+  nonConformities NonConformity[]
+
+  @@unique([assessmentId, questionId])
+  @@index([assessmentId])
+  @@index([sectionId])
+  @@map("question_responses")
+}
+
+model Evidence {
+  id            String       @id @default(uuid())
+  type          EvidenceType
+  fileName      String
+  filePath      String
+  fileSize      Int
+  mimeType      String
+  description   String?
+  uploadedAt    DateTime     @default(now())
+
+  responseId    String
+  response      QuestionResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+
+  uploadedById  String
+  uploadedBy    User @relation(fields: [uploadedById], references: [id])
+
+  @@index([responseId])
+  @@index([uploadedById])
+  @@map("evidence")
+}
+
+model NonConformity {
+  id              String    @id @default(uuid())
+  title           String
+  description     String
+  severity        Severity
+  status          NCRStatus @default(OPEN)
+  identifiedDate  DateTime  @default(now())
+  rootCause       String?
+  rootCauseMethod String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  assessmentId    String
+  assessment      Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  responseId      String?
+  response        QuestionResponse? @relation(fields: [responseId], references: [id])
+
+  correctiveActions CorrectiveAction[]
+
+  @@index([assessmentId])
+  @@index([responseId])
+  @@map("non_conformities")
+}
+
+model CorrectiveAction {
+  id                 String       @id @default(uuid())
+  description        String
+  priority           Priority     @default(MEDIUM)
+  status             ActionStatus @default(PENDING)
+  targetDate         DateTime?
+  completedDate      DateTime?
+  verifiedDate       DateTime?
+  effectivenessNotes String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  nonConformityId    String
+  nonConformity      NonConformity @relation(fields: [nonConformityId], references: [id], onDelete: Cascade)
+
+  assignedToId       String?
+  assignedTo         User? @relation("AssignedActions", fields: [assignedToId], references: [id])
+
+  verifiedById       String?
+  verifiedBy         User? @relation("VerifiedActions", fields: [verifiedById], references: [id])
+
+  @@index([nonConformityId])
+  @@index([assignedToId])
+  @@index([verifiedById])
+  @@map("corrective_actions")
+}
+
+model Division {
+  id             String       @id @default(uuid())
+  name           String
+  createdAt      DateTime     @default(now())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  departments    Department[]
+
+  @@index([organizationId])
+  @@map("divisions")
+}
+
+model Department {
+  id             String       @id @default(uuid())
+  name           String
+  createdAt      DateTime     @default(now())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  divisionId     String?
+  division       Division?    @relation(fields: [divisionId], references: [id])
+
+  @@index([organizationId])
+  @@index([divisionId])
+  @@map("departments")
+}
+
+model OrgRole {
+  id              String          @id @default(uuid())
+  name            String
+  permissionLevel PermissionLevel
+  isDefault       Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  organizationId  String
+  organization    Organization    @relation(fields: [organizationId], references: [id])
+  users           User[]
+
+  @@index([organizationId])
+  @@map("org_roles")
+}
+
+model UserOrgInvite {
+  id             String       @id @default(uuid())
+  status         InviteStatus @default(PENDING)
+  createdAt      DateTime     @default(now())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([userId])
+  @@index([organizationId])
+  @@map("user_org_invites")
+}
+
+model BetaInvite {
+  id              String           @id @default(uuid())
+  code            String           @unique @map("code")
+  email           String?
+  status          BetaInviteStatus @default(ACTIVE)
+  expiresAt       DateTime
+  maxUses         Int              @default(1)
+  usedCount       Int              @default(0)
+  metadata        Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  createdById     String
+  createdBy       User             @relation("BetaInviteCreatedBy", fields: [createdById], references: [id])
+  organizationId  String?
+  organization    Organization?    @relation(fields: [organizationId], references: [id])
+  usages          BetaInviteUsage[]
+
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("beta_invites")
+}
+
+model BetaInviteUsage {
+  id            String      @id @default(uuid())
+  betaInviteId  String
+  betaInvite    BetaInvite  @relation(fields: [betaInviteId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id])
+  ipAddress     String?
+  userAgent     String?
+  referrer      String?
+  converted     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+
+  @@index([betaInviteId])
+  @@index([userId])
+  @@map("beta_invite_usages")
+}
+
+// Append-only audit trail for GDPR data-subject requests (export / anonymize).
+// Deliberately has no relation fields to User: it stores raw FK columns so the
+// User model needs no back-relation and anonymization never affects this table.
+model GdprAuditLog {
+  id           String   @id @default(uuid())
+  action       String
+  targetUserId String   @map("target_user_id")
+  targetEmail  String   @map("target_email")
+  actorId      String   @map("actor_id")
+  status       String
+  reason       String?
+  counts       Json?
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([targetUserId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("gdpr_audit_logs")
+}

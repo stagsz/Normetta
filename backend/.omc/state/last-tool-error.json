@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd backend && npx jest src/__tests__/onboarding.test.ts --forceExit --no-coverage 2>&1 | head -60\",\"description\":\"Get full test error output\"}",
+  "error": "Exit code 1\n/usr/bin/bash: line 3: cd: backend: No such file or directory",
+  "timestamp": "2026-05-30T15:25:42.938Z",
+  "retry_count": 2
+}

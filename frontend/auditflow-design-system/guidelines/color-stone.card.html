@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Stone — neutrals" subtitle="Warm stone ramp for text, surfaces, borders; 900 is ink" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 18px 20px; background: var(--surface-card); }
+  .row { display: flex; gap: 0; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-xs); border: 1px solid var(--border-subtle); }
+  .sw { flex: 1; height: 84px; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px 10px; }
+  .sw span { font-family: var(--font-mono); font-size: 10px; line-height: 1.3; }
+  .sw .n { font-weight: 600; }
+  .l { color: var(--stone-900); }
+  .d { color: #fff; }
+  .cap { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--stone-50)"><span class="n l">50</span><span class="l">#FAF8F4</span></div>
+    <div class="sw" style="background:var(--stone-100)"><span class="n l">100</span><span class="l">#F1EDE5</span></div>
+    <div class="sw" style="background:var(--stone-200)"><span class="n l">200</span><span class="l">#E6DED2</span></div>
+    <div class="sw" style="background:var(--stone-300)"><span class="n l">300</span><span class="l">#D5CABA</span></div>
+    <div class="sw" style="background:var(--stone-400)"><span class="n l">400</span><span class="l">#AB9E8B</span></div>
+    <div class="sw" style="background:var(--stone-500)"><span class="n d">500</span><span class="d">#827666</span></div>
+    <div class="sw" style="background:var(--stone-600)"><span class="n d">600</span><span class="d">#5E564A</span></div>
+    <div class="sw" style="background:var(--stone-700)"><span class="n d">700</span><span class="d">#453F36</span></div>
+    <div class="sw" style="background:var(--stone-800)"><span class="n d">800</span><span class="d">#2D2823</span></div>
+    <div class="sw" style="background:var(--stone-900)"><span class="n d">900●</span><span class="d">#211D18</span></div>
+  </div>
+  <div class="cap">● ink · --text-strong · 700 body · 500 muted · 200 borders · 50 page</div>
+</body>
+</html>

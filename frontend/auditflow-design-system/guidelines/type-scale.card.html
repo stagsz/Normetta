@@ -1,0 +1,23 @@
+<!-- @dsCard group="Type" viewport="700x230" name="Type scale" subtitle="Modular ~1.2 scale, 11px → 56px" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 18px 22px; background: var(--surface-card); }
+  .line { display:flex; align-items:baseline; gap:16px; padding:5px 0; border-bottom:1px solid var(--border-subtle); }
+  .line:last-child { border-bottom:0; }
+  .tok { font-family: var(--font-mono); font-size:11px; color:var(--text-muted); width:120px; flex:none; }
+  .spec { font-family: var(--font-display); color:var(--text-strong); font-weight:500; white-space:nowrap; }
+</style>
+</head>
+<body>
+  <div class="line"><span class="tok">--text-5xl · 56</span><span class="spec" style="font-size:34px">Display numeral</span></div>
+  <div class="line"><span class="tok">--text-3xl · 34</span><span class="spec" style="font-size:30px">Page title</span></div>
+  <div class="line"><span class="tok">--text-2xl · 26</span><span class="spec" style="font-size:24px">Section heading</span></div>
+  <div class="line"><span class="tok">--text-xl · 21</span><span class="spec" style="font-size:20px">Card title</span></div>
+  <div class="line"><span class="tok">--text-md · 15</span><span class="spec" style="font-size:15px; font-family:var(--font-sans)">Body default</span></div>
+  <div class="line"><span class="tok">--text-xs · 12</span><span class="spec" style="font-size:12px; font-family:var(--font-sans); color:var(--text-muted)">Caption / metadata</span></div>
+</body>
+</html>

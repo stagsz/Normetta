@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"gh pr merge 2 --squash --admin --repo stagsz/AuditFlow 2>&1\",\"description\":\"Merge PR #2 with admin override\"}",
+  "error": "Exit code 1\nGraphQL: Repository rule violations found\n\nCannot update this protected ref.\n\nAt least 1 approving review is required by reviewers with write access.\n\n (mergePullRequest)",
+  "timestamp": "2026-05-30T15:45:50.018Z",
+  "retry_count": 2
+}

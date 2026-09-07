@@ -1,0 +1,44 @@
+# Dependencies
+node_modules
+
+# Build output
+.next
+out
+dist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Test files
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+coverage
+jest.config.js
+jest.setup.ts
+
+# Development files
+*.log
+npm-debug.log*
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+
+# Cache
+.cache
+.turbo

@@ -1,0 +1,95 @@
+<!-- @template name="Normetta App" description="Full Normetta self-assessment app shell — sign-in, dashboard, assessment workflow, findings table." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Normetta</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="./ds-base.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; background: #FAF8F4; }
+  #root { height: 100vh; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #D5CABA; border-radius: 99px; border: 2px solid #FAF8F4; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="TopBar.jsx"></script>
+<script type="text/babel" src="Login.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="Findings.jsx"></script>
+<script type="text/babel" src="Assessment.jsx"></script>
+<script type="text/babel">
+const { useState } = React;
+
+const TITLES = {
+  dashboard:  { title: 'Dashboard', subtitle: 'Northwind Manufacturing · ISO 9001:2015' },
+  assessment: { title: 'Self-assessment', subtitle: 'Clause 7 — Support' },
+  findings:   { title: 'Findings', subtitle: 'Open nonconformities and observations' },
+  clauses:    { title: 'Clause library', subtitle: 'ISO 9001:2015 requirements' },
+  reports:    { title: 'Reports', subtitle: 'Management review & certification readiness' },
+  team:       { title: 'Team', subtitle: 'Roles and responsibilities' },
+  settings:   { title: 'Settings', subtitle: 'Organization & assessment configuration' },
+};
+
+function Placeholder({ view }) {
+  const Icon = window.AFIcon;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 14, color: 'var(--text-subtle)' }}>
+      <Icon name="book-open" size={40} strokeWidth={1.5} />
+      <div style={{ fontSize: 15, color: 'var(--text-muted)' }}>The <strong style={{ color: 'var(--text-body)' }}>{view}</strong> view is part of the full product.</div>
+    </div>
+  );
+}
+
+function App() {
+  const [signedIn, setSignedIn] = useState(false);
+  const [view, setView] = useState('dashboard');
+  const TopBar = window.AFTopBar;
+  const Sidebar = window.AFSidebar;
+  const DS = window.AuditFlowDesignSystem_900961;
+  const { Button } = DS;
+  const Icon = window.AFIcon;
+
+  if (!signedIn) return <window.AFLogin onSignIn={() => setSignedIn(true)} />;
+
+  let body;
+  if (view === 'dashboard') body = <window.AFDashboard onOpenFindings={() => setView('findings')} onStartAssessment={() => setView('assessment')} />;
+  else if (view === 'assessment') body = <window.AFAssessment />;
+  else if (view === 'findings') body = <window.AFFindings />;
+  else body = <Placeholder view={view} />;
+
+  const meta = TITLES[view] || TITLES.dashboard;
+  const actions = view === 'dashboard'
+    ? <Button variant="primary" iconLeft={<Icon name="download" size={16} />}>Export readiness report</Button>
+    : null;
+
+  return (
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      <Sidebar active={view} onNavigate={setView} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <TopBar title={meta.title} subtitle={meta.subtitle} actions={actions} />
+        <main style={{ flex: 1, overflowY: 'auto', background: 'var(--surface-page)' }}>{body}</main>
+      </div>
+    </div>
+  );
+}
+
+// ds-base.js loads the bundle asynchronously — wait for the namespace before mounting.
+(function mount() {
+  if (window.AuditFlowDesignSystem_900961 && window.AFDashboard && window.AFLogin) {
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  } else {
+    setTimeout(mount, 40);
+  }
+})();
+</script>
+</body>
+</html>
