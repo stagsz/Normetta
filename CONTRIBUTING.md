@@ -1,4 +1,4 @@
-# Contributing to AuditFlow
+# Contributing to Normetta
 
 ## Branch/push policy
 
@@ -25,4 +25,4 @@ Use Conventional Commits, scoped to the area changed:
 ## Reporting issues
 
 - Reproduction steps + logs/screenshots + environment.
-- Security issues: do not open a public ticket; email security@auditflow.io.
+- Security issues: do not open a public ticket; email security@normetta.com.

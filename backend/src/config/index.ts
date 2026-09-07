@@ -77,7 +77,7 @@ export const config = {
     smtpSecure: process.env.SMTP_SECURE === 'true',
     smtpUser: process.env.SMTP_USER || '',
     smtpPass: process.env.SMTP_PASS || '',
-    fromEmail: process.env.EMAIL_FROM || 'noreply@auditflow.io',
+    fromEmail: process.env.EMAIL_FROM || 'noreply@normetta.com',
     fromName: process.env.EMAIL_FROM_NAME || 'Normetta',
     appUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://audit-flow.org',
   },

@@ -1,7 +1,7 @@
 {
-  "name": "auditflow",
+  "name": "normetta",
   "version": "1.0.0",
-  "description": "AuditFlow - ISO 9001 Quality Management & Audit Platform",
+  "description": "Normetta - ISO 9001 Quality Management & Audit Platform",
   "private": true,
   "workspaces": [
     "backend",

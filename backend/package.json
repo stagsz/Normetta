@@ -1,7 +1,7 @@
 {
-  "name": "@auditflow/backend",
+  "name": "@normetta/backend",
   "version": "1.0.0",
-  "description": "AuditFlow - Backend API for ISO 9001 Quality Management",
+  "description": "Normetta - Backend API for ISO 9001 Quality Management",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

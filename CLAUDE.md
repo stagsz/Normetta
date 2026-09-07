@@ -1,24 +1,18 @@
-# CLAUDE.md
+# Normetta
 
-This file provides guidance to Claude Code and Hermes agents when working with the AuditFlow codebase.
+ISO 9001:2015 Quality Management & Audit Platform for SMEs in Europe.
 
-## Project Overview
-
-AuditFlow is an ISO 9001 Quality Management & Audit Platform for SMEs in Europe.
-It helps quality managers prepare for and manage internal/external audits, track NCRs, and run
-self-assessments mapped to ISO 9001:2015 clause structure.
-
-**Live app:** https://audit-flow.org  
-**Backend base URL:** https://audit-flow.org/_/backend/api  
+**Live app:** https://www.normetta.com  
+**Backend base URL:** https://www.normetta.com/_/backend/api  
 **Supabase project:** fqnorsqggyshqfmihivw (Pro plan — pgvector available)  
-**GitHub:** https://github.com/stagsz/AuditFlow
+**GitHub:** https://github.com/stagsz/Normetta
 
 ---
 
 ## Monorepo Structure
 
 ```
-AuditFlow/
+Normetta/
 ├── backend/          # Express + TypeScript API (deployed as Vercel serverless)
 │   ├── prisma/       # Prisma schema + migrations
 │   ├── src/
@@ -198,11 +192,14 @@ NEXT_PUBLIC_API_URL   # Backend API base URL
 
 ## Test Accounts
 - System admin: hermes@greisz.se / Sidvolt2
-- App URL: https://audit-flow-zeta.vercel.app
+- App URL: https://normetta-zeta.vercel.app
 
 ---
 
 ## Company OS
 Strategy, marketing plans, and operational documents live in:
-`C:\Users\staff\anthropicFun\Boarder_room\AuditFlow\`
+`C:\Users\staff\anthropicFun\Boarder_room\GreiszConsulting\`
 (separate from this codebase — that's the "board room" layer)
+
+Normetta branding/boardroom docs:
+`C:\Users\staff\anthropicFun\Boarder_room\Normetta\`

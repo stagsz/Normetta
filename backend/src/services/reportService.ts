@@ -11,17 +11,52 @@ try {
   console.warn('PowerPoint support unavailable: pptxgenjs is not installed.');
 }
 
-// Color constants for the report
-const COLORS = {
-  PRIMARY: '#1e40af',
-  SECONDARY: '#475569',
+// ---------------------------------------------------------------------------
+// Report design system
+// A single source of truth for the branded PDF template. Colours are neutral
+// and brand-agnostic today (teal accent matching the app), but centralised so a
+// future per-organization theme only needs to override THEME.
+// ---------------------------------------------------------------------------
+const THEME = {
+  BRAND: '#0d9488',        // teal accent (matches app UI)
+  BRAND_DARK: '#0f766e',   // deeper teal for gradients/bands
+  INK: '#0f172a',          // near-black headings
+  BODY: '#334155',         // body copy
+  MUTED: '#64748b',        // secondary / captions
+  LINE: '#e2e8f0',         // hairlines & table rules
+  ZEBRA: '#f8fafc',        // alternating row tint
+  SURFACE: '#f1f5f9',      // card / panel fill
   SUCCESS: '#16a34a',
-  WARNING: '#ca8a04',
+  WARNING: '#d97706',
   DANGER: '#dc2626',
-  LIGHT_GRAY: '#f1f5f9',
-  DARK_GRAY: '#334155',
   WHITE: '#ffffff',
 };
+
+// Backwards-compatible alias so existing helpers keep working.
+const COLORS = {
+  PRIMARY: THEME.BRAND,
+  SECONDARY: THEME.MUTED,
+  SUCCESS: THEME.SUCCESS,
+  WARNING: THEME.WARNING,
+  DANGER: THEME.DANGER,
+  LIGHT_GRAY: THEME.SURFACE,
+  DARK_GRAY: THEME.BODY,
+  WHITE: THEME.WHITE,
+};
+
+// A4 page geometry (points)
+const PAGE = {
+  WIDTH: 595.28,
+  HEIGHT: 841.89,
+  MARGIN: 50,
+  get CONTENT_WIDTH() { return this.WIDTH - this.MARGIN * 2; },
+  get RIGHT() { return this.WIDTH - this.MARGIN; },
+  HEADER_H: 46,   // running header band height on inner pages
+  BODY_TOP: 78,   // where body content starts on inner pages
+  FOOTER_Y: 800,  // baseline for footer text
+};
+
+const REPORT_LABEL = 'ISO 9001:2015 Assessment Report';
 
 interface SectionScore {
   sectionId: string;
@@ -272,12 +307,13 @@ export class ReportService {
       const chunks: Buffer[] = [];
       const doc = new PDFDocument({
         size: 'A4',
-        margins: { top: 50, bottom: 50, left: 50, right: 50 },
+        margins: { top: PAGE.BODY_TOP, bottom: 60, left: PAGE.MARGIN, right: PAGE.MARGIN },
+        bufferPages: true, // required to stamp page numbers after layout
         info: {
           Title: `Assessment Report - ${data.assessment.title}`,
-          Author: 'ISO 9001 Audit Management System',
-          Subject: 'Assessment Report',
-          Creator: 'ISO 9001 Audit Management System',
+          Author: 'AuditFlow',
+          Subject: 'ISO 9001:2015 Assessment Report',
+          Creator: 'AuditFlow',
         },
       });
 
@@ -285,17 +321,55 @@ export class ReportService {
       doc.on('end', () => resolve(Buffer.concat(chunks)));
       doc.on('error', reject);
 
-      // Generate report sections
+      // Cover page (page 0 — no running header)
       this.addCoverPage(doc, data);
+
+      // Content sections — each opens a fresh page via addSectionHeader
       this.addExecutiveSummary(doc, data);
       this.addSectionBreakdown(doc, data);
       this.addFindingsList(doc, data);
       this.addNCRSummary(doc, data);
       this.addRecommendations(doc, data);
 
-      // Finalize the document
+      // Stamp running header + footer with page numbers on every inner page
+      this.paintChrome(doc, data);
+
       doc.end();
     });
+  }
+
+  /**
+   * Draw the running header band and footer (with page numbers) on every page
+   * except the cover. Must run after all content is laid out.
+   */
+  private paintChrome(doc: typeof PDFDocument.prototype, data: ReportData): void {
+    const range = doc.bufferedPageRange();
+    const total = range.count;
+    const pageCount = total - 1; // exclude cover from "Page X of N"
+
+    for (let i = range.start + 1; i < range.start + total; i++) {
+      doc.switchToPage(i);
+
+      // Running header band
+      doc.rect(0, 0, PAGE.WIDTH, PAGE.HEADER_H).fill(THEME.SURFACE);
+      doc.rect(0, PAGE.HEADER_H, PAGE.WIDTH, 2).fill(THEME.BRAND);
+      doc.fontSize(9).font('Helvetica-Bold').fillColor(THEME.BRAND)
+        .text('AuditFlow', PAGE.MARGIN, 17, { lineBreak: false });
+      // Right-aligned title — x computed manually to avoid width/align
+      // triggering pdfkit auto-pagination when writing inside a margin.
+      const titleText = data.assessment.title;
+      doc.font('Helvetica').fontSize(9).fillColor(THEME.MUTED);
+      const titleW = Math.min(doc.widthOfString(titleText), PAGE.CONTENT_WIDTH - 80);
+      doc.text(titleText, PAGE.RIGHT - titleW, 17, { lineBreak: false, ellipsis: true, width: titleW });
+
+      // Footer hairline
+      doc.moveTo(PAGE.MARGIN, PAGE.FOOTER_Y - 8).lineTo(PAGE.RIGHT, PAGE.FOOTER_Y - 8)
+        .lineWidth(0.5).strokeColor(THEME.LINE).stroke();
+      doc.fontSize(8).font('Helvetica').fillColor(THEME.MUTED)
+        .text(REPORT_LABEL, PAGE.MARGIN, PAGE.FOOTER_Y, { lineBreak: false });
+      const pageStr = `Page ${i - range.start} of ${pageCount}`;
+      doc.text(pageStr, PAGE.RIGHT - doc.widthOfString(pageStr), PAGE.FOOTER_Y, { lineBreak: false });
+    }
   }
 
   /**
@@ -303,95 +377,73 @@ export class ReportService {
    */
   private addCoverPage(doc: typeof PDFDocument.prototype, data: ReportData): void {
     const { assessment } = data;
-    const pageWidth = 595.28; // A4 width in points
+    const cx = PAGE.WIDTH / 2;
 
-    // Title
-    doc.fontSize(28)
-      .fillColor(COLORS.PRIMARY)
-      .text('ISO 9001:2015', { align: 'center' })
-      .moveDown(0.5);
+    // Top brand band
+    doc.rect(0, 0, PAGE.WIDTH, 150).fill(THEME.BRAND);
+    doc.rect(0, 150, PAGE.WIDTH, 6).fill(THEME.BRAND_DARK);
 
-    doc.fontSize(24)
-      .fillColor(COLORS.DARK_GRAY)
-      .text('Assessment Report', { align: 'center' })
-      .moveDown(2);
+    doc.fillColor(THEME.WHITE)
+      .fontSize(13).font('Helvetica-Bold')
+      .text('AUDITFLOW', PAGE.MARGIN, 42, { characterSpacing: 3, lineBreak: false });
+    doc.fontSize(30).font('Helvetica-Bold')
+      .text('ISO 9001:2015', PAGE.MARGIN, 70, { lineBreak: false });
+    doc.fontSize(17).font('Helvetica')
+      .text('Assessment Report', PAGE.MARGIN, 108, { lineBreak: false });
 
-    // Assessment title
-    doc.fontSize(18)
-      .fillColor(COLORS.PRIMARY)
-      .text(assessment.title, { align: 'center' })
-      .moveDown(0.5);
+    // Title block
+    doc.fillColor(THEME.INK).fontSize(22).font('Helvetica-Bold')
+      .text(assessment.title, PAGE.MARGIN, 200, { width: PAGE.CONTENT_WIDTH, align: 'center' });
+    doc.fillColor(THEME.MUTED).fontSize(13).font('Helvetica')
+      .text(assessment.organization.name, PAGE.MARGIN, doc.y + 6,
+        { width: PAGE.CONTENT_WIDTH, align: 'center' });
 
-    // Organization
-    doc.fontSize(14)
-      .fillColor(COLORS.SECONDARY)
-      .text(assessment.organization.name, { align: 'center' })
-      .moveDown(2);
+    // Score gauge (centred, given room)
+    doc.y = 300;
+    this.addScoreGauge(doc, assessment.overallScore, PAGE.WIDTH);
 
-    // Visual Score Gauge
-    this.addScoreGauge(doc, assessment.overallScore, pageWidth);
-    doc.moveDown(2);
+    // Metadata panel
+    const panelY = 470;
+    const panelH = 200;
+    doc.roundedRect(PAGE.MARGIN, panelY, PAGE.CONTENT_WIDTH, panelH, 8)
+      .fillAndStroke(THEME.SURFACE, THEME.LINE);
+    doc.rect(PAGE.MARGIN, panelY, 4, panelH).fill(THEME.BRAND);
 
-    // Key details box
-    const boxY = doc.y;
-    const boxWidth = 300;
-    const boxX = (pageWidth - boxWidth) / 2 - 50;
-
-    doc.rect(boxX, boxY, boxWidth, 130)
-      .fillAndStroke(COLORS.LIGHT_GRAY, COLORS.PRIMARY);
-
-    doc.fontSize(11)
-      .fillColor(COLORS.DARK_GRAY);
-
-    const labelX = boxX + 20;
-    const valueX = boxX + 120;
-    let currentY = boxY + 20;
-
-    // Status
-    doc.text('Status:', labelX, currentY);
-    doc.font('Helvetica-Bold')
-      .text(assessment.status.replace('_', ' '), valueX, currentY);
-    currentY += 22;
-
-    // Audit Type
-    doc.font('Helvetica')
-      .text('Audit Type:', labelX, currentY);
-    doc.font('Helvetica-Bold')
-      .text(assessment.auditType.replace('_', ' '), valueX, currentY);
-    currentY += 22;
-
-    // Lead Auditor
-    doc.font('Helvetica')
-      .fillColor(COLORS.DARK_GRAY)
-      .text('Lead Auditor:', labelX, currentY);
-    doc.font('Helvetica-Bold')
-      .text(`${assessment.leadAuditor.firstName} ${assessment.leadAuditor.lastName}`, valueX, currentY);
-    currentY += 22;
-
-    // Date
-    doc.font('Helvetica')
-      .text('Report Date:', labelX, currentY);
-    doc.font('Helvetica-Bold')
-      .text(new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }), valueX, currentY);
-
-    // Footer with completion date if available
-    doc.y = 700;
-    doc.fontSize(10)
-      .font('Helvetica')
-      .fillColor(COLORS.SECONDARY);
-
-    if (assessment.completedDate) {
-      doc.text(`Assessment Completed: ${new Date(assessment.completedDate).toLocaleDateString('en-US')}`, { align: 'center' });
+    const rows: Array<[string, string]> = [
+      ['Status', assessment.status.replace(/_/g, ' ')],
+      ['Audit Type', assessment.auditType.replace(/_/g, ' ')],
+      ['Lead Auditor', `${assessment.leadAuditor.firstName} ${assessment.leadAuditor.lastName}`],
+      ['Overall Compliance', assessment.overallScore !== null ? `${assessment.overallScore.toFixed(1)}%` : 'N/A'],
+      ['Completed', assessment.completedDate ? this.fmtDate(assessment.completedDate) : '—'],
+      ['Report Date', this.fmtDate(new Date())],
+    ];
+    const labelX = PAGE.MARGIN + 28;
+    const valueX = PAGE.MARGIN + 190;
+    let ry = panelY + 22;
+    for (const [label, value] of rows) {
+      doc.fontSize(11).font('Helvetica').fillColor(THEME.MUTED)
+        .text(label, labelX, ry, { lineBreak: false });
+      doc.font('Helvetica-Bold').fillColor(THEME.INK)
+        .text(value, valueX, ry, { width: PAGE.RIGHT - valueX - 24, lineBreak: false });
+      ry += 22;
+      if (label !== rows[rows.length - 1][0]) {
+        doc.moveTo(labelX, ry - 6).lineTo(PAGE.RIGHT - 24, ry - 6)
+          .lineWidth(0.5).strokeColor(THEME.LINE).stroke();
+      }
     }
-    if (assessment.scheduledDate) {
-      doc.text(`Scheduled Date: ${new Date(assessment.scheduledDate).toLocaleDateString('en-US')}`, { align: 'center' });
-    }
+
+    // Confidentiality note anchored to bottom
+    doc.fontSize(9).font('Helvetica-Oblique').fillColor(THEME.MUTED)
+      .text('Confidential — prepared for internal quality management use.',
+        PAGE.MARGIN, 760, { width: PAGE.CONTENT_WIDTH, align: 'center' });
 
     doc.addPage();
+    void cx;
+  }
+
+  /** Consistent long-form date formatting. */
+  private fmtDate(d: Date | string): string {
+    return new Date(d).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
   /**
@@ -562,11 +614,12 @@ export class ReportService {
       }
     }
 
-    // Key Statistics
+    // Key Statistics — visual card grid
     doc.font('Helvetica-Bold')
-      .fontSize(12)
-      .text('Key Statistics:')
-      .moveDown(0.5);
+      .fontSize(13)
+      .fillColor(THEME.INK)
+      .text('Key Statistics')
+      .moveDown(0.6);
 
     const score1Count = findings.filter(f => f.score === 1).length;
     const score2Count = findings.filter(f => f.score === 2).length;
@@ -575,26 +628,36 @@ export class ReportService {
     const criticalNCRs = nonConformities.filter(n => n.severity === Severity.CRITICAL).length;
     const majorNCRs = nonConformities.filter(n => n.severity === Severity.MAJOR).length;
 
-    const stats = [
-      { label: 'Overall Compliance Score', value: assessment.overallScore !== null ? `${assessment.overallScore.toFixed(1)}%` : 'N/A' },
-      { label: 'Non-Compliant Findings (Score 1)', value: score1Count.toString() },
-      { label: 'Initial / Partial Findings (Score 2)', value: score2Count.toString() },
-      { label: 'Total Non-Conformities', value: nonConformities.length.toString() },
-      { label: 'Open NCRs', value: openNCRs.toString() },
-      { label: 'Closed NCRs', value: closedNCRs.toString() },
-      { label: 'Critical Severity NCRs', value: criticalNCRs.toString() },
-      { label: 'Major Severity NCRs', value: majorNCRs.toString() },
+    const cards: Array<{ label: string; value: string; accent: string }> = [
+      { label: 'Overall Compliance', value: assessment.overallScore !== null ? `${assessment.overallScore.toFixed(1)}%` : 'N/A', accent: this.getScoreColor(assessment.overallScore) },
+      { label: 'Non-Compliant (1)', value: String(score1Count), accent: score1Count > 0 ? THEME.DANGER : THEME.SUCCESS },
+      { label: 'Initial / Partial (2)', value: String(score2Count), accent: score2Count > 0 ? THEME.WARNING : THEME.SUCCESS },
+      { label: 'Total NCRs', value: String(nonConformities.length), accent: THEME.MUTED },
+      { label: 'Open NCRs', value: String(openNCRs), accent: openNCRs > 0 ? THEME.WARNING : THEME.SUCCESS },
+      { label: 'Closed NCRs', value: String(closedNCRs), accent: THEME.SUCCESS },
+      { label: 'Critical NCRs', value: String(criticalNCRs), accent: criticalNCRs > 0 ? THEME.DANGER : THEME.SUCCESS },
+      { label: 'Major NCRs', value: String(majorNCRs), accent: majorNCRs > 0 ? THEME.WARNING : THEME.SUCCESS },
     ];
 
-    doc.font('Helvetica')
-      .fontSize(11);
-
-    for (const stat of stats) {
-      doc.text(`• ${stat.label}: `, { continued: true })
-        .font('Helvetica-Bold')
-        .text(stat.value)
-        .font('Helvetica');
-    }
+    const cols = 4;
+    const gap = 10;
+    const cardW = (PAGE.CONTENT_WIDTH - gap * (cols - 1)) / cols;
+    const cardH = 58;
+    const gridTop = doc.y;
+    cards.forEach((card, idx) => {
+      const col = idx % cols;
+      const row = Math.floor(idx / cols);
+      const x = PAGE.MARGIN + col * (cardW + gap);
+      const y = gridTop + row * (cardH + gap);
+      doc.roundedRect(x, y, cardW, cardH, 6).fillAndStroke(THEME.WHITE, THEME.LINE);
+      doc.rect(x, y, 3, cardH).fill(card.accent);
+      doc.fontSize(19).font('Helvetica-Bold').fillColor(card.accent)
+        .text(card.value, x + 10, y + 10, { width: cardW - 16, lineBreak: false });
+      doc.fontSize(8).font('Helvetica').fillColor(THEME.MUTED)
+        .text(card.label.toUpperCase(), x + 10, y + 36, { width: cardW - 16, lineBreak: false });
+    });
+    doc.y = gridTop + Math.ceil(cards.length / cols) * (cardH + gap);
+    doc.moveDown(0.5);
 
     // Team Members
     if (assessment.teamMembers.length > 0) {
@@ -624,69 +687,86 @@ export class ReportService {
     if (sectionBreakdown.length === 0) {
       doc.fontSize(11)
         .font('Helvetica-Oblique')
-        .fillColor(COLORS.SECONDARY)
+        .fillColor(THEME.MUTED)
         .text('No section scores available.')
         .moveDown();
       return;
     }
 
-    // Table header
-    const tableTop = doc.y;
-    const col1 = 50;
-    const col2 = 150;
-    const col3 = 350;
-    const col4 = 420;
-    const col5 = 480;
+    // Column layout (x positions + widths) — all within 50..545
+    const cSec = PAGE.MARGIN + 8;      // 58
+    const cTitle = PAGE.MARGIN + 55;   // 105
+    const titleW = 250;                // ends 355
+    const cScore = PAGE.MARGIN + 318;  // 368, right-aligned w50 -> 418
+    const cQ = PAGE.MARGIN + 372;      // 422, right-aligned w45 -> 467
+    const cStatus = PAGE.MARGIN + 425; // 475, w65 -> 540
+    const statusW = 65;
+    const rowX = PAGE.MARGIN;
+    const rowW = PAGE.CONTENT_WIDTH;
 
-    doc.fontSize(10)
-      .font('Helvetica-Bold')
-      .fillColor(COLORS.PRIMARY);
+    const drawHead = () => {
+      const hy = doc.y;
+      doc.rect(rowX, hy, rowW, 22).fill(THEME.BRAND);
+      doc.fontSize(9).font('Helvetica-Bold').fillColor(THEME.WHITE);
+      doc.text('SECTION', cSec, hy + 7, { lineBreak: false });
+      doc.text('TITLE', cTitle, hy + 7, { lineBreak: false });
+      doc.text('SCORE', cScore, hy + 7, { width: 50, align: 'right', lineBreak: false });
+      doc.text('QUEST.', cQ, hy + 7, { width: 45, align: 'right', lineBreak: false });
+      doc.text('STATUS', cStatus, hy + 7, { width: statusW, align: 'center', lineBreak: false });
+      doc.y = hy + 22;
+    };
 
-    doc.text('Section', col1, tableTop);
-    doc.text('Title', col2, tableTop);
-    doc.text('Score', col3, tableTop);
-    doc.text('Questions', col4, tableTop);
-    doc.text('Status', col5, tableTop);
+    drawHead();
 
-    // Underline
-    doc.moveTo(col1, tableTop + 15)
-      .lineTo(550, tableTop + 15)
-      .strokeColor(COLORS.PRIMARY)
-      .stroke();
-
-    let rowY = tableTop + 25;
-
-    doc.font('Helvetica')
-      .fontSize(10)
-      .fillColor(COLORS.DARK_GRAY);
-
+    let zebra = false;
     for (const section of sectionBreakdown) {
-      // Check if we need a new page
-      if (rowY > 700) {
+      // Wrapped title height determines row height
+      doc.fontSize(9).font('Helvetica');
+      const titleH = doc.heightOfString(section.sectionTitle, { width: titleW });
+      const rowH = Math.max(22, titleH + 12);
+
+      // Page break — repeat the header
+      if (doc.y + rowH > PAGE.FOOTER_Y - 20) {
         doc.addPage();
-        rowY = 50;
+        drawHead();
+        zebra = false;
       }
 
-      doc.text(section.sectionNumber, col1, rowY);
-      doc.text(section.sectionTitle.substring(0, 30), col2, rowY);
+      const ry = doc.y;
+      if (zebra) doc.rect(rowX, ry, rowW, rowH).fill(THEME.ZEBRA);
+      zebra = !zebra;
 
-      // Score with color
-      doc.fillColor(this.getScoreColor(section.score))
-        .text(`${section.score.toFixed(1)}%`, col3, rowY);
-
-      doc.fillColor(COLORS.DARK_GRAY)
-        .text(`${section.questionsAnswered}/${section.totalQuestions}`, col4, rowY);
-
-      // Status indicator
       const status = section.score >= 80 ? 'Good' : section.score >= 60 ? 'Fair' : 'Poor';
-      doc.fillColor(this.getScoreColor(section.score))
-        .text(status, col5, rowY);
+      const color = this.getScoreColor(section.score);
+      const textY = ry + 6;
 
-      rowY += 20;
+      doc.fontSize(9).font('Helvetica-Bold').fillColor(THEME.INK)
+        .text(section.sectionNumber, cSec, textY, { width: 45, lineBreak: false });
+      doc.font('Helvetica').fillColor(THEME.BODY)
+        .text(section.sectionTitle, cTitle, textY, { width: titleW });
+      doc.font('Helvetica-Bold').fillColor(color)
+        .text(`${section.score.toFixed(1)}%`, cScore, textY, { width: 50, align: 'right', lineBreak: false });
+      doc.font('Helvetica').fillColor(THEME.BODY)
+        .text(`${section.questionsAnswered}/${section.totalQuestions}`, cQ, textY, { width: 45, align: 'right', lineBreak: false });
+      this.drawPill(doc, status, color, cStatus, textY - 2, statusW);
+
+      doc.moveTo(rowX, ry + rowH).lineTo(PAGE.RIGHT, ry + rowH)
+        .lineWidth(0.5).strokeColor(THEME.LINE).stroke();
+      doc.y = ry + rowH;
     }
 
-    doc.moveDown(2);
     doc.addPage();
+  }
+
+  /** Small rounded status pill with tinted background. */
+  private drawPill(doc: typeof PDFDocument.prototype, label: string, color: string, x: number, y: number, w: number): void {
+    const pillW = 52;
+    const px = x + (w - pillW) / 2;
+    doc.save();
+    doc.roundedRect(px, y, pillW, 15, 7).fillOpacity(0.14).fill(color).fillOpacity(1);
+    doc.fontSize(8).font('Helvetica-Bold').fillColor(color)
+      .text(label.toUpperCase(), px, y + 4, { width: pillW, align: 'center', lineBreak: false });
+    doc.restore();
   }
 
   /**
@@ -974,20 +1054,22 @@ export class ReportService {
    * Add section header helper
    */
   private addSectionHeader(doc: typeof PDFDocument.prototype, title: string): void {
-    doc.fontSize(16)
+    // Accent tab + title
+    doc.rect(PAGE.MARGIN, doc.y + 2, 4, 20).fill(THEME.BRAND);
+    doc.fontSize(17)
       .font('Helvetica-Bold')
-      .fillColor(COLORS.PRIMARY)
-      .text(title)
-      .moveDown(0.5);
+      .fillColor(THEME.INK)
+      .text(title, PAGE.MARGIN + 14, doc.y, { lineBreak: false });
 
-    // Underline
-    doc.moveTo(50, doc.y)
-      .lineTo(550, doc.y)
-      .strokeColor(COLORS.PRIMARY)
+    doc.moveDown(0.6);
+    doc.moveTo(PAGE.MARGIN, doc.y)
+      .lineTo(PAGE.RIGHT, doc.y)
       .lineWidth(1)
+      .strokeColor(THEME.LINE)
       .stroke();
 
     doc.moveDown();
+    doc.fillColor(THEME.BODY).font('Helvetica').fontSize(11);
   }
 
   /**

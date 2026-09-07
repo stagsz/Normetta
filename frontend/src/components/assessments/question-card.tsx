@@ -50,7 +50,7 @@ export const SCORE_COLORS = {
 } as const;
 
 export function badgeClassesForScore(score: number) {
-  return SCORE_COLORS[score] ?? SCORE_COLORS[4];
+  return SCORE_COLORS[score as keyof typeof SCORE_COLORS] ?? SCORE_COLORS[4];
 }
 
 export function QuestionCard({
@@ -77,7 +77,7 @@ export function QuestionCard({
     <Card
       className={clsx(
         'border-l-4 transition-colors',
-        hasScore ? scoreColors[currentScore] : 'border-l-[var(--border-strong)]',
+        hasScore ? SCORE_COLORS[currentScore].border : 'border-l-[var(--border-strong)]',
         className
       )}
     >
@@ -111,7 +111,7 @@ export function QuestionCard({
                 currentScore === 5 && 'bg-info-50 text-info-700'
               )}
             >
-              {scoreLabels[currentScore]}
+              {SCORE_LABELS[currentScore]}
             </div>
           )}
         </div>
@@ -250,7 +250,7 @@ export function QuestionCardCompact({
       className={clsx(
         'w-full text-left p-4 rounded-xl border-l-4 bg-[var(--surface-card)] border border-[var(--border-subtle)] transition-all',
         'hover:shadow-[var(--shadow-md)] hover:border-[var(--border-default)]',
-        hasScore ? scoreColors[currentScore] : 'border-l-[var(--border-strong)]',
+        hasScore ? SCORE_COLORS[currentScore].border : 'border-l-[var(--border-strong)]',
         className
       )}
     >

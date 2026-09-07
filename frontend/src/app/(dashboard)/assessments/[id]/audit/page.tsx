@@ -29,6 +29,15 @@ const statusLabels: Record<string, string> = {
   ARCHIVED: 'Archived',
 };
 
+// Treat obviously invalid IDs as not-found early so a 404/bad response
+// doesn't crash into the global ErrorBoundary.
+const isInvalidId = (id?: string) => {
+  if (!id) return true;
+  if (id.includes('undefined') || id.includes('null')) return true;
+  if (/^0{8}-0{4}-4000-8000-0{3}[0-9a-fA-F]{12}$/.test(id)) return true;
+  return false;
+};
+
 function AuditPageSkeleton() {
   return (
     <div className="space-y-6">
@@ -204,6 +213,34 @@ export default function AssessmentAuditPage() {
   // Loading state
   if (assessmentLoading || sectionsLoading) {
     return <AuditPageSkeleton />;
+  }
+
+  // Invalid ID guard
+  if (isInvalidId(assessmentId)) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Link href="/assessments">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Assessment Not Found</h1>
+        </div>
+        <Card>
+          <CardContent className="py-12 text-center">
+            <AlertTriangle className="mx-auto h-12 w-12 text-red-400 mb-4" />
+            <p className="text-[var(--text-body)] font-medium">Invalid assessment identifier.</p>
+            <p className="text-[var(--text-muted)] text-sm mt-1">
+              The requested audit could not be found. Please return to assessments and try again.
+            </p>
+            <Link href="/assessments">
+              <Button className="mt-4">Back to Assessments</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   // Error state

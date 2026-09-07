@@ -4,7 +4,8 @@
     "module": "commonjs",
     "lib": ["ES2022"],
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "rootDir": ".",
+    "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,6 +15,6 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "api/**/*"],
   "exclude": ["node_modules", "dist"]
 }
