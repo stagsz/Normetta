@@ -51,9 +51,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      // Check if this is an auth endpoint (login/register) - don't try to refresh
-      const isAuthEndpoint = originalRequest.url?.includes('/auth/login') ||
-        originalRequest.url?.includes('/auth/register');
+      // Check if this is an auth endpoint (login) - don't try to refresh
+      const isAuthEndpoint = originalRequest.url?.includes('/auth/login');
 
       if (isAuthEndpoint) {
         return Promise.reject(error);
@@ -116,13 +115,6 @@ api.interceptors.response.use(
 export const authApi = {
   login: (email: string, password: string) =>
     api.post('/auth/login', { email, password }),
-  register: (data: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    organizationId: string;
-  }) => api.post('/auth/register', data),
   refresh: (refreshToken: string) =>
     api.post('/auth/refresh', { refreshToken }),
   me: () => api.get('/auth/me'),

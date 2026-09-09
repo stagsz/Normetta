@@ -3,27 +3,6 @@ import { authService } from '../services/authService';
 
 export class AuthController {
   /**
-   * POST /api/auth/register
-   */
-  async register(req: Request, res: Response): Promise<void> {
-    const { email, password, firstName, lastName, organizationId, role } = req.body;
-
-    const user = await authService.register({
-      email,
-      password,
-      firstName,
-      lastName,
-      organizationId,
-      role,
-    });
-
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
-  }
-
-  /**
    * POST /api/auth/login
    */
   async login(req: Request, res: Response): Promise<void> {

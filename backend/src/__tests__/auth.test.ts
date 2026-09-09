@@ -153,12 +153,7 @@ describe('Auth API', () => {
   });
 
   describe('POST /api/auth/register', () => {
-    it('should register a new user successfully', async () => {
-      // Create an organization first
-      const org = await prisma.organization.create({
-        data: { name: 'Test Org' },
-      });
-
+    it('should not exist — account creation is only via /api/onboarding', async () => {
       const response = await request(app)
         .post('/api/auth/register')
         .send({
@@ -166,74 +161,10 @@ describe('Auth API', () => {
           password: 'SecurePass123',
           firstName: 'New',
           lastName: 'User',
-          organizationId: org.id,
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body.success).toBe(true);
-      expect(response.body.data).toHaveProperty('email', 'newuser@example.com');
-      expect(response.body.data).toHaveProperty('firstName', 'New');
-      expect(response.body.data).toHaveProperty('lastName', 'User');
-      expect(response.body.data).not.toHaveProperty('passwordHash');
-    });
-
-    it('should return 400 for duplicate email', async () => {
-      const existingUser = await createTestUser({
-        email: 'existing@example.com',
-      });
-
-      // Get the organization
-      const user = await prisma.user.findUnique({
-        where: { id: existingUser.id },
-      });
-
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({
-          email: 'existing@example.com',
-          password: 'AnotherPass123',
-          firstName: 'Another',
-          lastName: 'User',
-          organizationId: user?.organizationId,
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.message).toContain('already registered');
-    });
-
-    it('should return 400 with password less than 8 characters', async () => {
-      const org = await prisma.organization.create({
-        data: { name: 'Test Org' },
-      });
-
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({
-          email: 'shortpass@example.com',
-          password: 'short',
-          firstName: 'Test',
-          lastName: 'User',
-          organizationId: org.id,
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-    });
-
-    it('should return 404 for non-existent organization', async () => {
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({
-          email: 'noorg@example.com',
-          password: 'ValidPass123',
-          firstName: 'No',
-          lastName: 'Org',
           organizationId: '00000000-0000-0000-0000-000000000000',
         });
 
       expect(response.status).toBe(404);
-      expect(response.body.success).toBe(false);
     });
   });
 
