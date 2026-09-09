@@ -151,3 +151,6 @@ docs/legal/GDPR_COMPLIANCE_REVIEW.md
 # Legacy/one-time artifacts not needed at runtime
 supabase/migrations/
 backend/prisma/seed*.ts
+
+# Local agent/tool state — never commit
+.omc/

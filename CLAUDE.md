@@ -204,7 +204,9 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY  # Cloudflare Turnstile site key; unset = widget 
 ---
 
 ## Test Accounts
-- System admin: hermes@greisz.se / Sidvolt2
+- Credentials are never stored in this repo. Test logins live in the password manager /
+  local `backend/.env` only. (The previous admin credentials committed here were rotated
+  after the repo was public — treat anything in git history as burned.)
 - App URL: https://normetta-zeta.vercel.app
 
 ---
