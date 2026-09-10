@@ -25,11 +25,11 @@ export function ProgressBar({
 
   const getColor = () => {
     if (colorScheme === 'compliance') {
-      if (percentage >= 70) return 'bg-green-500';
-      if (percentage >= 50) return 'bg-amber-500';
-      return 'bg-red-500';
+      if (percentage >= 70) return 'bg-[var(--status-pass-solid)]';
+      if (percentage >= 50) return 'bg-[var(--status-obs-solid)]';
+      return 'bg-[var(--status-fail-solid)]';
     }
-    return 'bg-emerald-500';
+    return 'bg-[var(--brand-soft)]';
   };
 
   const heights = {
@@ -42,9 +42,9 @@ export function ProgressBar({
     <div className={clsx('w-full', className)}>
       {(label || showPercentage) && (
         <div className="flex justify-between mb-1.5">
-          {label && <span className="text-sm font-medium text-gray-700">{label}</span>}
+          {label && <span className="text-sm font-medium text-[var(--text-body)]">{label}</span>}
           {showPercentage && (
-            <span className="text-sm font-medium text-gray-500">
+            <span className="text-sm font-medium text-[var(--text-muted)]">
               {Math.round(percentage)}%
             </span>
           )}
@@ -52,7 +52,7 @@ export function ProgressBar({
       )}
       <div
         className={clsx(
-          'w-full bg-gray-200 rounded-full overflow-hidden',
+          'w-full bg-[var(--stone-200)] rounded-full overflow-hidden',
           heights[size]
         )}
       >
@@ -95,18 +95,18 @@ export function CircularProgress({
 
   const getColor = () => {
     if (colorScheme === 'compliance') {
-      if (percentage >= 70) return '#23a663'; // green-500
-      if (percentage >= 50) return '#f99d07'; // amber-500
-      return '#f83b3b'; // red-500
+      if (percentage >= 70) return 'var(--status-pass-solid)'; // green-500
+      if (percentage >= 50) return 'var(--status-obs-solid)'; // amber-500
+      return 'var(--status-fail-solid)'; // red-500
     }
-    return '#6b8f5e'; // emerald-500
+    return 'var(--brand)'; // emerald-500
   };
 
   return (
     <div className={clsx('relative inline-flex items-center justify-center', className)}>
       <svg width={size} height={size} className="transform -rotate-90">
         <circle
-          className="text-gray-200"
+          className="text-[var(--border-subtle)]"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           fill="transparent"
@@ -128,7 +128,7 @@ export function CircularProgress({
         />
       </svg>
       {showPercentage && (
-        <span className="absolute text-2xl font-bold text-gray-800">
+        <span className="absolute text-2xl font-bold text-[var(--text-strong)]">
           {Math.round(percentage)}%
         </span>
       )}

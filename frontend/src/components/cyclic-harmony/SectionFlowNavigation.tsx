@@ -74,13 +74,13 @@ export function SectionFlowNavigation({
   };
 
   return (
-    <div className={cn('relative bg-harmony-warm-gray rounded-crown-lg p-6', className)}>
+    <div className={cn('relative bg-[var(--surface-sunken)] rounded-crown-lg p-6', className)}>
       {/* Section Flow Title */}
       <div className="mb-6">
-        <h2 className="font-display font-bold text-xl text-harmony-dark-text mb-2">
+        <h2 className="font-display font-bold text-xl text-[var(--text-strong)] mb-2">
           Audit Journey
         </h2>
-        <p className="text-sm text-gray-600 leading-generous">
+        <p className="text-sm text-[var(--text-muted)] leading-generous">
           Navigate through ISO 9001 sections to complete your assessment
         </p>
       </div>
@@ -91,10 +91,10 @@ export function SectionFlowNavigation({
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-crown flex items-center justify-center hover:bg-harmony-warm-white transition-colors duration-200"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[var(--surface-card)] rounded-full shadow-soft-2 flex items-center justify-center hover:bg-[var(--surface-raised)] transition-colors duration-200"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-5 h-5 text-harmony-forest" />
+            <ChevronLeft className="w-5 h-5 text-[var(--text-link)]" />
           </button>
         )}
 
@@ -102,10 +102,10 @@ export function SectionFlowNavigation({
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-crown flex items-center justify-center hover:bg-harmony-warm-white transition-colors duration-200"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[var(--surface-card)] rounded-full shadow-soft-2 flex items-center justify-center hover:bg-[var(--surface-raised)] transition-colors duration-200"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-5 h-5 text-harmony-forest" />
+            <ChevronRight className="w-5 h-5 text-[var(--text-link)]" />
           </button>
         )}
 
@@ -153,30 +153,30 @@ export function SectionFlowNavigation({
       </div>
 
       {/* Progress Summary */}
-      <div className="mt-6 pt-6 border-t border-harmony-light-beige">
+      <div className="mt-6 pt-6 border-t border-[var(--border-subtle)]">
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-harmony-forest" />
-              <span className="text-gray-600">
+              <div className="w-3 h-3 rounded-full bg-[var(--status-pass-solid)]" />
+              <span className="text-[var(--text-muted)]">
                 Completed: {sections.filter((s) => s.progress === 100).length}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-harmony-lime" />
-              <span className="text-gray-600">
+              <div className="w-3 h-3 rounded-full bg-[var(--brand)]" />
+              <span className="text-[var(--text-muted)]">
                 In Progress: {sections.filter((s) => s.progress > 0 && s.progress < 100).length}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-harmony-sage opacity-40" />
-              <span className="text-gray-600">
+              <div className="w-3 h-3 rounded-full bg-[var(--text-muted)] opacity-40" />
+              <span className="text-[var(--text-muted)]">
                 Pending: {sections.filter((s) => s.progress === 0).length}
               </span>
             </div>
           </div>
 
-          <div className="font-medium text-harmony-dark-text">
+          <div className="font-medium text-[var(--text-strong)]">
             {sections.reduce((sum, s) => sum + s.answeredQuestions, 0)} /{' '}
             {sections.reduce((sum, s) => sum + s.totalQuestions, 0)} Questions Answered
           </div>

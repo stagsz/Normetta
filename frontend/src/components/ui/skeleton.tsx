@@ -22,7 +22,7 @@ function Skeleton({
   return (
     <div
       className={clsx(
-        'animate-pulse bg-gray-200',
+        'animate-pulse bg-[var(--stone-200)]',
         {
           'rounded-md': variant === 'rectangular',
           'rounded-full': variant === 'circular',
@@ -45,7 +45,7 @@ function SkeletonCard({ className }: { className?: string }) {
   return (
     <div
       className={clsx(
-        'rounded-2xl border border-gray-200 bg-white shadow-sm p-6',
+        'rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)] p-6',
         className
       )}
     >
@@ -66,7 +66,7 @@ function SkeletonChart({ className, height = 280 }: { className?: string; height
   return (
     <div
       className={clsx(
-        'rounded-2xl border border-gray-200 bg-white shadow-sm',
+        'rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]',
         className
       )}
     >
@@ -84,7 +84,7 @@ function SkeletonChart({ className, height = 280 }: { className?: string; height
 function SkeletonStatusGrid({ count = 5 }: { count?: number }) {
   return (
     <div
-      className="rounded-2xl border border-gray-200 bg-white shadow-sm"
+      className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]"
     >
       <div className="p-6 pb-0">
         <Skeleton variant="text" width={160} height={24} />
@@ -92,7 +92,7 @@ function SkeletonStatusGrid({ count = 5 }: { count?: number }) {
       <div className="p-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {Array.from({ length: count }).map((_, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-lg flex flex-col items-center">
+            <div key={i} className="p-4 bg-[var(--surface-sunken)] rounded-lg flex flex-col items-center">
               <Skeleton variant="text" width={40} height={28} className="mb-2" />
               <Skeleton variant="text" width={60} />
             </div>
@@ -106,7 +106,7 @@ function SkeletonStatusGrid({ count = 5 }: { count?: number }) {
 /** Skeleton for a table row in list views */
 function SkeletonTableRow({ columns = 6 }: { columns?: number }) {
   return (
-    <tr className="border-b border-gray-100">
+    <tr className="border-b border-[var(--border-subtle)]">
       {Array.from({ length: columns }).map((_, i) => (
         <td key={i} className="px-6 py-4">
           <Skeleton variant="text" width={i === 0 ? 140 : 80} />
@@ -121,7 +121,7 @@ function SkeletonListItem({ className }: { className?: string }) {
   return (
     <div
       className={clsx(
-        'rounded-2xl border border-gray-200 bg-white shadow-sm p-4',
+        'rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)] p-4',
         className
       )}
     >
@@ -158,7 +158,7 @@ function SkeletonListItem({ className }: { className?: string }) {
 function SkeletonFilters({ showExtraFilters = true }: { showExtraFilters?: boolean }) {
   return (
     <div
-      className="rounded-2xl border border-gray-200 bg-white shadow-sm"
+      className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]"
     >
       <div className="p-6">
         <div className="flex flex-col md:flex-row gap-4">
@@ -181,7 +181,7 @@ function SkeletonFilters({ showExtraFilters = true }: { showExtraFilters?: boole
 function SkeletonPagination() {
   return (
     <div
-      className="rounded-2xl border border-gray-200 bg-white shadow-sm"
+      className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]"
     >
       <div className="p-4">
         <div className="flex items-center justify-between">

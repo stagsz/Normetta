@@ -2,7 +2,6 @@ import { prisma } from '../config/database';
 import { logger } from '../utils/logger';
 
 // Read version from package.json at runtime
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageJson = require('../../package.json');
 
 export interface HealthStatus {

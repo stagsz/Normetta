@@ -9,7 +9,7 @@ import {
 /** Skeleton for a single NCR list item */
 function SkeletonNCRItem() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
+    <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)] p-4">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           {/* Title and badges row */}
@@ -56,7 +56,7 @@ export function NCRsListSkeleton({ itemCount = 5 }: NCRsListSkeletonProps) {
       </div>
 
       {/* Filters skeleton - NCRs have status and severity dropdowns */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <div className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -72,7 +72,7 @@ export function NCRsListSkeleton({ itemCount = 5 }: NCRsListSkeletonProps) {
       </div>
 
       {/* Sort controls skeleton */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <div className="py-3 px-6">
           <div className="flex items-center gap-6 text-sm">
             <Skeleton variant="text" width={60} />

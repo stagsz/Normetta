@@ -9,17 +9,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gray-100 text-gray-700 border border-gray-200',
-        sage: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        default: 'bg-[var(--surface-sunken)] text-[var(--text-body)] border border-[var(--border-subtle)]',
+        sage: 'bg-[var(--brand-soft)] text-[var(--brand)] border border-[var(--border-subtle)]',
         info: 'bg-blue-50 text-blue-700 border border-blue-200',
         success: 'bg-green-50 text-green-700 border border-green-200',
         warning: 'bg-amber-50 text-amber-700 border border-amber-200',
         danger: 'bg-red-50 text-red-700 border border-red-200',
         // Solid variants
-        'solid-sage': 'bg-emerald-600 text-white',
+        'solid-sage': 'bg-[var(--brand)] text-white',
         'solid-info': 'bg-blue-600 text-white',
         'solid-success': 'bg-green-600 text-white',
-        'solid-warning': 'bg-amber-500 text-white',
+        'solid-warning': 'bg-[var(--status-obs-solid)] text-white',
         'solid-danger': 'bg-red-600 text-white',
       },
       size: {

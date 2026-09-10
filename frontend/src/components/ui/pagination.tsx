@@ -58,7 +58,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           className
         )}
       >
-        <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
           <span>Show</span>
           <div className="w-20">
             <Select
@@ -76,7 +76,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-[var(--text-muted)]">
             {totalItems === 0
               ? 'No items'
               : `${startItem}-${endItem} of ${totalItems}`}
@@ -94,7 +94,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
               <span className="sr-only sm:not-sr-only sm:ml-1">Previous</span>
             </Button>
 
-            <span className="px-3 text-sm font-medium text-gray-700">
+            <span className="px-3 text-sm font-medium text-[var(--text-body)]">
               Page {currentPage} of {totalPages || 1}
             </span>
 

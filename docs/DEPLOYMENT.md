@@ -56,7 +56,7 @@ Vercel automatically detects Next.js and deploys.
 
 Add in Vercel dashboard:
 ```
-NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+NEXT_PUBLIC_API_URL=https://audit-flow.org/_/backend/api
 NEXT_PUBLIC_ENV=production
 ```
 
@@ -76,7 +76,7 @@ cd frontend
 vercel deploy --prod
 ```
 
-Result: App available at `https://yourapp.vercel.app`
+Result: App available at `https://audit-flow.org`
 
 ---
 

@@ -1,0 +1,74 @@
+<!-- @dsCard group="Components" viewport="700x470" name="Display" subtitle="Card · ClauseStrip · Badge · ConformanceBadge · Avatar · ProgressBar" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 22px 24px; background: var(--surface-page); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 8px; display:block; }
+  .rowx { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Card, Badge, ConformanceBadge, Avatar, ProgressBar, ClauseStrip } = window.AuditFlowDesignSystem_900961;
+
+const ISO_CLAUSES = [
+  {tick:'4', label:'Clause 4 — Context', status:'pass', weight:3},
+  {tick:'5', label:'Clause 5 — Leadership', status:'pass', weight:3},
+  {tick:'6', label:'Clause 6 — Planning', status:'obs', weight:4},
+  {tick:'7', label:'Clause 7 — Support', status:'pass', weight:5},
+  {tick:'8', label:'Clause 8 — Operation', status:'fail', weight:6},
+  {tick:'9', label:'Clause 9 — Evaluation', status:'obs', weight:4},
+  {tick:'10', label:'Clause 10 — Improvement', status:'pending', weight:3},
+];
+
+function Demo() {
+  return (
+    <div className="grid">
+      <Card title="Clause 7 — Support" subtitle="ISO 9001:2015" action={<ConformanceBadge status="observation" />}>
+        <div style={{display:'flex', flexDirection:'column', gap:14}}>
+          <ProgressBar segments={[{value:64,tone:'pass'},{value:18,tone:'obs'},{value:9,tone:'fail'}]} />
+          <div className="rowx" style={{justifyContent:'space-between'}}>
+            <span style={{fontSize:13, color:'var(--text-muted)'}}>12 of 14 controls reviewed</span>
+            <span className="af-mono" style={{fontWeight:600, color:'var(--text-strong)'}}>87.5%</span>
+          </div>
+          <div className="rowx" style={{marginTop:2}}>
+            <Avatar name="Dana Okoye" />
+            <Avatar name="Marcus Reid" tone="slate" />
+            <Avatar name="QA Lead" tone="pass" size="md" />
+          </div>
+        </div>
+      </Card>
+      <div>
+        <span className="lbl">Conformance badges</span>
+        <div className="rowx" style={{marginBottom:18}}>
+          <ConformanceBadge status="conformant" />
+          <ConformanceBadge status="observation" />
+          <ConformanceBadge status="nonconformity" />
+          <ConformanceBadge status="notassessed" />
+        </div>
+        <span className="lbl">Badges</span>
+        <div className="rowx" style={{marginBottom:18}}>
+          <Badge tone="brand" dot>Active</Badge>
+          <Badge tone="info">In review</Badge>
+          <Badge tone="fail" variant="solid">3 overdue</Badge>
+          <Badge tone="neutral">Draft</Badge>
+        </div>
+        <span className="lbl">Clause readiness</span>
+        <ClauseStrip clauses={ISO_CLAUSES} showLegend />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script>
+</body>
+</html>

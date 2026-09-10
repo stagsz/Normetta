@@ -54,8 +54,8 @@ function SectionTreeItem({
         onClick={handleClick}
         className={clsx(
           'w-full flex items-center gap-2 px-3 py-2 text-left rounded-xl transition-colors',
-          'hover:bg-gray-50',
-          isSelected && 'bg-emerald-50 border-l-2 border-emerald-600'
+          'hover:bg-[var(--surface-sunken)]',
+          isSelected && 'bg-[var(--brand-soft)] border-l-2 border-[var(--brand)]'
         )}
         style={{ paddingLeft: `${12 + depth * 16}px` }}
       >
@@ -64,13 +64,13 @@ function SectionTreeItem({
           {hasChildren && (
             <button
               onClick={handleToggle}
-              className="p-0.5 hover:bg-gray-200 rounded"
+              className="p-0.5 hover:bg-[var(--stone-200)] rounded"
               aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
             >
               {isExpanded ? (
-                <ChevronDown className="w-4 h-4 text-gray-500" />
+                <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />
               ) : (
-                <ChevronRight className="w-4 h-4 text-gray-500" />
+                <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
               )}
             </button>
           )}
@@ -79,22 +79,22 @@ function SectionTreeItem({
         {/* Section icon */}
         <div className="flex-shrink-0">
           {hasChildren ? (
-            <BookOpen className="w-4 h-4 text-emerald-500" />
+            <BookOpen className="w-4 h-4 text-[var(--brand)]" />
           ) : (
-            <FileText className="w-4 h-4 text-gray-400" />
+            <FileText className="w-4 h-4 text-[var(--text-subtle)]" />
           )}
         </div>
 
         {/* Section content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2">
-            <span className="font-semibold text-gray-900 text-sm">
+            <span className="font-semibold text-[var(--text-strong)] text-sm">
               {section.sectionNumber}
             </span>
             <span
               className={clsx(
                 'text-sm truncate',
-                isSelected ? 'text-emerald-700' : 'text-gray-600'
+                isSelected ? 'text-[var(--brand)]' : 'text-[var(--text-muted)]'
               )}
             >
               {section.title}
@@ -104,7 +104,7 @@ function SectionTreeItem({
 
         {/* Question count badge */}
         {questionCount > 0 && (
-          <span className="flex-shrink-0 px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
+          <span className="flex-shrink-0 px-2 py-0.5 text-xs font-medium bg-[var(--surface-sunken)] text-[var(--text-muted)] rounded-full">
             {questionCount} {questionCount === 1 ? 'question' : 'questions'}
           </span>
         )}
@@ -248,20 +248,20 @@ export default function StandardsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">
             ISO 9001:2015 Standards
           </h1>
-          <p className="text-gray-500">
+          <p className="text-[var(--text-muted)]">
             Browse the ISO 9001:2015 standard sections and audit questions
           </p>
         </div>
         <Card>
           <CardContent className="py-12 text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <p className="text-gray-700 font-medium">
+            <p className="text-[var(--text-body)] font-medium">
               Failed to load standards
             </p>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-[var(--text-muted)] text-sm mt-1">
               Please try refreshing the page
             </p>
           </CardContent>
@@ -277,23 +277,23 @@ export default function StandardsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">
             ISO 9001:2015 Standards
           </h1>
-          <p className="text-gray-500">
+          <p className="text-[var(--text-muted)]">
             Browse the ISO 9001:2015 standard sections and audit questions
           </p>
         </div>
         <div className="flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-xl">
-            <BookOpen className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-700 font-medium">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-sunken)] rounded-xl">
+            <BookOpen className="w-4 h-4 text-[var(--text-muted)]" />
+            <span className="text-[var(--text-body)] font-medium">
               {stats.totalSections} sections
             </span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-xl">
-            <FileText className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-700 font-medium">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-sunken)] rounded-xl">
+            <FileText className="w-4 h-4 text-[var(--text-muted)]" />
+            <span className="text-[var(--text-body)] font-medium">
               {stats.totalQuestions} questions
             </span>
           </div>
@@ -318,14 +318,14 @@ export default function StandardsPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleExpandAll}
-                    className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
+                    className="text-xs text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                   >
                     Expand All
                   </button>
-                  <span className="text-gray-300">|</span>
+                  <span className="text-[var(--text-subtle)]">|</span>
                   <button
                     onClick={handleCollapseAll}
-                    className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
+                    className="text-xs text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                   >
                     Collapse All
                   </button>

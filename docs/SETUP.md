@@ -123,11 +123,11 @@ http://localhost:3000
 ```
 
 Default test user (after seeding):
-- Email: `admin@example.com`
-- Password: `password123` (change in production!)
+- Email: `hermes@greisz.se`
+- Password: `Sidvolt2`
 
----
 
+### Test Backend
 ## Database Setup Details
 
 ### Using Docker Compose

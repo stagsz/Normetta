@@ -83,35 +83,35 @@ export default function AdminInvitesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Pending Join Requests</h1>
-        <p className="text-gray-500">Approve or reject requests to join your organisation</p>
+        <h1 className="text-2xl font-bold text-[var(--text-strong)]">Pending Join Requests</h1>
+        <p className="text-[var(--text-muted)]">Approve or reject requests to join your organisation</p>
       </div>
 
       {loading ? (
         <Card>
           <CardContent className="py-12 flex items-center justify-center">
-            <Loader2 className="animate-spin text-gray-400" size={32} />
+            <Loader2 className="animate-spin text-[var(--text-subtle)]" size={32} />
           </CardContent>
         </Card>
       ) : pendingInvites.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Inbox className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-            <p className="text-gray-500">No pending join requests</p>
+            <Inbox className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-4" />
+            <p className="text-[var(--text-muted)]">No pending join requests</p>
           </CardContent>
         </Card>
       ) : (
         <Card>
           <CardContent className="p-0">
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-[var(--border-subtle)]">
               {pendingInvites.map((invite) => (
                 <li key={invite.id} className="flex flex-col sm:flex-row sm:items-center gap-3 px-6 py-4">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-[var(--text-strong)]">
                       {invite.firstName} {invite.lastName}
                     </p>
-                    <p className="text-sm text-gray-500">{invite.email}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-sm text-[var(--text-muted)]">{invite.email}</p>
+                    <p className="text-xs text-[var(--text-subtle)] mt-0.5">
                       Requested {format(new Date(invite.createdAt), 'MMM d, yyyy')}
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export default function AdminInvitesPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                      className="text-[var(--brand-strong)] border-[var(--border-subtle)] hover:bg-[var(--brand-soft)]"
                       onClick={() => handleApprove(invite.id)}
                       disabled={actioning === invite.id}
                       loading={actioning === invite.id}
@@ -141,7 +141,7 @@ export default function AdminInvitesPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="text-red-600 border-red-200 hover:bg-red-50"
+                      className="text-[var(--status-fail-fg)] border-[var(--status-fail-line)] hover:bg-[var(--status-fail-bg)]"
                       onClick={() => handleReject(invite.id)}
                       disabled={actioning === invite.id}
                       loading={actioning === invite.id}

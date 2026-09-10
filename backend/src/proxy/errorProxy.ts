@@ -30,11 +30,9 @@ export function globalErrorHandler(
   error: Error,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction
 ): void {
   // Log the error
-  // eslint-disable-next-line no-console
   console.error('[AUDITFLOW_ERR]', error.constructor?.name, error.message);
   logger.error('Error occurred', {
     error: error.message,
@@ -104,7 +102,7 @@ export function notFoundHandler(req: Request, res: Response): void {
  * Async Handler Wrapper
  * Convenience wrapper for async route handlers
  */
-export function asyncHandler<T extends (req: Request, res: Response, next: NextFunction) => Promise<void>>(
+export function asyncHandler<T extends (req: Request, res: Response, next: NextFunction) => Promise<unknown>>(
   handler: T
 ): (req: Request, res: Response, next: NextFunction) => Promise<void> {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

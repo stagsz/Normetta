@@ -11,6 +11,8 @@ import {
   Calendar,
   ChevronDown,
   ChevronUp,
+  Eye,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +24,7 @@ import {
 import { ActionStatusDropdown } from './ActionStatusDropdown';
 
 const statusColors: Record<string, string> = {
-  PENDING: 'bg-gray-100 text-gray-700',
+  PENDING: 'bg-[var(--surface-sunken)] text-[var(--text-body)]',
   IN_PROGRESS: 'bg-amber-50 text-amber-700',
   COMPLETED: 'bg-blue-50 text-blue-700',
   VERIFIED: 'bg-green-50 text-green-700',
@@ -36,7 +38,7 @@ const statusLabels: Record<string, string> = {
 };
 
 const priorityColors: Record<string, string> = {
-  LOW: 'bg-gray-100 text-gray-600',
+  LOW: 'bg-[var(--surface-sunken)] text-[var(--text-muted)]',
   MEDIUM: 'bg-amber-50 text-amber-700',
   HIGH: 'bg-orange-100 text-orange-700',
   CRITICAL: 'bg-red-50 text-red-700',
@@ -63,16 +65,16 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
     action.status !== 'VERIFIED';
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div className="border border-[var(--border-subtle)] rounded-xl overflow-hidden">
       {/* Main Row */}
       <div
-        className={`flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 ${
-          isExpanded ? 'bg-gray-50' : ''
+        className={`flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--surface-sunken)] ${
+          isExpanded ? 'bg-[var(--surface-sunken)]' : ''
         }`}
         onClick={onToggle}
       >
         <div className="flex-1 min-w-0 pr-4">
-          <p className="font-medium text-gray-900 truncate">{action.description}</p>
+          <p className="font-medium text-[var(--text-strong)] truncate">{action.description}</p>
           <div className="flex flex-wrap items-center gap-2 mt-2 text-sm">
             {/* Status Dropdown */}
             <ActionStatusDropdown
@@ -85,7 +87,7 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
             {/* Priority Badge */}
             <span
               className={`px-2 py-0.5 rounded text-xs font-medium ${
-                priorityColors[action.priority] || 'bg-gray-100 text-gray-700'
+                priorityColors[action.priority] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
               }`}
             >
               {action.priority}
@@ -93,7 +95,7 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
 
             {/* Assignee */}
             {action.assignedTo && (
-              <span className="flex items-center gap-1 text-gray-500">
+              <span className="flex items-center gap-1 text-[var(--text-muted)]">
                 <User className="h-3 w-3" />
                 {action.assignedTo.firstName} {action.assignedTo.lastName}
               </span>
@@ -103,7 +105,7 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
             {action.targetDate && (
               <span
                 className={`flex items-center gap-1 ${
-                  isOverdue ? 'text-red-600 font-medium' : 'text-gray-500'
+                  isOverdue ? 'text-red-600 font-medium' : 'text-[var(--text-muted)]'
                 }`}
               >
                 <Calendar className="h-3 w-3" />
@@ -117,25 +119,25 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
         </div>
         <div className="flex items-center gap-2">
           {isExpanded ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-[var(--text-subtle)]" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-[var(--text-subtle)]" />
           )}
         </div>
       </div>
 
       {/* Expanded Details */}
       {isExpanded && (
-        <div className="px-4 pb-4 pt-2 border-t border-gray-200 bg-gray-50">
+        <div className="px-4 pb-4 pt-2 border-t border-[var(--border-subtle)] bg-[var(--surface-sunken)]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-gray-500 font-medium mb-1">Description</p>
-              <p className="text-gray-700">{action.description}</p>
+              <p className="text-[var(--text-muted)] font-medium mb-1">Description</p>
+              <p className="text-[var(--text-body)]">{action.description}</p>
             </div>
 
             <div className="space-y-3">
               <div>
-                <p className="text-gray-500 font-medium mb-1">Status</p>
+                <p className="text-[var(--text-muted)] font-medium mb-1">Status</p>
                 <ActionStatusDropdown
                   actionId={action.id}
                   currentStatus={action.status}
@@ -145,31 +147,43 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
               </div>
 
               <div>
-                <p className="text-gray-500 font-medium mb-1">Priority</p>
+                <p className="text-[var(--text-muted)] font-medium mb-1">Priority</p>
                 <span
                   className={`inline-flex px-2 py-1 rounded text-sm font-medium ${
-                    priorityColors[action.priority] || 'bg-gray-100 text-gray-700'
+                    priorityColors[action.priority] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                   }`}
                 >
                   {action.priority}
                 </span>
               </div>
+
+              {canEdit && action.status === 'COMPLETED' && (
+                <div>
+                  <Button
+                    size="sm"
+                    onClick={() => onVerifyClick(action)}
+                    className="bg-green-600 hover:bg-green-700 focus:ring-green-500"
+                  >
+                    Verify Corrective Action
+                  </Button>
+                </div>
+              )}
             </div>
 
             {action.assignedTo && (
               <div>
-                <p className="text-gray-500 font-medium mb-1">Assigned To</p>
-                <p className="text-gray-700">
+                <p className="text-[var(--text-muted)] font-medium mb-1">Assigned To</p>
+                <p className="text-[var(--text-body)]">
                   {action.assignedTo.firstName} {action.assignedTo.lastName}
                 </p>
-                <p className="text-gray-500 text-xs">{action.assignedTo.email}</p>
+                <p className="text-[var(--text-muted)] text-xs">{action.assignedTo.email}</p>
               </div>
             )}
 
             {action.targetDate && (
               <div>
-                <p className="text-gray-500 font-medium mb-1">Target Date</p>
-                <p className={isOverdue ? 'text-red-600 font-medium' : 'text-gray-700'}>
+                <p className="text-[var(--text-muted)] font-medium mb-1">Target Date</p>
+                <p className={isOverdue ? 'text-red-600 font-medium' : 'text-[var(--text-body)]'}>
                   {format(new Date(action.targetDate), 'MMMM d, yyyy')}
                   {isOverdue && ' (Overdue)'}
                 </p>
@@ -178,8 +192,8 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
 
             {action.completedDate && (
               <div>
-                <p className="text-gray-500 font-medium mb-1">Completed Date</p>
-                <p className="text-gray-700">
+                <p className="text-[var(--text-muted)] font-medium mb-1">Completed Date</p>
+                <p className="text-[var(--text-body)]">
                   {format(new Date(action.completedDate), 'MMMM d, yyyy')}
                 </p>
               </div>
@@ -187,12 +201,12 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
 
             {action.verifiedBy && (
               <div>
-                <p className="text-gray-500 font-medium mb-1">Verified By</p>
-                <p className="text-gray-700">
+                <p className="text-[var(--text-muted)] font-medium mb-1">Verified By</p>
+                <p className="text-[var(--text-body)]">
                   {action.verifiedBy.firstName} {action.verifiedBy.lastName}
                 </p>
                 {action.verifiedDate && (
-                  <p className="text-gray-500 text-xs">
+                  <p className="text-[var(--text-muted)] text-xs">
                     on {format(new Date(action.verifiedDate), 'MMM d, yyyy')}
                   </p>
                 )}
@@ -201,12 +215,12 @@ function ActionRow({ action, isExpanded, onToggle, canEdit, onVerifyClick }: {
 
             {action.effectivenessNotes && (
               <div className="md:col-span-2">
-                <p className="text-gray-500 font-medium mb-1">Effectiveness Notes</p>
-                <p className="text-gray-700">{action.effectivenessNotes}</p>
+                <p className="text-[var(--text-muted)] font-medium mb-1">Effectiveness Notes</p>
+                <p className="text-[var(--text-body)]">{action.effectivenessNotes}</p>
               </div>
             )}
 
-            <div className="text-xs text-gray-400 md:col-span-2">
+            <div className="text-xs text-[var(--text-subtle)] md:col-span-2">
               Created: {format(new Date(action.createdAt), 'MMM d, yyyy')} |
               Updated: {format(new Date(action.updatedAt), 'MMM d, yyyy')}
             </div>
@@ -221,7 +235,7 @@ function ActionListSkeleton() {
   return (
     <div className="space-y-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="border border-gray-200 rounded-xl p-4">
+        <div key={i} className="border border-[var(--border-subtle)] rounded-xl p-4">
           <Skeleton width="60%" height={20} className="mb-2" />
           <div className="flex gap-2">
             <Skeleton width={80} height={20} />
@@ -243,9 +257,9 @@ function EmptyState({ canEdit, onAddAction, ncrStatus }: {
 
   return (
     <div className="text-center py-8">
-      <CheckCircle2 className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-      <p className="text-gray-600 font-medium">No corrective actions yet</p>
-      <p className="text-gray-400 text-sm mt-1">
+      <CheckCircle2 className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-3" />
+      <p className="text-[var(--text-muted)] font-medium">No corrective actions yet</p>
+      <p className="text-[var(--text-subtle)] text-sm mt-1">
         {isClosed
           ? 'This non-conformity is closed.'
           : 'Add corrective actions to address this non-conformity.'
@@ -304,7 +318,7 @@ export function CorrectiveActionList({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+          <CheckCircle2 className="h-5 w-5 text-[var(--brand-strong)]" />
           Corrective Actions ({stats.total})
         </CardTitle>
         {canEdit && !isClosed && actions.length > 0 && (
@@ -317,16 +331,16 @@ export function CorrectiveActionList({
       <CardContent>
         {/* Summary Stats */}
         {actions.length > 0 && (
-          <div className="flex flex-wrap gap-4 mb-4 pb-4 border-b border-gray-200">
+          <div className="flex flex-wrap gap-4 mb-4 pb-4 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-gray-400" />
-              <span className="text-gray-600">
+              <Clock className="h-4 w-4 text-[var(--text-subtle)]" />
+              <span className="text-[var(--text-muted)]">
                 {stats.pending} pending, {stats.inProgress} in progress
               </span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <CheckCircle2 className="h-4 w-4 text-blue-500" />
-              <span className="text-gray-600">
+              <span className="text-[var(--text-muted)]">
                 {stats.completed} completed, {stats.verified} verified
               </span>
             </div>
@@ -348,7 +362,7 @@ export function CorrectiveActionList({
         {isError && !isLoading && (
           <div className="text-center py-8">
             <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-3" />
-            <p className="text-gray-600 font-medium">Failed to load corrective actions</p>
+            <p className="text-[var(--text-muted)] font-medium">Failed to load corrective actions</p>
             <Button onClick={() => refetch()} variant="outline" className="mt-4">
               Try Again
             </Button>

@@ -60,9 +60,9 @@ export function ProcessStageCard({
         <div className="flex-1 flex items-center justify-center -mt-4">
           <div className={cn(
             'transition-all duration-300',
-            status === 'completed' && 'text-harmony-forest',
-            status === 'active' && 'text-harmony-olive',
-            status === 'pending' && 'text-harmony-sage'
+            status === 'completed' && 'text-[var(--status-pass-solid)]',
+            status === 'active' && 'text-[var(--brand)]',
+            status === 'pending' && 'text-[var(--text-subtle)]'
           )}>
             <Icon size={56} strokeWidth={2} />
           </div>
@@ -70,11 +70,11 @@ export function ProcessStageCard({
 
         {/* Title & Description */}
         <div className="text-center space-y-2 mb-4">
-          <h3 className="font-display font-bold text-lg text-harmony-dark-text leading-tight">
+          <h3 className="font-display font-bold text-lg text-[var(--text-strong)] leading-tight">
             {title}
           </h3>
           {description && (
-            <p className="text-sm text-gray-600 line-clamp-2 leading-generous">
+            <p className="text-sm text-[var(--text-muted)] line-clamp-2 leading-generous">
               {description}
             </p>
           )}
@@ -83,9 +83,9 @@ export function ProcessStageCard({
         {/* Progress Bar (if in progress) */}
         {progress > 0 && progress < 100 && (
           <div className="mb-4">
-            <div className="h-1.5 bg-harmony-light-beige rounded-full overflow-hidden">
+            <div className="h-1.5 bg-[var(--surface-raised)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-harmony-lime to-harmony-olive transition-all duration-500"
+                className="h-full bg-gradient-to-r from-mint-600 to-mint-400 transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -96,9 +96,9 @@ export function ProcessStageCard({
         <div className="text-center">
           <span className={cn(
             'inline-block font-display font-medium text-sm tracking-wider',
-            status === 'completed' && 'text-harmony-forest',
-            status === 'active' && 'text-harmony-olive',
-            status === 'pending' && 'text-harmony-sage'
+            status === 'completed' && 'text-[var(--status-pass-fg)]',
+            status === 'active' && 'text-[var(--text-link)]',
+            status === 'pending' && 'text-[var(--text-subtle)]'
           )}>
             {stageNumber}
           </span>
@@ -106,7 +106,7 @@ export function ProcessStageCard({
 
         {/* Completion Checkmark Overlay */}
         {status === 'completed' && (
-          <div className="absolute top-4 right-4 w-8 h-8 bg-harmony-forest rounded-full flex items-center justify-center shadow-md">
+          <div className="absolute top-4 right-4 w-8 h-8 bg-[var(--status-pass-solid)] rounded-full flex items-center justify-center shadow-[var(--shadow-md)]">
             <svg
               className="w-5 h-5 text-white"
               fill="none"

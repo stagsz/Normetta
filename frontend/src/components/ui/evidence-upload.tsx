@@ -175,10 +175,10 @@ export function EvidenceUpload({
         className={clsx(
           'relative border-2 border-dashed rounded-xl p-6 transition-colors text-center',
           disabled
-            ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+            ? 'border-[var(--border-subtle)] bg-[var(--surface-sunken)] cursor-not-allowed'
             : isDragActive
-            ? 'border-emerald-500 bg-emerald-50'
-            : 'border-gray-300 bg-white hover:border-gray-400'
+            ? 'border-[var(--brand)] bg-[var(--brand-soft)]'
+            : 'border-[var(--border-default)] bg-[var(--surface-card)] hover:border-[var(--border-strong)]'
         )}
       >
         <input
@@ -195,13 +195,13 @@ export function EvidenceUpload({
           <div
             className={clsx(
               'p-3 rounded-full',
-              isDragActive ? 'bg-emerald-100' : 'bg-gray-100'
+              isDragActive ? 'bg-[var(--brand-soft)]' : 'bg-[var(--surface-sunken)]'
             )}
           >
             <Upload
               className={clsx(
                 'h-6 w-6',
-                isDragActive ? 'text-emerald-600' : 'text-gray-400'
+                isDragActive ? 'text-[var(--brand-strong)]' : 'text-[var(--text-subtle)]'
               )}
             />
           </div>
@@ -212,16 +212,16 @@ export function EvidenceUpload({
               className={clsx(
                 'font-medium cursor-pointer',
                 disabled
-                  ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-emerald-600 hover:text-emerald-700'
+                  ? 'text-[var(--text-subtle)] cursor-not-allowed'
+                  : 'text-[var(--brand-strong)] hover:text-[var(--brand)]'
               )}
             >
               Click to upload
             </label>
-            <span className="text-gray-500"> or drag and drop</span>
+            <span className="text-[var(--text-muted)]"> or drag and drop</span>
           </div>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[var(--text-muted)]">
             PDF, Word, Excel, PNG, or JPEG (max {formatFileSize(MAX_FILE_SIZE)})
           </p>
         </div>
@@ -237,27 +237,27 @@ export function EvidenceUpload({
                 'flex items-center gap-3 p-3 rounded-xl border',
                 uploadingFile.error
                   ? 'bg-red-50 border-red-200'
-                  : 'bg-gray-50 border-gray-200'
+                  : 'bg-[var(--surface-sunken)] border-[var(--border-subtle)]'
               )}
             >
               <div
                 className={clsx(
                   'flex-shrink-0 p-2 rounded',
-                  uploadingFile.error ? 'bg-red-50' : 'bg-white'
+                  uploadingFile.error ? 'bg-red-50' : 'bg-[var(--surface-card)]'
                 )}
               >
                 {uploadingFile.error ? (
                   <AlertCircle className="h-5 w-5 text-red-500" />
                 ) : (
-                  <FileText className="h-5 w-5 text-gray-400" />
+                  <FileText className="h-5 w-5 text-[var(--text-subtle)]" />
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-[var(--text-strong)] truncate">
                   {uploadingFile.file.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   {formatFileSize(uploadingFile.file.size)}
                 </p>
 
@@ -272,7 +272,7 @@ export function EvidenceUpload({
                       size="sm"
                       showPercentage={false}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-[var(--text-muted)] mt-1">
                       {uploadingFile.progress < 100
                         ? `Uploading... ${uploadingFile.progress}%`
                         : 'Upload complete'}

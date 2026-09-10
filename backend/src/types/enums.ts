@@ -16,6 +16,11 @@ export {
   ActionStatus,
   Priority,
   EvidenceType,
+  BetaInviteStatus,
+  CompanySize,
+  QMSStatus,
+  CertificationStatus,
+  StandardsKnowledgeLevel,
 } from '@prisma/client';
 
 // Re-export types for TypeScript usage
@@ -29,4 +34,9 @@ export type {
   ActionStatus as ActionStatusType,
   Priority as PriorityType,
   EvidenceType as EvidenceTypeType,
+  BetaInviteStatus as BetaInviteStatusType,
+  CompanySize as CompanySizeType,
+  QMSStatus as QMSStatusType,
+  CertificationStatus as CertificationStatusType,
+  StandardsKnowledgeLevel as StandardsKnowledgeLevelType,
 } from '@prisma/client';

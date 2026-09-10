@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { nonConformityController } from '../controllers/nonConformityController';
+import { rootCauseAgentController } from '../controllers/rootCauseAgentController';
 import { withAuth, asyncHandler } from '../proxy';
 
 // Router for routes nested under /assessments/:id/non-conformities
@@ -66,6 +67,12 @@ nonConformityRouter.delete(
 nonConformityRouter.post(
   '/:id/transition',
   asyncHandler(nonConformityController.transitionStatus.bind(nonConformityController))
+);
+
+// POST /api/non-conformities/:id/root-cause-agent/chat - 5 Whys AI-guided root cause chat
+nonConformityRouter.post(
+  '/:id/root-cause-agent/chat',
+  asyncHandler(rootCauseAgentController.chat.bind(rootCauseAgentController))
 );
 
 export default nonConformityRouter;

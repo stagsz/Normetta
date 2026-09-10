@@ -385,10 +385,10 @@ describe('QuestionCard Component', () => {
       expect(card).toHaveClass('border-l-green-500');
     });
 
-    it('applies gray border when no score', () => {
+    it('applies neutral border when no score', () => {
       const { container } = render(<QuestionCard {...defaultProps} />);
       const card = container.firstChild;
-      expect(card).toHaveClass('border-l-gray-300');
+      expect(card).toHaveClass('border-l-[var(--border-strong)]');
     });
   });
 
@@ -472,10 +472,10 @@ describe('QuestionCardCompact Component', () => {
   });
 
   describe('color coding', () => {
-    it('applies gray border when no score', () => {
+    it('applies neutral border when no score', () => {
       render(<QuestionCardCompact {...defaultProps} />);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-gray-300');
+      expect(button).toHaveClass('border-l-[var(--border-strong)]');
     });
 
     it('applies red border for score 1', () => {

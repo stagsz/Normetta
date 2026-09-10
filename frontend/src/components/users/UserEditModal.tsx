@@ -103,13 +103,13 @@ export function UserEditModal({ isOpen, onClose, user }: UserEditModalProps) {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="flex items-center gap-2">
-            <Edit3 className="h-5 w-5 text-emerald-600" />
+            <Edit3 className="h-5 w-5 text-[var(--brand-strong)]" />
             Edit User
           </CardTitle>
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             disabled={isSubmitting}
             aria-label="Close modal"
           >
@@ -119,22 +119,22 @@ export function UserEditModal({ isOpen, onClose, user }: UserEditModalProps) {
         <CardContent>
           {/* User avatar and role indicator */}
           <div className="flex items-center gap-3 mb-6 pb-4 border-b">
-            <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center">
-              <span className="text-lg font-medium text-emerald-600">
+            <div className="h-12 w-12 rounded-full bg-[var(--brand-soft)] flex items-center justify-center">
+              <span className="text-lg font-medium text-[var(--brand-strong)]">
                 {user.firstName?.[0]?.toUpperCase() || ''}
                 {user.lastName?.[0]?.toUpperCase() || ''}
               </span>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Editing user profile</p>
-              <p className="text-sm font-medium text-gray-700">{user.email}</p>
+              <p className="text-sm text-[var(--text-muted)]">Editing user profile</p>
+              <p className="text-sm font-medium text-[var(--text-body)]">{user.email}</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* First Name */}
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="firstName" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 <div className="flex items-center gap-1">
                   <UserIcon className="h-4 w-4" />
                   First Name <span className="text-red-500">*</span>
@@ -161,7 +161,7 @@ export function UserEditModal({ isOpen, onClose, user }: UserEditModalProps) {
 
             {/* Last Name */}
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="lastName" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 <div className="flex items-center gap-1">
                   <UserIcon className="h-4 w-4" />
                   Last Name <span className="text-red-500">*</span>
@@ -188,7 +188,7 @@ export function UserEditModal({ isOpen, onClose, user }: UserEditModalProps) {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 <div className="flex items-center gap-1">
                   <Mail className="h-4 w-4" />
                   Email <span className="text-red-500">*</span>

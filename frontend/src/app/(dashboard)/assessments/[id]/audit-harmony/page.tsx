@@ -240,7 +240,7 @@ export default function AssessmentAuditHarmonyPage() {
               <h2 className="font-display font-bold text-2xl text-harmony-dark-text mb-2">
                 Assessment Not Found
               </h2>
-              <p className="text-gray-600 mb-6 leading-generous">
+              <p className="text-[var(--text-muted)] mb-6 leading-generous">
                 The assessment may have been deleted or you don't have permission to access it.
               </p>
               <Link href="/assessments">
@@ -258,7 +258,7 @@ export default function AssessmentAuditHarmonyPage() {
   return (
     <div className="min-h-screen bg-harmony-warm-white">
       {/* Header */}
-      <div className="bg-white border-b border-harmony-light-beige sticky top-0 z-20 shadow-sm">
+      <div className="bg-[var(--surface-card)] border-b border-harmony-light-beige sticky top-0 z-20 shadow-[var(--shadow-sm)]">
         <div className="max-w-[1600px] mx-auto px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -271,7 +271,7 @@ export default function AssessmentAuditHarmonyPage() {
                 <h1 className="font-display font-bold text-2xl text-harmony-dark-text">
                   {assessment.title}
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-[var(--text-muted)] mt-1">
                   {statusLabels[assessment.status]} - Conducting Audit
                 </p>
               </div>
@@ -289,7 +289,7 @@ export default function AssessmentAuditHarmonyPage() {
                 variant="outline"
                 onClick={handleManualSave}
                 disabled={saveStatus === 'saving' || pendingCount === 0}
-                className="bg-white border-2 border-harmony-sage hover:bg-harmony-warm-white hover:border-harmony-olive"
+                className="bg-[var(--surface-card)] border-2 border-harmony-sage hover:bg-harmony-warm-white hover:border-harmony-olive"
               >
                 <Save className="mr-2 h-4 w-4" />
                 Save
@@ -337,14 +337,14 @@ export default function AssessmentAuditHarmonyPage() {
                     </h2>
                   </div>
                   {activeSection.description && (
-                    <p className="text-gray-600 leading-generous ml-13">
+                    <p className="text-[var(--text-muted)] leading-generous ml-13">
                       {activeSection.description}
                     </p>
                   )}
                 </div>
 
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">Progress</div>
+                  <div className="text-sm text-[var(--text-muted)]">Progress</div>
                   <div className="font-display font-bold text-3xl text-harmony-forest">
                     {sectionStages.find((s) => s.id === activeSectionId)?.progress || 0}%
                   </div>
@@ -360,7 +360,7 @@ export default function AssessmentAuditHarmonyPage() {
             <CrownedCard crownColor="sage">
               <div className="text-center py-12">
                 <ClipboardList className="mx-auto h-16 w-16 text-harmony-sage mb-4" />
-                <p className="text-gray-600 font-medium">
+                <p className="text-[var(--text-muted)] font-medium">
                   No questions available for this section
                 </p>
               </div>

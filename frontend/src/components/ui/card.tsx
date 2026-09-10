@@ -7,8 +7,9 @@ const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
+      data-motion-card=""
       className={clsx(
-        'rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition-shadow duration-200',
+        'rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-md)]',
         className
       )}
       {...props}
@@ -33,7 +34,7 @@ const CardTitle = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHead
     <h3
       ref={ref}
       className={clsx(
-        'text-lg font-semibold leading-none tracking-tight text-gray-950',
+        'text-lg font-semibold leading-none tracking-tight text-[var(--text-strong)]',
         className
       )}
       {...props}
@@ -46,7 +47,7 @@ const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={clsx('text-sm text-gray-500', className)}
+      className={clsx('text-sm text-[var(--text-muted)]', className)}
       {...props}
     />
   )

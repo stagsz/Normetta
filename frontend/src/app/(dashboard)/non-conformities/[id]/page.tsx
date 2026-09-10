@@ -15,6 +15,7 @@ import {
   Calendar,
   Hash,
   HelpCircle,
+  Sparkles,
 } from 'lucide-react';
 import {
   useNonConformity,
@@ -28,7 +29,9 @@ import { NCRStatusWorkflow } from '@/components/ncr/NCRStatusWorkflow';
 import { CorrectiveActionList } from '@/components/ncr/CorrectiveActionList';
 import { CorrectiveActionFormModal } from '@/components/ncr/CorrectiveActionFormModal';
 import { VerificationFormModal } from '@/components/ncr/VerificationFormModal';
+import { RootCauseAgentModal } from '@/components/ncr/RootCauseAgentModal';
 import { CorrectiveAction } from '@/hooks/useCorrectiveActions';
+import { RootCauseWhyStep } from '@/lib/api';
 
 const statusColors: Record<string, string> = {
   OPEN: 'bg-red-50 text-red-700',
@@ -129,14 +132,14 @@ function RootCauseForm({ rootCause, rootCauseMethod, onSave, onCancel, isSaving 
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor="rootCauseMethod" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="rootCauseMethod" className="block text-sm font-medium text-[var(--text-body)] mb-1">
           Root Cause Analysis Method
         </label>
         <select
           id="rootCauseMethod"
           value={localMethod}
           onChange={(e) => setLocalMethod(e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-full rounded-md border border-[var(--border-default)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)]"
         >
           <option value="">Select a method...</option>
           {rootCauseMethodOptions.map((option) => (
@@ -147,7 +150,7 @@ function RootCauseForm({ rootCause, rootCauseMethod, onSave, onCancel, isSaving 
         </select>
       </div>
       <div>
-        <label htmlFor="rootCause" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="rootCause" className="block text-sm font-medium text-[var(--text-body)] mb-1">
           Root Cause Description
         </label>
         <textarea
@@ -156,7 +159,7 @@ function RootCauseForm({ rootCause, rootCauseMethod, onSave, onCancel, isSaving 
           onChange={(e) => setLocalRootCause(e.target.value)}
           rows={4}
           placeholder="Describe the root cause of this non-conformity..."
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-full rounded-md border border-[var(--border-default)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)]"
         />
       </div>
       <div className="flex justify-end gap-2">
@@ -177,6 +180,8 @@ export default function NonConformityDetailPage() {
   const [isEditingRootCause, setIsEditingRootCause] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
   const [actionToVerify, setActionToVerify] = useState<CorrectiveAction | null>(null);
+  const [showAIChat, setShowAIChat] = useState(false);
+  const [aiPrefill, setAiPrefill] = useState<{ rootCause: string; method: string } | null>(null);
 
   const ncrId = (params?.id ?? '') as string;
   const { data, isLoading, isError } = useNonConformity(ncrId);
@@ -199,9 +204,15 @@ export default function NonConformityDetailPage() {
       });
       toast.success('Root cause saved successfully');
       setIsEditingRootCause(false);
+      setAiPrefill(null);
     } catch {
       toast.error('Failed to save root cause');
     }
+  };
+
+  const handleAcceptAIRootCause = (rootCause: string, _whyChain: RootCauseWhyStep[]) => {
+    setAiPrefill({ rootCause, method: '5_WHYS' });
+    setIsEditingRootCause(true);
   };
 
   if (isLoading) {
@@ -217,13 +228,13 @@ export default function NonConformityDetailPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Non-Conformity Not Found</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Non-Conformity Not Found</h1>
         </div>
         <Card>
           <CardContent className="py-12 text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <p className="text-gray-700 font-medium">Failed to load non-conformity</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-[var(--text-body)] font-medium">Failed to load non-conformity</p>
+            <p className="text-[var(--text-muted)] text-sm mt-1">
               The non-conformity may have been deleted or you don't have permission to view it.
             </p>
             <Link href="/non-conformities">
@@ -249,24 +260,24 @@ export default function NonConformityDetailPage() {
           </Link>
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-gray-900">{ncr.title}</h1>
+              <h1 className="text-2xl font-bold text-[var(--text-strong)]">{ncr.title}</h1>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full ${
-                  statusColors[ncr.status] || 'bg-gray-100 text-gray-700'
+                  statusColors[ncr.status] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                 }`}
               >
                 {statusLabels[ncr.status] || ncr.status}
               </span>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full border flex items-center gap-1 ${
-                  severityColors[ncr.severity] || 'bg-gray-100 text-gray-700'
+                  severityColors[ncr.severity] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                 }`}
               >
                 {severityIcons[ncr.severity]}
                 {ncr.severity}
               </span>
             </div>
-            <p className="text-gray-500 mt-1">
+            <p className="text-[var(--text-muted)] mt-1">
               Identified: {format(new Date(ncr.identifiedDate), 'MMMM d, yyyy')}
             </p>
           </div>
@@ -305,12 +316,12 @@ export default function NonConformityDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-emerald-600" />
+                <FileText className="h-5 w-5 text-[var(--brand-strong)]" />
                 Description
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 whitespace-pre-wrap">
+              <p className="text-[var(--text-muted)] whitespace-pre-wrap">
                 {ncr.description || 'No description provided.'}
               </p>
             </CardContent>
@@ -320,42 +331,52 @@ export default function NonConformityDetailPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="flex items-center gap-2">
-                <HelpCircle className="h-5 w-5 text-emerald-600" />
+                <HelpCircle className="h-5 w-5 text-[var(--brand-strong)]" />
                 Root Cause Analysis
               </CardTitle>
               {canEdit && !isEditingRootCause && (
-                <Button variant="outline" size="sm" onClick={() => setIsEditingRootCause(true)}>
-                  <Edit className="h-4 w-4 mr-2" />
-                  {ncr.rootCause ? 'Edit' : 'Add Root Cause'}
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => setShowAIChat(true)}>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    AI 5 Whys
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setIsEditingRootCause(true)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    {ncr.rootCause ? 'Edit' : 'Add Root Cause'}
+                  </Button>
+                </div>
               )}
             </CardHeader>
             <CardContent>
               {isEditingRootCause ? (
                 <RootCauseForm
-                  rootCause={ncr.rootCause || ''}
-                  rootCauseMethod={ncr.rootCauseMethod || ''}
+                  key={aiPrefill ? 'ai-prefill' : 'existing'}
+                  rootCause={aiPrefill?.rootCause ?? ncr.rootCause ?? ''}
+                  rootCauseMethod={aiPrefill?.method ?? ncr.rootCauseMethod ?? ''}
                   onSave={handleSaveRootCause}
-                  onCancel={() => setIsEditingRootCause(false)}
+                  onCancel={() => {
+                    setIsEditingRootCause(false);
+                    setAiPrefill(null);
+                  }}
                   isSaving={updateNCR.isPending}
                 />
               ) : ncr.rootCause ? (
                 <div className="space-y-4">
                   {ncr.rootCauseMethod && (
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Analysis Method</p>
-                      <p className="text-gray-700">{methodLabel}</p>
+                      <p className="text-sm font-medium text-[var(--text-muted)]">Analysis Method</p>
+                      <p className="text-[var(--text-body)]">{methodLabel}</p>
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Root Cause</p>
-                    <p className="text-gray-700 whitespace-pre-wrap">{ncr.rootCause}</p>
+                    <p className="text-sm font-medium text-[var(--text-muted)]">Root Cause</p>
+                    <p className="text-[var(--text-body)] whitespace-pre-wrap">{ncr.rootCause}</p>
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <HelpCircle className="mx-auto h-10 w-10 text-gray-300 mb-2" />
-                  <p className="text-gray-500">No root cause analysis documented yet.</p>
+                  <HelpCircle className="mx-auto h-10 w-10 text-[var(--text-subtle)] mb-2" />
+                  <p className="text-[var(--text-muted)]">No root cause analysis documented yet.</p>
                   {canEdit && (
                     <Button
                       variant="outline"
@@ -375,16 +396,16 @@ export default function NonConformityDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Hash className="h-5 w-5 text-emerald-600" />
+                  <Hash className="h-5 w-5 text-[var(--brand-strong)]" />
                   Linked Assessment Response
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Section Info */}
                 {ncr.response.section && (
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <p className="text-sm font-medium text-gray-500 mb-1">ISO Section</p>
-                    <p className="text-gray-900 font-medium">
+                  <div className="bg-[var(--surface-sunken)] rounded-xl p-4">
+                    <p className="text-sm font-medium text-[var(--text-muted)] mb-1">ISO Section</p>
+                    <p className="text-[var(--text-strong)] font-medium">
                       {ncr.response.section.sectionNumber} - {ncr.response.section.title}
                     </p>
                   </div>
@@ -392,12 +413,12 @@ export default function NonConformityDetailPage() {
 
                 {/* Question Info */}
                 <div className="border-l-4 border-red-400 pl-4">
-                  <p className="text-sm font-medium text-gray-500 mb-1">
+                  <p className="text-sm font-medium text-[var(--text-muted)] mb-1">
                     Question {ncr.response.question.questionNumber}
                   </p>
-                  <p className="text-gray-700">{ncr.response.question.questionText}</p>
+                  <p className="text-[var(--text-body)]">{ncr.response.question.questionText}</p>
                   {(ncr.response.question as any).standardReference && (
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-[var(--text-muted)] mt-1">
                       Reference: {(ncr.response.question as any).standardReference}
                     </p>
                   )}
@@ -406,15 +427,15 @@ export default function NonConformityDetailPage() {
                 {/* Response Score & Justification */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <p className="text-sm font-medium text-gray-500 mb-1">Score</p>
+                    <p className="text-sm font-medium text-[var(--text-muted)] mb-1">Score</p>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-50 text-red-700">
                       {(ncr.response as any).score} - Non-Compliant
                     </span>
                   </div>
                   {(ncr.response as any).justification && (
                     <div>
-                      <p className="text-sm font-medium text-gray-500 mb-1">Justification</p>
-                      <p className="text-gray-600 text-sm">{(ncr.response as any).justification}</p>
+                      <p className="text-sm font-medium text-[var(--text-muted)] mb-1">Justification</p>
+                      <p className="text-[var(--text-muted)] text-sm">{(ncr.response as any).justification}</p>
                     </div>
                   )}
                 </div>
@@ -441,24 +462,24 @@ export default function NonConformityDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Assessment</p>
+                <p className="text-sm font-medium text-[var(--text-muted)] mb-1">Assessment</p>
                 <Link
                   href={`/assessments/${ncr.assessment.id}`}
-                  className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-medium"
+                  className="flex items-center gap-1 text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                 >
                   <ExternalLink className="h-4 w-4" />
                   {ncr.assessment.title}
                 </Link>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Assessment Status</p>
+                <p className="text-sm font-medium text-[var(--text-muted)] mb-1">Assessment Status</p>
                 <span
                   className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                     ncr.assessment.status === 'COMPLETED'
                       ? 'bg-green-50 text-green-700'
                       : ncr.assessment.status === 'IN_PROGRESS'
                       ? 'bg-blue-50 text-blue-700'
-                      : 'bg-gray-100 text-gray-700'
+                      : 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                   }`}
                 >
                   {ncr.assessment.status.replace('_', ' ')}
@@ -471,26 +492,26 @@ export default function NonConformityDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-emerald-600" />
+                <Calendar className="h-5 w-5 text-[var(--brand-strong)]" />
                 Timeline
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Identified</span>
-                <span className="text-gray-900 font-medium">
+                <span className="text-[var(--text-muted)]">Identified</span>
+                <span className="text-[var(--text-strong)] font-medium">
                   {format(new Date(ncr.identifiedDate), 'MMM d, yyyy')}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Created</span>
-                <span className="text-gray-900 font-medium">
+                <span className="text-[var(--text-muted)]">Created</span>
+                <span className="text-[var(--text-strong)] font-medium">
                   {format(new Date(ncr.createdAt), 'MMM d, yyyy')}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Last Updated</span>
-                <span className="text-gray-900 font-medium">
+                <span className="text-[var(--text-muted)]">Last Updated</span>
+                <span className="text-[var(--text-strong)] font-medium">
                   {format(new Date(ncr.updatedAt), 'MMM d, yyyy')}
                 </span>
               </div>
@@ -504,11 +525,11 @@ export default function NonConformityDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Corrective Actions</span>
+                <span className="text-[var(--text-muted)]">Corrective Actions</span>
                 <span className="font-medium">{ncr.correctiveActions?.length || 0}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Actions Completed</span>
+                <span className="text-[var(--text-muted)]">Actions Completed</span>
                 <span className="font-medium text-blue-600">
                   {ncr.correctiveActions?.filter((a: { status: string }) =>
                     a.status === 'COMPLETED' || a.status === 'VERIFIED'
@@ -516,7 +537,7 @@ export default function NonConformityDetailPage() {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Actions Verified</span>
+                <span className="text-[var(--text-muted)]">Actions Verified</span>
                 <span className="font-medium text-green-600">
                   {ncr.correctiveActions?.filter((a: { status: string }) =>
                     a.status === 'VERIFIED'
@@ -524,7 +545,7 @@ export default function NonConformityDetailPage() {
                 </span>
               </div>
               <div className="pt-2 border-t">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[var(--text-muted)]">
                   {ncr.rootCause ? 'Root cause documented' : 'Root cause not documented'}
                 </p>
               </div>
@@ -545,6 +566,14 @@ export default function NonConformityDetailPage() {
         isOpen={actionToVerify !== null}
         onClose={() => setActionToVerify(null)}
         action={actionToVerify}
+      />
+
+      {/* AI 5 Whys Root Cause Agent Modal */}
+      <RootCauseAgentModal
+        isOpen={showAIChat}
+        onClose={() => setShowAIChat(false)}
+        ncrId={ncrId}
+        onAccept={handleAcceptAIRootCause}
       />
     </div>
   );

@@ -110,12 +110,12 @@ export default function DesignShowcasePage() {
   return (
     <div className="min-h-screen bg-harmony-warm-white">
       {/* Header */}
-      <div className="bg-white border-b border-harmony-light-beige">
+      <div className="bg-[var(--surface-card)] border-b border-harmony-light-beige">
         <div className="max-w-[1600px] mx-auto px-8 py-8">
           <h1 className="font-display font-bold text-4xl text-harmony-dark-text mb-2">
             Cyclic Harmony Design System
           </h1>
-          <p className="text-lg text-gray-600 leading-generous">
+          <p className="text-lg text-[var(--text-muted)] leading-generous">
             A showcase of all components in the Cyclic Harmony design system
           </p>
         </div>
@@ -131,22 +131,22 @@ export default function DesignShowcasePage() {
             <div>
               <div className="h-32 bg-harmony-sage rounded-crown mb-3 shadow-crown" />
               <p className="font-medium text-harmony-dark-text">Sage</p>
-              <p className="text-sm text-gray-600">#8BAA7E</p>
+              <p className="text-sm text-[var(--text-muted)]">#8BAA7E</p>
             </div>
             <div>
               <div className="h-32 bg-harmony-olive rounded-crown mb-3 shadow-crown" />
               <p className="font-medium text-harmony-dark-text">Olive</p>
-              <p className="text-sm text-gray-600">#5C7C52</p>
+              <p className="text-sm text-[var(--text-muted)]">#5C7C52</p>
             </div>
             <div>
               <div className="h-32 bg-harmony-forest rounded-crown mb-3 shadow-crown" />
               <p className="font-medium text-harmony-dark-text">Forest</p>
-              <p className="text-sm text-gray-600">#3D5A3A</p>
+              <p className="text-sm text-[var(--text-muted)]">#3D5A3A</p>
             </div>
             <div>
               <div className="h-32 bg-harmony-lime rounded-crown mb-3 shadow-crown" />
               <p className="font-medium text-harmony-dark-text">Lime</p>
-              <p className="text-sm text-gray-600">#A8C499</p>
+              <p className="text-sm text-[var(--text-muted)]">#A8C499</p>
             </div>
           </div>
         </section>
@@ -161,7 +161,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Sage Crown
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Used for pending or initial states
               </p>
             </CrownedCard>
@@ -170,7 +170,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Lime Crown
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Used for in-progress states
               </p>
             </CrownedCard>
@@ -179,7 +179,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Olive Crown
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Used for active states
               </p>
             </CrownedCard>
@@ -188,7 +188,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Forest Crown
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Used for completed states
               </p>
             </CrownedCard>
@@ -199,7 +199,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-xl text-harmony-dark-text mb-2">
                 Gradient Crown
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Special gradient crown showing progression from lime through sage to olive.
                 Used for highlighted or actively selected items.
               </p>
@@ -217,7 +217,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Interactive
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Hover to see lift effect and shadow deepening
               </p>
             </CrownedCard>
@@ -226,7 +226,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Active State
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Ring highlight with subtle scale
               </p>
             </CrownedCard>
@@ -235,7 +235,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-lg text-harmony-dark-text mb-2">
                 Disabled
               </h3>
-              <p className="text-gray-600 leading-generous">
+              <p className="text-[var(--text-muted)] leading-generous">
                 Reduced opacity and grayscale filter
               </p>
             </CrownedCard>
@@ -347,7 +347,7 @@ export default function DesignShowcasePage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setSaveStatus('idle')}
-                className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-sm font-medium"
+                className="px-4 py-2 rounded-xl bg-[var(--surface-sunken)] hover:bg-[var(--stone-200)] text-sm font-medium"
               >
                 Idle
               </button>
@@ -384,38 +384,38 @@ export default function DesignShowcasePage() {
                 <h1 className="font-display font-bold text-4xl text-harmony-dark-text">
                   Display Heading (4xl)
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">font-display font-bold text-4xl</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">font-display font-bold text-4xl</p>
               </div>
               <div>
                 <h2 className="font-display font-bold text-3xl text-harmony-dark-text">
                   Section Heading (3xl)
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">font-display font-bold text-3xl</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">font-display font-bold text-3xl</p>
               </div>
               <div>
                 <h3 className="font-display font-bold text-2xl text-harmony-dark-text">
                   Card Heading (2xl)
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">font-display font-bold text-2xl</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">font-display font-bold text-2xl</p>
               </div>
               <div>
                 <h4 className="font-display font-bold text-xl text-harmony-dark-text">
                   Component Heading (xl)
                 </h4>
-                <p className="text-sm text-gray-500 mt-1">font-display font-bold text-xl</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">font-display font-bold text-xl</p>
               </div>
               <div>
-                <p className="text-base text-gray-700 leading-generous">
+                <p className="text-base text-[var(--text-body)] leading-generous">
                   Body text with generous line height (1.6). This is the standard text size used
                   throughout the application for readability and breathing space.
                 </p>
-                <p className="text-sm text-gray-500 mt-1">text-base leading-generous</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">text-base leading-generous</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[var(--text-muted)]">
                   Small text for labels and secondary information
                 </p>
-                <p className="text-sm text-gray-500 mt-1">text-sm</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">text-sm</p>
               </div>
             </div>
           </CrownedCard>
@@ -427,23 +427,23 @@ export default function DesignShowcasePage() {
             Shadows & Elevation
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-crown p-8 shadow-sm">
+            <div className="bg-[var(--surface-card)] rounded-crown p-8 shadow-[var(--shadow-sm)]">
               <h4 className="font-display font-bold text-harmony-dark-text mb-2">
                 Small (sm)
               </h4>
-              <p className="text-gray-600 text-sm">Subtle depth for secondary elements</p>
+              <p className="text-[var(--text-muted)] text-sm">Subtle depth for secondary elements</p>
             </div>
-            <div className="bg-white rounded-crown p-8 shadow-crown">
+            <div className="bg-[var(--surface-card)] rounded-crown p-8 shadow-crown">
               <h4 className="font-display font-bold text-harmony-dark-text mb-2">
                 Medium (crown)
               </h4>
-              <p className="text-gray-600 text-sm">Default shadow for cards</p>
+              <p className="text-[var(--text-muted)] text-sm">Default shadow for cards</p>
             </div>
-            <div className="bg-white rounded-crown p-8 shadow-crown-hover">
+            <div className="bg-[var(--surface-card)] rounded-crown p-8 shadow-crown-hover">
               <h4 className="font-display font-bold text-harmony-dark-text mb-2">
                 Large (crown-hover)
               </h4>
-              <p className="text-gray-600 text-sm">Elevated state on hover</p>
+              <p className="text-[var(--text-muted)] text-sm">Elevated state on hover</p>
             </div>
           </div>
         </section>
@@ -458,7 +458,7 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-xl text-harmony-dark-text mb-4">
                 Visual Progression
               </h3>
-              <p className="text-gray-600 leading-generous mb-3">
+              <p className="text-[var(--text-muted)] leading-generous mb-3">
                 Green gradients show advancement through the process:
               </p>
               <div className="space-y-2">
@@ -485,10 +485,10 @@ export default function DesignShowcasePage() {
               <h3 className="font-display font-bold text-xl text-harmony-dark-text mb-4">
                 Breathing Space
               </h3>
-              <p className="text-gray-600 leading-generous mb-3">
+              <p className="text-[var(--text-muted)] leading-generous mb-3">
                 Every element has room to exist:
               </p>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-2 text-sm text-[var(--text-muted)]">
                 <li>• Minimum 32px padding in cards</li>
                 <li>• Line height of 1.6 (generous)</li>
                 <li>• Ample gap between elements (24px+)</li>

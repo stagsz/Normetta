@@ -51,9 +51,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      // Check if this is an auth endpoint (login/register) - don't try to refresh
-      const isAuthEndpoint = originalRequest.url?.includes('/auth/login') ||
-        originalRequest.url?.includes('/auth/register');
+      // Check if this is an auth endpoint (login) - don't try to refresh
+      const isAuthEndpoint = originalRequest.url?.includes('/auth/login');
 
       if (isAuthEndpoint) {
         return Promise.reject(error);
@@ -73,10 +72,14 @@ api.interceptors.response.use(
             refreshToken,
           });
 
-          const { accessToken } = response.data.data;
-          localStorage.setItem('accessToken', accessToken);
+          const { accessToken } =
+            response.data?.data || response.data || {};
 
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          if (accessToken) {
+            localStorage.setItem('accessToken', accessToken);
+
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          }
           isRefreshing = false;
           return api(originalRequest);
         }
@@ -112,18 +115,15 @@ api.interceptors.response.use(
 export const authApi = {
   login: (email: string, password: string) =>
     api.post('/auth/login', { email, password }),
-  register: (data: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    organizationId: string;
-  }) => api.post('/auth/register', data),
   refresh: (refreshToken: string) =>
     api.post('/auth/refresh', { refreshToken }),
   me: () => api.get('/auth/me'),
   changePassword: (currentPassword: string, newPassword: string) =>
     api.post('/auth/change-password', { currentPassword, newPassword }),
+  forgotPassword: (email: string) =>
+    api.post('/auth/forgot-password', { email }),
+  resetPassword: (token: string, newPassword: string) =>
+    api.post('/auth/reset-password', { token, newPassword }),
 };
 
 export const assessmentsApi = {
@@ -290,21 +290,75 @@ export const nonConformitiesApi = {
     api.get(`/assessments/${assessmentId}/non-conformities/summary`),
 };
 
+export interface RootCauseChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface RootCauseWhyStep {
+  question: string;
+  answer: string;
+}
+
+export interface RootCauseChatResult {
+  reply: string;
+  isComplete: boolean;
+  rootCause?: string;
+  whyChain?: RootCauseWhyStep[];
+  contributingFactors?: string[];
+}
+
+export const rootCauseAgentApi = {
+  chat: (ncrId: string, messages: RootCauseChatMessage[]) =>
+    api.post(`/non-conformities/${ncrId}/root-cause-agent/chat`, { messages }),
+};
+
+export interface OnboardingReadinessProfile {
+  companySize?: string;
+  qmsStatus?: string;
+  certificationStatus?: string;
+  lastAuditSummary?: string;
+  improvementNotes?: string;
+  standardsKnowledgeLevel?: string;
+  hoursPerWeek?: number;
+}
+
 export const onboardingApi = {
   setup: (data: {
     firstName: string; lastName: string; email: string; password: string;
     company: { name: string; slug: string; industry?: string; country?: string };
+    profile?: OnboardingReadinessProfile;
     divisions: { name: string }[];
     departments: { name: string; divisionIndex?: number }[];
     roles: { name: string; permissionLevel: string }[];
+    /** Cloudflare Turnstile token; required by the backend when Turnstile is configured. */
+    turnstileToken?: string;
   }) => api.post('/onboarding/setup', data),
   checkSlug: (slug: string) => api.get(`/onboarding/check-slug/${slug}`),
   setupOrg: (data: {
     company: { name: string; slug: string; industry?: string; country?: string };
+    profile?: OnboardingReadinessProfile;
     divisions: { name: string }[];
     departments: { name: string; divisionIndex?: number }[];
     roles: { name: string; permissionLevel: string }[];
   }) => api.post('/onboarding/setup-org', data),
+};
+
+export interface ProfileInterviewInsights {
+  priorityClauses: string[];
+  painPoints: string[];
+  summary: string;
+}
+
+export interface ProfileInterviewResult {
+  reply: string;
+  isComplete: boolean;
+  insights?: ProfileInterviewInsights;
+}
+
+export const organizationProfileAgentApi = {
+  chat: (messages: RootCauseChatMessage[]) =>
+    api.post('/organization-profile/agent/chat', { messages }),
 };
 
 export const orgInviteApi = {
@@ -315,6 +369,22 @@ export const orgInviteApi = {
   pendingCount: () => api.get('/org/invites/count'),
   resolve: (id: string, action: 'approve' | 'reject', orgRoleId?: string) =>
     api.post(`/org/invites/${id}/resolve`, { action, orgRoleId }),
+};
+
+export const betaInviteApi = {
+  create: (data: { email?: string; expiresInDays?: number; maxUses?: number; metadata?: Record<string, any> }) =>
+    api.post('/beta-invites', data),
+  bulkCreate: (data: { count: number; expiresInDays?: number; maxUses?: number }) =>
+    api.post('/beta-invites/bulk', data),
+  list: (params?: { page?: number; pageSize?: number; search?: string; status?: string[] }) =>
+    api.get('/beta-invites', { params }),
+  getById: (id: string) => api.get(`/beta-invites/${id}`),
+  validateCode: (code: string) => api.post('/invite/validate', { code }),
+  trackUsage: (code: string, referrer?: string) => api.post('/invite/track', { code, referrer }),
+  getAnalytics: (days?: number) => api.get('/beta-invites/analytics', { params: { days } }),
+  send: (id: string, email: string, message?: string) => api.post(`/beta-invites/${id}/send`, { email, message }),
+  sendReminder: (id: string) => api.post(`/beta-invites/${id}/reminder`),
+  revoke: (id: string) => api.post(`/beta-invites/${id}/revoke`),
 };
 
 export const evidenceApi = {

@@ -14,12 +14,12 @@ export function DashboardEmptyState() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500">ISO 9001:2015 Quality Management System Overview</p>
+        <h1 className="text-2xl font-bold text-[var(--text-strong)]">Dashboard</h1>
+        <p className="text-[var(--text-muted)]">ISO 9001:2015 Quality Management System Overview</p>
       </div>
 
       {/* Empty State Card */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <EmptyState
           icon={ClipboardCheck}
           title="Welcome to ISO 9001 Self-Assessment"

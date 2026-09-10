@@ -1,7 +1,7 @@
 {
-  "name": "@auditflow/shared",
+  "name": "@normetta/shared",
   "version": "1.0.0",
-  "description": "AuditFlow - Shared types and utilities for ISO 9001 Quality Management",
+  "description": "Normetta - Shared types and utilities for ISO 9001 Quality Management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

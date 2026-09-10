@@ -1,4 +1,4 @@
-# Dependencies
+﻿# Dependencies
 node_modules/
 /.pnp
 .pnp.js
@@ -138,6 +138,12 @@ CLAUDE.md
 
 # Build artifacts
 frontend/tsconfig.tsbuildinfo
+backend/tsconfig.tsbuildinfo
+
+# Public assets
+frontend/public/*
+!frontend/public/og-image.png
+!frontend/public/promo/
 
 # Internal ops notes
 docs/legal/GDPR_COMPLIANCE_REVIEW.md
@@ -145,3 +151,6 @@ docs/legal/GDPR_COMPLIANCE_REVIEW.md
 # Legacy/one-time artifacts not needed at runtime
 supabase/migrations/
 backend/prisma/seed*.ts
+
+# Local agent/tool state — never commit
+.omc/

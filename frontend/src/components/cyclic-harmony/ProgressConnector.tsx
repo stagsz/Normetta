@@ -19,10 +19,10 @@ export function ProgressConnector({
   className,
 }: ProgressConnectorProps) {
   const strokeColor = completed
-    ? '#3D5A3A' // harmony-forest
+    ? '#5FA463' // status pass solid
     : active
-    ? '#8BAA7E' // harmony-sage
-    : '#D8D8D0'; // harmony-warm-gray
+    ? '#14B8A6' // brand teal
+    : 'rgba(234, 241, 239, 0.18)'; // hairline on dark
 
   return (
     <div className={cn('flex items-center justify-center w-16 h-24', className)}>

@@ -54,20 +54,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)] py-12 px-4 sm:px-6 lg:px-8">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-100/50 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[var(--brand-soft)]/50 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-sky-100/40 rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-md shadow-lg relative">
+      <Card className="w-full max-w-md shadow-[var(--shadow-lg)] relative">
         <CardHeader className="text-center pb-2">
-          <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-            <Shield className="w-9 h-9 text-emerald-600" />
+          <div className="mx-auto w-16 h-16 bg-[var(--brand-soft)] rounded-2xl flex items-center justify-center mb-4 shadow-[var(--shadow-sm)]">
+            <Shield className="w-9 h-9 text-[var(--brand-strong)]" />
           </div>
           <CardTitle className="text-2xl font-display">ISO 9001 Audit Management</CardTitle>
-          <CardDescription className="text-gray-500">Sign in to your account</CardDescription>
+          <CardDescription className="text-[var(--text-muted)]">Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -97,13 +97,13 @@ export default function LoginPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-[var(--brand-strong)] focus:ring-[var(--brand-strong)] border-[var(--border-default)] rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600">Remember me</label>
+                <label htmlFor="remember-me" className="ml-2 text-sm text-[var(--text-muted)]">Remember me</label>
               </div>
               <Link
                 href="/forgot-password"
-                className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                className="text-sm text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium transition-colors"
               >
                 Forgot password?
               </Link>
@@ -113,9 +113,9 @@ export default function LoginPage() {
               Sign in
             </Button>
 
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-[var(--text-muted)]">
               Don&apos;t have an account?{' '}
-              <Link href="/register" className="text-emerald-600 hover:text-emerald-700 font-medium transition-colors">
+              <Link href="/register" className="text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium transition-colors">
                 Sign up
               </Link>
             </p>

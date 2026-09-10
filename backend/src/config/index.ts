@@ -2,6 +2,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Fail fast if critical secrets are missing — never fall back to defaults in any env
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+}
+
 export const config = {
   // Server
   port: parseInt(process.env.PORT || '3001', 10),
@@ -14,9 +23,9 @@ export const config = {
 
   // JWT
   jwt: {
-    secret: process.env.JWT_SECRET || 'default-secret-change-me',
+    secret: requireEnv('JWT_SECRET'),
     expiresIn: process.env.JWT_EXPIRES_IN || '24h',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || 'default-refresh-secret',
+    refreshSecret: requireEnv('JWT_REFRESH_SECRET'),
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
 
@@ -53,8 +62,38 @@ export const config = {
   // Encryption
   encryptionKey: process.env.ENCRYPTION_KEY || '',
 
-  // Auto-save
   autoSaveIntervalSeconds: 30,
+
+  // AI (root cause analysis agent)
+  ai: {
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+    model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-5',
+  },
+
+  // Cloudflare Turnstile (bot challenge on the trial-signup form).
+  // When the secret is unset, verification is skipped and a warning is logged
+  // once, so local dev and tests run without Cloudflare keys.
+  turnstile: {
+    secretKey: process.env.TURNSTILE_SECRET_KEY || '',
+    // Hostnames the widget may be served from. Cloudflare echoes the page
+    // hostname in the siteverify response; anything else is rejected.
+    allowedHostnames: (process.env.TURNSTILE_ALLOWED_HOSTNAMES || 'normetta.com,www.normetta.com')
+      .split(',')
+      .map((h) => h.trim().toLowerCase())
+      .filter(Boolean),
+  },
+
+  // Email
+  email: {
+    smtpHost: process.env.SMTP_HOST || '',
+    smtpPort: parseInt(process.env.SMTP_PORT || '587', 10),
+    smtpSecure: process.env.SMTP_SECURE === 'true',
+    smtpUser: process.env.SMTP_USER || '',
+    smtpPass: process.env.SMTP_PASS || '',
+    fromEmail: process.env.EMAIL_FROM || 'noreply@normetta.com',
+    fromName: process.env.EMAIL_FROM_NAME || 'Normetta',
+    appUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://audit-flow.org',
+  },
 } as const;
 
 export type Config = typeof config;

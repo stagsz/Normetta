@@ -15,6 +15,7 @@ import {
   CheckCircle,
   AlertCircle,
   Clock,
+  ShieldCheck,
 } from 'lucide-react';
 import { nonConformitiesApi } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -154,27 +155,27 @@ export default function ActionsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Corrective Actions</h1>
-        <p className="text-gray-600 mt-1">Track and manage all corrective actions</p>
+        <h1 className="text-3xl font-bold text-[var(--text-strong)]">Corrective Actions</h1>
+        <p className="text-[var(--text-muted)] mt-1">Track and manage all corrective actions</p>
       </div>
 
       {/* Search and Filters */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="relative md:col-span-2">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-3 h-4 w-4 text-[var(--text-subtle)]" />
           <input
             type="text"
             placeholder="Search actions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-[var(--border-default)] rounded-xl focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
           />
         </div>
 
         <select
           value={statusFilter || ''}
           onChange={(e) => setStatusFilter(e.target.value || null)}
-          className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+          className="px-4 py-2 border border-[var(--border-default)] rounded-xl focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
         >
           <option value="">All Statuses</option>
           <option value="OPEN">Open</option>
@@ -186,7 +187,7 @@ export default function ActionsPage() {
         <select
           value={priorityFilter || ''}
           onChange={(e) => setPriorityFilter(e.target.value || null)}
-          className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+          className="px-4 py-2 border border-[var(--border-default)] rounded-xl focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
         >
           <option value="">All Priorities</option>
           <option value="HIGH">High</option>
@@ -205,31 +206,31 @@ export default function ActionsPage() {
         <CardContent>
           {filteredActions.length === 0 ? (
             <div className="text-center py-12">
-              <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <p className="text-gray-600">No corrective actions found</p>
+              <AlertCircle className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-4" />
+              <p className="text-[var(--text-muted)]">No corrective actions found</p>
             </div>
           ) : (
             <div className="space-y-4">
               {filteredActions.map((action) => (
                 <div
                   key={action.id}
-                  className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
+                  className="border border-[var(--border-subtle)] rounded-xl p-4 hover:shadow-[var(--shadow-md)] transition-shadow"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 space-y-2">
                       {/* Non-Conformity Link */}
                       <Link
                         href={`/non-conformities/${action.nonConformityId}`}
-                        className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                        className="text-sm text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                       >
                         NCR: {action.nonConformity?.title}
                       </Link>
 
                       {/* Action Description */}
-                      <p className="text-gray-900 font-medium">{action.description}</p>
+                      <p className="text-[var(--text-strong)] font-medium">{action.description}</p>
 
                       {/* Metadata */}
-                      <div className="flex flex-wrap gap-2 items-center text-sm text-gray-600">
+                      <div className="flex flex-wrap gap-2 items-center text-sm text-[var(--text-muted)]">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[action.status]}`}>
                           {statusIcons[action.status]}
                           {action.status.replace('_', ' ')}
@@ -250,13 +251,28 @@ export default function ActionsPage() {
                         {action.verifiedDate && (
                           <span className="text-green-700">
                             Verified: {format(new Date(action.verifiedDate), 'MMM d, yyyy')}
+                            {action.verifiedBy && (
+                              <span className="ml-2">
+                                by {action.verifiedBy.firstName} {action.verifiedBy.lastName}
+                              </span>
+                            )}
                           </span>
                         )}
                       </div>
 
+                      {/* Actions */}
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <Link href={`/non-conformities/${action.nonConformityId}?tab=actions`}>
+                          <Button variant="outline" size="sm">
+                            <Eye className="h-4 w-4 mr-1" />
+                            Open to review/verify
+                          </Button>
+                        </Link>
+                      </div>
+
                       {/* Assignee */}
                       {action.assignedTo && (
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[var(--text-muted)]">
                           Assigned to: {action.assignedTo.firstName} {action.assignedTo.lastName}
                         </p>
                       )}
@@ -266,9 +282,18 @@ export default function ActionsPage() {
                     <div className="flex gap-2">
                       <Link href={`/non-conformities/${action.nonConformityId}?tab=actions`}>
                         <Button variant="outline" size="sm">
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 mr-1" />
+                          Open
                         </Button>
                       </Link>
+                      {action.status === 'COMPLETED' && (
+                        <Link href={`/non-conformities/${action.nonConformityId}?tab=actions`}>
+                          <Button size="sm">
+                            <ShieldCheck className="h-4 w-4 mr-1" />
+                            Verify
+                          </Button>
+                        </Link>
+                      )}
                       <Button
                         variant="destructive"
                         size="sm"

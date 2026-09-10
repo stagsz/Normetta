@@ -39,28 +39,28 @@ export function QuestionCard({
 
   const scoreColors = {
     1: {
-      bg: 'bg-red-50',
-      border: 'border-red-300',
-      text: 'text-red-700',
-      activeBg: 'bg-red-50',
-      activeBorder: 'border-red-400',
-      activeText: 'text-red-800',
+      bg: 'bg-[var(--surface-card)]',
+      border: 'border-[var(--border-subtle)]',
+      text: 'text-[var(--status-fail-fg)]',
+      activeBg: 'bg-[var(--status-fail-bg)]',
+      activeBorder: 'border-[var(--status-fail-line)]',
+      activeText: 'text-[var(--status-fail-fg)]',
     },
     2: {
-      bg: 'bg-amber-50',
-      border: 'border-amber-300',
-      text: 'text-amber-700',
-      activeBg: 'bg-amber-50',
-      activeBorder: 'border-amber-500',
-      activeText: 'text-amber-800',
+      bg: 'bg-[var(--surface-card)]',
+      border: 'border-[var(--border-subtle)]',
+      text: 'text-[var(--status-obs-fg)]',
+      activeBg: 'bg-[var(--status-obs-bg)]',
+      activeBorder: 'border-[var(--status-obs-line)]',
+      activeText: 'text-[var(--status-obs-fg)]',
     },
     3: {
-      bg: 'bg-harmony-lime/20',
-      border: 'border-harmony-sage',
-      text: 'text-harmony-forest',
-      activeBg: 'bg-harmony-lime/40',
-      activeBorder: 'border-harmony-olive',
-      activeText: 'text-harmony-forest',
+      bg: 'bg-[var(--surface-card)]',
+      border: 'border-[var(--border-subtle)]',
+      text: 'text-[var(--status-pass-fg)]',
+      activeBg: 'bg-[var(--status-pass-bg)]',
+      activeBorder: 'border-[var(--status-pass-line)]',
+      activeText: 'text-[var(--status-pass-fg)]',
     },
   };
 
@@ -81,17 +81,17 @@ export function QuestionCard({
       {/* Question Header */}
       <div className="mb-6">
         <div className="flex items-start gap-4 mb-3">
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-harmony-light-beige text-harmony-forest font-display font-bold text-sm flex-shrink-0">
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--brand-soft)] text-[var(--text-link)] font-display font-bold text-sm flex-shrink-0">
             {questionNumber}
           </span>
-          <h3 className="font-display font-bold text-lg text-harmony-dark-text leading-tight flex-1">
+          <h3 className="font-display font-bold text-lg text-[var(--text-strong)] leading-tight flex-1">
             {questionText}
           </h3>
         </div>
 
         {guidance && (
-          <div className="ml-14 p-4 bg-harmony-warm-white rounded-xl border border-harmony-light-beige">
-            <p className="text-sm text-gray-600 leading-generous italic">
+          <div className="ml-14 p-4 bg-[var(--surface-sunken)] rounded-xl border border-[var(--border-subtle)]">
+            <p className="text-sm text-[var(--text-muted)] leading-generous italic">
               {guidance}
             </p>
           </div>
@@ -100,7 +100,7 @@ export function QuestionCard({
 
       {/* Score Selection */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-harmony-dark-text mb-3">
+        <label className="block text-sm font-medium text-[var(--text-strong)] mb-3">
           Compliance Score
         </label>
         <div className="grid grid-cols-3 gap-3">
@@ -116,10 +116,10 @@ export function QuestionCard({
                 disabled={disabled}
                 className={cn(
                   'relative p-4 rounded-xl border-2 transition-all duration-300',
-                  'hover:shadow-md hover:-translate-y-0.5',
+                  'hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5',
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   isActive
-                    ? cn(colors.activeBg, colors.activeBorder, colors.activeText, 'shadow-md scale-105')
+                    ? cn(colors.activeBg, colors.activeBorder, colors.activeText, 'shadow-[var(--shadow-md)] scale-105')
                     : cn(colors.bg, colors.border, colors.text)
                 )}
               >
@@ -132,9 +132,9 @@ export function QuestionCard({
 
                 {/* Active indicator */}
                 {isActive && (
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-harmony-forest rounded-full flex items-center justify-center shadow-md">
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-[var(--brand)] rounded-full flex items-center justify-center shadow-[var(--shadow-md)]">
                     <svg
-                      className="w-4 h-4 text-white"
+                      className="w-4 h-4 text-[var(--text-on-brand)]"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -154,7 +154,7 @@ export function QuestionCard({
 
       {/* Justification */}
       <div>
-        <label htmlFor={`justification-${questionNumber}`} className="block text-sm font-medium text-harmony-dark-text mb-3">
+        <label htmlFor={`justification-${questionNumber}`} className="block text-sm font-medium text-[var(--text-strong)] mb-3">
           Justification & Evidence
         </label>
         <textarea
@@ -166,10 +166,10 @@ export function QuestionCard({
           placeholder="Provide detailed justification for your score, including evidence and observations..."
           className={cn(
             'w-full px-4 py-3 rounded-xl border-2 transition-all duration-200',
-            'focus:outline-none focus:ring-2 focus:ring-harmony-olive focus:border-harmony-olive',
+            'focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-[var(--brand)]',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            'bg-white border-harmony-light-beige text-gray-700',
-            'placeholder:text-gray-400 leading-generous resize-none'
+            'bg-[var(--surface-card)] border-[var(--border-default)] text-[var(--text-body)]',
+            'placeholder:text-[var(--text-subtle)] leading-generous resize-none'
           )}
         />
       </div>

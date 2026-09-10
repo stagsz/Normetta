@@ -71,11 +71,11 @@ export default function JoinPage() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)] px-4">
         <Card className="w-full max-w-md text-center">
           <CardContent className="py-12">
-            <p className="text-2xl font-bold text-gray-800 mb-2">404</p>
-            <p className="text-gray-500">This invite link is invalid or has expired.</p>
+            <p className="text-2xl font-bold text-[var(--text-strong)] mb-2">404</p>
+            <p className="text-[var(--text-muted)]">This invite link is invalid or has expired.</p>
           </CardContent>
         </Card>
       </div>
@@ -84,14 +84,14 @@ export default function JoinPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)] px-4">
         <Card className="w-full max-w-md text-center">
           <CardContent className="py-12">
-            <div className="mx-auto w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-              <CheckCircle className="w-8 h-8 text-emerald-600" />
+            <div className="mx-auto w-14 h-14 bg-[var(--brand-soft)] rounded-full flex items-center justify-center mb-4">
+              <CheckCircle className="w-8 h-8 text-[var(--brand-strong)]" />
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Request sent!</h2>
-            <p className="text-gray-500">
+            <h2 className="text-xl font-bold text-[var(--text-strong)] mb-2">Request sent!</h2>
+            <p className="text-[var(--text-muted)]">
               Your join request has been submitted. An admin will review and approve it shortly.
             </p>
           </CardContent>
@@ -101,11 +101,11 @@ export default function JoinPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)] py-12 px-4">
+      <Card className="w-full max-w-md shadow-[var(--shadow-lg)]">
         <CardHeader className="text-center pb-2">
-          <div className="mx-auto w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4">
-            <Shield className="w-8 h-8 text-emerald-600" />
+          <div className="mx-auto w-14 h-14 bg-[var(--brand-soft)] rounded-2xl flex items-center justify-center mb-4">
+            <Shield className="w-8 h-8 text-[var(--brand-strong)]" />
           </div>
           <CardTitle className="text-xl">
             Join {orgName ?? '...'}

@@ -5,26 +5,26 @@ import { clsx } from 'clsx';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+  'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   {
     variants: {
       variant: {
         default:
-          'bg-emerald-600 text-white shadow-md hover:bg-emerald-700 hover:shadow-lg',
+          'bg-[linear-gradient(var(--brand),_var(--brand-strong))] text-white shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] hover:brightness-110',
         destructive:
-          'bg-red-600 text-white shadow-md hover:bg-red-700 hover:shadow-lg',
+          'bg-red-600 text-white shadow-[var(--shadow-md)] hover:bg-red-700 hover:shadow-[var(--shadow-lg)]',
         outline:
-          'border-2 border-emerald-300 bg-white text-emerald-700 shadow-md hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-lg',
+          'border-2 border-[var(--brand-soft)] bg-[var(--surface-card)] text-[var(--brand)] shadow-[var(--shadow-md)] hover:bg-[var(--brand-soft)] hover:border-[var(--brand)] hover:shadow-[var(--shadow-lg)]',
         secondary:
-          'bg-gray-100 text-gray-800 shadow-md hover:bg-gray-200 hover:shadow-lg',
+          'bg-[var(--surface-sunken)] text-[var(--text-strong)] shadow-[var(--shadow-md)] hover:bg-[var(--stone-200)] hover:shadow-[var(--shadow-lg)]',
         ghost:
-          'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+          'text-[var(--text-muted)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-strong)]',
         link:
-          'text-emerald-600 underline-offset-4 hover:underline hover:text-emerald-700',
+          'text-[var(--brand-strong)] underline-offset-4 hover:underline hover:text-[var(--brand)]',
         success:
-          'bg-green-600 text-white shadow-md hover:bg-green-700 hover:shadow-lg',
+          'bg-green-600 text-white shadow-[var(--shadow-md)] hover:bg-green-700 hover:shadow-[var(--shadow-lg)]',
         warning:
-          'bg-yellow-500 text-white shadow-md hover:bg-yellow-600 hover:shadow-lg',
+          'bg-yellow-500 text-white shadow-[var(--shadow-md)] hover:bg-yellow-600 hover:shadow-[var(--shadow-lg)]',
       },
       size: {
         default: 'h-10 px-5 py-2 text-sm rounded-xl',
@@ -44,10 +44,11 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   loading?: boolean;
+  iconLeft?: React.ReactNode;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, loading, children, disabled, ...props }, ref) => {
+  ({ className, variant, size, loading, iconLeft, children, disabled, ...props }, ref) => {
     return (
       <button
         className={clsx(buttonVariants({ variant, size, className }))}
@@ -77,6 +78,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             />
           </svg>
         )}
+        {!loading && iconLeft && <span className="mr-2 inline-flex">{iconLeft}</span>}
         {children}
       </button>
     );

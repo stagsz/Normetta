@@ -92,16 +92,16 @@ function ConfirmDialog({
       />
 
       {/* Dialog */}
-      <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <div className="relative bg-[var(--surface-card)] rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--text-strong)] mb-2">
           Confirm Status Change
         </h3>
-        <p className="text-gray-600 mb-4">
+        <p className="text-[var(--text-muted)] mb-4">
           Are you sure you want to change the status from{' '}
           <span className="font-medium">{STATUS_LABELS[currentStatus]}</span> to{' '}
           <span className="font-medium">{STATUS_LABELS[newStatus]}</span>?
         </p>
-        <p className="text-sm text-gray-500 mb-4 bg-gray-50 rounded-md p-3">
+        <p className="text-sm text-[var(--text-muted)] mb-4 bg-[var(--surface-sunken)] rounded-md p-3">
           {description}
         </p>
 
@@ -218,7 +218,7 @@ export function NCRStatusWorkflow({
   // If the NCR is closed (terminal state), show a message
   if (currentStatus === 'CLOSED') {
     return (
-      <div className="flex items-center gap-2 text-gray-500">
+      <div className="flex items-center gap-2 text-[var(--text-muted)]">
         <Lock className="h-4 w-4" />
         <span className="text-sm">This NCR is closed and cannot be modified.</span>
       </div>
@@ -259,15 +259,15 @@ export function NCRStatusWorkflow({
               <div
                 className={`flex items-center gap-1 px-2 py-1 rounded ${
                   status === currentStatus
-                    ? 'bg-emerald-100 text-emerald-700 font-medium'
-                    : 'text-gray-400'
+                    ? 'bg-[var(--brand-soft)] text-[var(--brand)] font-medium'
+                    : 'text-[var(--text-subtle)]'
                 }`}
               >
                 {STATUS_ICONS[status]}
                 <span className="hidden sm:inline">{STATUS_LABELS[status]}</span>
               </div>
               {index < 3 && (
-                <ArrowRight className="h-4 w-4 text-gray-300" />
+                <ArrowRight className="h-4 w-4 text-[var(--text-subtle)]" />
               )}
             </div>
           )
@@ -313,7 +313,7 @@ export function NCRStatusWorkflow({
       {forwardTransition && (
         <div className="text-center">
           {forwardTransition === 'RESOLVED' && (
-            <div className="text-xs text-gray-500 space-y-1">
+            <div className="text-xs text-[var(--text-muted)] space-y-1">
               <p>Requirements to resolve:</p>
               <ul className="space-y-0.5">
                 <li className={requirements.hasCorrectiveActions ? 'text-green-600' : 'text-red-500'}>
@@ -326,7 +326,7 @@ export function NCRStatusWorkflow({
             </div>
           )}
           {forwardTransition === 'CLOSED' && (
-            <div className="text-xs text-gray-500 space-y-1">
+            <div className="text-xs text-[var(--text-muted)] space-y-1">
               <p>Requirements to close:</p>
               <ul className="space-y-0.5">
                 <li className={requirements.hasRootCause ? 'text-green-600' : 'text-red-500'}>

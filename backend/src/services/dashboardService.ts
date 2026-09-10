@@ -223,7 +223,8 @@ export class DashboardService {
       where: {
         ...responseWhere,
         questionId: { in: Array.from(allNeededQuestionIds) },
-        score: { not: null },
+        // 0 = N/A — excluded from compliance math like in assessmentService
+        score: { gt: 0 },
       },
       select: { questionId: true, score: true },
     });
@@ -264,7 +265,7 @@ export class DashboardService {
       }
 
       const totalScore = scores.reduce((sum, s) => sum + s, 0);
-      const maxPossibleScore = questionsAnswered * 3;
+      const maxPossibleScore = questionsAnswered * 5; // scoring scale is 1–5
       const scorePercentage = (totalScore / maxPossibleScore) * 100;
 
       sectionBreakdown.push({

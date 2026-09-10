@@ -32,11 +32,11 @@ import { AssessmentsListSkeleton } from '@/components/assessments/AssessmentsLis
 import { AssessmentsEmptyState } from '@/components/assessments/AssessmentsEmptyState';
 
 const statusColors: Record<string, string> = {
-  DRAFT: 'bg-gray-100 text-gray-700',
-  IN_PROGRESS: 'bg-blue-50 text-blue-700',
-  UNDER_REVIEW: 'bg-amber-50 text-amber-700',
-  COMPLETED: 'bg-green-50 text-green-700',
-  ARCHIVED: 'bg-gray-100 text-gray-500',
+  DRAFT: 'bg-[var(--surface-sunken)] text-[var(--text-body)]',
+  IN_PROGRESS: 'bg-[var(--brand-soft)] text-[var(--text-link)]',
+  UNDER_REVIEW: 'bg-[var(--status-obs-bg)] text-[var(--status-obs-fg)] border border-[var(--status-obs-line)]',
+  COMPLETED: 'bg-[var(--status-pass-bg)] text-[var(--status-pass-fg)] border border-[var(--status-pass-line)]',
+  ARCHIVED: 'bg-[var(--surface-sunken)] text-[var(--text-muted)]',
 };
 
 const statusOptions = [
@@ -70,18 +70,18 @@ function SortableColumnHeader({
   return (
     <button
       onClick={() => onSort(field)}
-      className="flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900 transition-colors"
+      className="flex items-center gap-1 font-medium text-[var(--text-muted)] hover:text-[var(--text-strong)] transition-colors"
       aria-label={`Sort by ${label}`}
     >
       {label}
       {isActive ? (
         currentSortOrder === 'asc' ? (
-          <ArrowUp className="h-4 w-4 text-emerald-600" />
+          <ArrowUp className="h-4 w-4 text-[var(--brand-strong)]" />
         ) : (
-          <ArrowDown className="h-4 w-4 text-emerald-600" />
+          <ArrowDown className="h-4 w-4 text-[var(--brand-strong)]" />
         )
       ) : (
-        <ArrowUpDown className="h-4 w-4 text-gray-400" />
+        <ArrowUpDown className="h-4 w-4 text-[var(--text-subtle)]" />
       )}
     </button>
   );
@@ -245,8 +245,8 @@ export default function AssessmentsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Assessments</h1>
-          <p className="text-gray-500">Manage your ISO 9001 self-assessments and audits</p>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Assessments</h1>
+          <p className="text-[var(--text-muted)]">Manage your ISO 9001 self-assessments and audits</p>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -273,7 +273,7 @@ export default function AssessmentsPage() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-subtle)]" size={18} />
                 <Input
                   placeholder="Search by title or description..."
                   value={searchInput}
@@ -307,7 +307,7 @@ export default function AssessmentsPage() {
         <Card>
           <CardContent className="py-3">
             <div className="flex items-center gap-6 text-sm">
-              <span className="text-gray-500 font-medium">Sort by:</span>
+              <span className="text-[var(--text-muted)] font-medium">Sort by:</span>
               <SortableColumnHeader
                 field="createdAt"
                 label="Created"
@@ -346,9 +346,9 @@ export default function AssessmentsPage() {
         {isError ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-              <p className="text-gray-700 font-medium">Failed to load assessments</p>
-              <p className="text-gray-500 text-sm mt-1">Please try refreshing the page</p>
+              <AlertCircle className="mx-auto h-12 w-12 text-[var(--status-fail-fg)] mb-4" />
+              <p className="text-[var(--text-body)] font-medium">Failed to load assessments</p>
+              <p className="text-[var(--text-muted)] text-sm mt-1">Please try refreshing the page</p>
             </CardContent>
           </Card>
         ) : assessments.length === 0 ? (
@@ -362,29 +362,29 @@ export default function AssessmentsPage() {
           </Card>
         ) : (
           assessments.map((assessment) => (
-            <Card key={assessment.id} className="hover:shadow-md transition-shadow">
+            <Card key={assessment.id} className="hover:shadow-[var(--shadow-md)] transition-shadow">
               <CardContent className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <Link
                         href={`/assessments/${assessment.id}`}
-                        className="text-lg font-semibold text-gray-900 hover:text-emerald-600"
+                        className="text-lg font-semibold text-[var(--text-strong)] hover:text-[var(--brand-strong)]"
                       >
                         {assessment.title}
                       </Link>
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          statusColors[assessment.status] || 'bg-gray-100 text-gray-700'
+                          statusColors[assessment.status] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                         }`}
                       >
                         {assessment.status.replace('_', ' ')}
                       </span>
-                      <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                      <span className="px-2 py-1 text-xs bg-[var(--surface-sunken)] text-[var(--text-muted)] rounded-full">
                         {assessment.auditType}
                       </span>
                     </div>
-                    <div className="mt-2 flex items-center gap-6 text-sm text-gray-500">
+                    <div className="mt-2 flex items-center gap-6 text-sm text-[var(--text-muted)]">
                       <span>
                         Lead: {assessment.leadAuditor.firstName} {assessment.leadAuditor.lastName}
                       </span>
@@ -395,7 +395,7 @@ export default function AssessmentsPage() {
                       )}
                       <span>Responses: {assessment._count.responses}</span>
                       {assessment._count.nonConformities > 0 && (
-                        <span className="text-red-600">
+                        <span className="text-[var(--status-fail-fg)]">
                           NC: {assessment._count.nonConformities}
                         </span>
                       )}
@@ -410,15 +410,15 @@ export default function AssessmentsPage() {
                           <span
                             className={`text-2xl font-bold ${
                               (assessment.overallScore || 0) >= 70
-                                ? 'text-green-600'
+                                ? 'text-[var(--status-pass-fg)]'
                                 : (assessment.overallScore || 0) >= 50
-                                ? 'text-amber-600'
-                                : 'text-red-600'
+                                ? 'text-[var(--status-obs-fg)]'
+                                : 'text-[var(--status-fail-fg)]'
                             }`}
                           >
                             {assessment.overallScore?.toFixed(1)}%
                           </span>
-                          <p className="text-xs text-gray-500">Compliance Score</p>
+                          <p className="text-xs text-[var(--text-muted)]">Compliance Score</p>
                         </div>
                       ) : (
                         <ProgressBar

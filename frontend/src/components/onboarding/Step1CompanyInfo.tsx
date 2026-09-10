@@ -94,9 +94,9 @@ export default function Step1CompanyInfo() {
           error={errors.slug?.message}
           onBlur={(e) => handleSlugBlur(e.target.value)}
         />
-        {checkingSlug && <p className="mt-1 text-xs text-gray-500">Checking availability...</p>}
+        {checkingSlug && <p className="mt-1 text-xs text-[var(--text-muted)]">Checking availability...</p>}
         {!checkingSlug && slugAvailable === true && (
-          <p className="mt-1 text-xs text-emerald-600">Slug is available</p>
+          <p className="mt-1 text-xs text-[var(--brand-strong)]">Slug is available</p>
         )}
         {!checkingSlug && slugAvailable === false && (
           <p className="mt-1 text-xs text-red-600">Slug is already taken</p>

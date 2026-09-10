@@ -37,23 +37,21 @@ interface QuestionCardProps {
   className?: string;
 }
 
-const scoreColors: Record<0 | 1 | 2 | 3 | 4 | 5, string> = {
-  0: 'border-l-gray-500 bg-gray-50/30',
-  1: 'border-l-red-500 bg-red-50/30',
-  2: 'border-l-orange-500 bg-orange-50/30',
-  3: 'border-l-yellow-500 bg-amber-50/30',
-  4: 'border-l-green-500 bg-green-50/30',
-  5: 'border-l-blue-500 bg-blue-50/30',
-};
+// --- shared scoring semantics for 1–5 scale ---
+export const SCORE_LABELS = ['Not Applicable', 'Non-Compliant', 'Initial', 'Developing', 'Established', 'Optimizing'] as const;
+export const SCORE_SHORT_LABELS = ['N/A', 'NC', 'Initial', 'Developing', 'Established', 'Optimizing'] as const;
+export const SCORE_COLORS = {
+  0: { bg: 'bg-[var(--status-na-bg)]', text: 'text-[var(--status-na-fg)]', border: 'border-l-[var(--status-na-solid)]' },
+  1: { bg: 'bg-[var(--status-fail-bg)]', text: 'text-[var(--status-fail-fg)]', border: 'border-l-red-500' },
+  2: { bg: 'bg-[var(--status-obs-bg)]', text: 'text-[var(--status-obs-fg)]', border: 'border-l-orange-500' },
+  3: { bg: 'bg-[var(--status-obs-bg)]', text: 'text-[var(--status-obs-fg)]', border: 'border-l-yellow-500' },
+  4: { bg: 'bg-[var(--status-pass-bg)]', text: 'text-[var(--status-pass-fg)]', border: 'border-l-green-500' },
+  5: { bg: 'bg-info-50', text: 'text-info-700', border: 'border-l-blue-500' },
+} as const;
 
-const scoreLabels: Record<0 | 1 | 2 | 3 | 4 | 5, string> = {
-  0: 'Not Applicable',
-  1: 'Non-Compliant',
-  2: 'Initial',
-  3: 'Developing',
-  4: 'Established',
-  5: 'Optimizing',
-};
+export function badgeClassesForScore(score: number) {
+  return SCORE_COLORS[score as keyof typeof SCORE_COLORS] ?? SCORE_COLORS[4];
+}
 
 export function QuestionCard({
   question,
@@ -79,7 +77,7 @@ export function QuestionCard({
     <Card
       className={clsx(
         'border-l-4 transition-colors',
-        hasScore ? scoreColors[currentScore] : 'border-l-gray-300',
+        hasScore ? SCORE_COLORS[currentScore].border : 'border-l-[var(--border-strong)]',
         className
       )}
     >
@@ -88,16 +86,16 @@ export function QuestionCard({
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[var(--brand-soft)] text-[var(--brand)]">
                 {question.questionNumber}
               </span>
               {question.standardReference && (
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-[var(--text-muted)]">
                   Ref: {question.standardReference}
                 </span>
               )}
             </div>
-            <p className="text-gray-900 font-medium">{question.questionText}</p>
+            <p className="text-[var(--text-strong)] font-medium">{question.questionText}</p>
           </div>
 
           {/* Current Score Badge */}
@@ -105,27 +103,27 @@ export function QuestionCard({
             <div
               className={clsx(
                 'flex-shrink-0 px-3 py-1.5 rounded-xl text-sm font-medium',
-                currentScore === 0 && 'bg-gray-100 text-gray-700',
-                currentScore === 1 && 'bg-red-50 text-red-700',
-                currentScore === 2 && 'bg-orange-100 text-orange-700',
-                currentScore === 3 && 'bg-amber-50 text-amber-700',
-                currentScore === 4 && 'bg-green-50 text-green-700',
-                currentScore === 5 && 'bg-blue-50 text-blue-700'
+                currentScore === 0 && 'bg-[var(--status-na-bg)] text-[var(--status-na-fg)]',
+                currentScore === 1 && 'bg-[var(--status-fail-bg)] text-[var(--status-fail-fg)]',
+                currentScore === 2 && 'bg-[var(--status-obs-bg)] text-[var(--status-obs-fg)]',
+                currentScore === 3 && 'bg-[var(--status-obs-bg)] text-[var(--status-obs-fg)]',
+                currentScore === 4 && 'bg-[var(--status-pass-bg)] text-[var(--status-pass-fg)]',
+                currentScore === 5 && 'bg-info-50 text-info-700'
               )}
             >
-              {scoreLabels[currentScore]}
+              {SCORE_LABELS[currentScore]}
             </div>
           )}
         </div>
 
         {/* Guidance Section */}
         {showGuidance && question.guidance && (
-          <div className="mb-6 p-3 bg-blue-50 rounded-xl border border-blue-100">
+          <div className="mb-6 p-3 bg-info-50 rounded-xl border border-info-100">
             <div className="flex items-start gap-2">
-              <HelpCircle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+              <HelpCircle className="h-4 w-4 text-info-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs font-medium text-blue-700 mb-1">Auditor Guidance</p>
-                <p className="text-sm text-blue-600">{question.guidance}</p>
+                <p className="text-xs font-medium text-info-700 mb-1">Auditor Guidance</p>
+                <p className="text-sm text-info-600">{question.guidance}</p>
               </div>
             </div>
           </div>
@@ -133,7 +131,7 @@ export function QuestionCard({
 
         {/* Score Buttons */}
         <div className="mb-4">
-          <p className="text-sm font-medium text-gray-700 mb-3 text-center">
+          <p className="text-sm font-medium text-[var(--text-body)] mb-3 text-center">
             Select Compliance Score
           </p>
           <ScoreGroup
@@ -157,11 +155,11 @@ export function QuestionCard({
             <div className="flex items-center justify-between mb-2">
               <label
                 htmlFor={`justification-${question.id}`}
-                className="text-sm font-medium text-gray-700 flex items-center gap-1.5"
+                className="text-sm font-medium text-[var(--text-body)] flex items-center gap-1.5"
               >
                 Justification / Notes
                 {requiresJustification && (
-                  <span className="text-red-500 text-xs font-semibold">
+                  <span className="text-[var(--status-fail-fg)] text-xs font-semibold">
                     (Required)
                   </span>
                 )}
@@ -169,7 +167,7 @@ export function QuestionCard({
               <span
                 className={clsx(
                   'text-xs',
-                  isOverLimit ? 'text-red-500 font-medium' : 'text-gray-500'
+                  isOverLimit ? 'text-[var(--status-fail-fg)] font-medium' : 'text-[var(--text-muted)]'
                 )}
               >
                 {justificationLength.toLocaleString()} / {MAX_JUSTIFICATION_LENGTH.toLocaleString()}
@@ -188,28 +186,28 @@ export function QuestionCard({
               rows={3}
               className={clsx(
                 'w-full rounded-md border px-3 py-2 text-sm resize-y min-h-[80px] max-h-[200px]',
-                'placeholder:text-gray-400',
+                'placeholder:text-[var(--text-subtle)]',
                 'focus:outline-none focus:ring-2 focus:border-transparent',
-                'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50',
+                'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--surface-sunken)]',
                 requiresJustification && !hasJustification
-                  ? 'border-amber-400 focus:ring-amber-500 bg-amber-50/50'
+                  ? 'border-[var(--status-obs-line)] focus:ring-[var(--status-obs-solid)] bg-[var(--status-obs-bg)]'
                   : isOverLimit
-                  ? 'border-red-400 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-emerald-400 bg-white'
+                  ? 'border-[var(--status-fail-line)] focus:ring-[var(--status-fail-solid)]'
+                  : 'border-[var(--border-default)] focus:ring-[var(--brand)] bg-[var(--surface-card)]'
               )}
             />
             {showJustificationWarning && (
               <div className="mt-2 flex items-center gap-1.5">
-                <AlertCircle className="h-4 w-4 text-amber-600 flex-shrink-0" />
-                <p className="text-xs text-amber-700">
+                <AlertCircle className="h-4 w-4 text-[var(--status-obs-fg)] flex-shrink-0" />
+                <p className="text-xs text-[var(--status-obs-fg)]">
                   Justification is required for non-compliant scores
                 </p>
               </div>
             )}
             {isOverLimit && (
               <div className="mt-2 flex items-center gap-1.5">
-                <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                <p className="text-xs text-red-600">
+                <AlertTriangle className="h-4 w-4 text-[var(--status-fail-fg)] flex-shrink-0" />
+                <p className="text-xs text-[var(--status-fail-fg)]">
                   Justification exceeds maximum length
                 </p>
               </div>
@@ -220,7 +218,7 @@ export function QuestionCard({
         {/* Draft Indicator */}
         {response?.isDraft && (
           <div className="mt-4 flex items-center justify-end">
-            <span className="text-xs text-gray-500 italic">Draft - not yet saved</span>
+            <span className="text-xs text-[var(--text-muted)] italic">Draft - not yet saved</span>
           </div>
         )}
       </CardContent>
@@ -250,52 +248,52 @@ export function QuestionCardCompact({
       type="button"
       onClick={onClick}
       className={clsx(
-        'w-full text-left p-4 rounded-xl border-l-4 bg-white border border-gray-200 transition-all',
-        'hover:shadow-md hover:border-gray-300',
-        hasScore ? scoreColors[currentScore] : 'border-l-gray-300',
+        'w-full text-left p-4 rounded-xl border-l-4 bg-[var(--surface-card)] border border-[var(--border-subtle)] transition-all',
+        'hover:shadow-[var(--shadow-md)] hover:border-[var(--border-default)]',
+        hasScore ? SCORE_COLORS[currentScore].border : 'border-l-[var(--border-strong)]',
         className
       )}
     >
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[var(--surface-sunken)] text-[var(--text-body)]">
               {question.questionNumber}
             </span>
             {hasScore && (
               <span
                 className={clsx(
                   'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium',
-                  currentScore === 0 && 'bg-gray-100 text-gray-700',
-                  currentScore === 1 && 'bg-red-50 text-red-700',
-                  currentScore === 2 && 'bg-orange-100 text-orange-700',
-                  currentScore === 3 && 'bg-amber-50 text-amber-700',
-                  currentScore === 4 && 'bg-green-50 text-green-700',
-                  currentScore === 5 && 'bg-blue-50 text-blue-700'
+                  currentScore === 0 && 'bg-[var(--status-na-bg)] text-[var(--status-na-fg)]',
+                  currentScore === 1 && 'bg-[var(--status-fail-bg)] text-[var(--status-fail-fg)]',
+                  currentScore === 2 && 'bg-[var(--status-obs-bg)] text-[var(--status-obs-fg)]',
+                  currentScore === 3 && 'bg-[var(--status-obs-bg)] text-[var(--status-obs-fg)]',
+                  currentScore === 4 && 'bg-[var(--status-pass-bg)] text-[var(--status-pass-fg)]',
+                  currentScore === 5 && 'bg-info-50 text-info-700'
                 )}
               >
                 Score: {currentScore}
               </span>
             )}
             {!hasScore && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[var(--surface-sunken)] text-[var(--text-muted)]">
                 Not scored
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-900 truncate">{question.questionText}</p>
+          <p className="text-sm text-[var(--text-strong)] truncate">{question.questionText}</p>
         </div>
         <div className="flex-shrink-0">
           <div
             className={clsx(
               'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold',
-              !hasScore && 'bg-gray-100 text-gray-400',
-              currentScore === 0 && 'bg-gray-500 text-white',
-              currentScore === 1 && 'bg-red-500 text-white',
-              currentScore === 2 && 'bg-orange-500 text-white',
-              currentScore === 3 && 'bg-amber-500 text-white',
-              currentScore === 4 && 'bg-green-500 text-white',
-              currentScore === 5 && 'bg-blue-500 text-white'
+              !hasScore && 'bg-[var(--surface-sunken)] text-[var(--text-subtle)]',
+              currentScore === 0 && 'bg-[var(--status-na-solid)] text-white',
+              currentScore === 1 && 'bg-[var(--status-fail-solid)] text-white',
+              currentScore === 2 && 'bg-warning-500 text-white',
+              currentScore === 3 && 'bg-[var(--status-obs-solid)] text-white',
+              currentScore === 4 && 'bg-[var(--status-pass-solid)] text-white',
+              currentScore === 5 && 'bg-info-500 text-white'
             )}
           >
             {hasScore ? (currentScore === 0 ? 'N/A' : currentScore) : '-'}

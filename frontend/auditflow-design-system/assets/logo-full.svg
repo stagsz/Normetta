@@ -1,0 +1,25 @@
+<svg width="208" height="48" viewBox="0 0 208 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Normetta">
+  <defs>
+    <linearGradient id="aff-face" x1="24" y1="2" x2="24" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2DD4BF"></stop>
+      <stop offset="0.5" stop-color="#14B8A6"></stop>
+      <stop offset="1" stop-color="#0F766E"></stop>
+    </linearGradient>
+    <linearGradient id="aff-bevel" x1="24" y1="2" x2="24" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"></stop>
+      <stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.28"></stop>
+    </linearGradient>
+    <filter id="aff-drop" x="-30%" y="-25%" width="160%" height="165%">
+      <feDropShadow dx="0" dy="1.4" stdDeviation="1.6" flood-color="#04211D" flood-opacity="0.40"></feDropShadow>
+    </filter>
+  </defs>
+  <g filter="url(#aff-drop)">
+    <rect x="1" y="1" width="46" height="46" rx="11" fill="url(#aff-face)"></rect>
+    <rect x="1.5" y="1.5" width="45" height="45" rx="10.5" fill="none" stroke="url(#aff-bevel)" stroke-width="1.2"></rect>
+    <path d="M12 25.5L20.5 34L36 13.5" stroke="#04211D" stroke-opacity="0.32" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,0.9)"></path>
+    <path d="M12 25.5L20.5 34L36 13.5" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <circle cx="36" cy="13.5" r="3.4" fill="#7EE8DC"></circle>
+  </g>
+  <text x="62" y="32" font-family="&#39;Space Grotesk&#39;, sans-serif" font-size="25" font-weight="600" letter-spacing="-0.4" fill="#12201F">Norm<tspan fill="#0D9488">etta</tspan></text>
+</svg>

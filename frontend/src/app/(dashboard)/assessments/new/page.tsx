@@ -172,8 +172,8 @@ export default function NewAssessmentPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Assessment</h1>
-          <p className="text-gray-500">Set up a new ISO 9001 self-assessment or audit</p>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Create New Assessment</h1>
+          <p className="text-[var(--text-muted)]">Set up a new ISO 9001 self-assessment or audit</p>
         </div>
       </div>
 
@@ -181,8 +181,8 @@ export default function NewAssessmentPage() {
       <Card className="max-w-2xl">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-100 rounded-xl">
-              <ClipboardList className="h-6 w-6 text-emerald-600" />
+            <div className="p-2 bg-[var(--brand-soft)] rounded-xl">
+              <ClipboardList className="h-6 w-6 text-[var(--brand-strong)]" />
             </div>
             <div>
               <CardTitle>Assessment Details</CardTitle>
@@ -208,7 +208,7 @@ export default function NewAssessmentPage() {
             <div className="w-full">
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-[var(--text-body)] mb-1"
               >
                 Description
               </label>
@@ -219,7 +219,7 @@ export default function NewAssessmentPage() {
                 id="description"
                 rows={4}
                 placeholder="Describe the scope and objectives of this assessment..."
-                className={`flex w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 resize-none ${
+                className={`flex w-full rounded-md border border-[var(--border-default)] bg-[var(--surface-card)] px-3 py-2 text-sm placeholder:text-[var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 resize-none ${
                   errors.description ? 'border-red-400 focus:ring-red-500' : ''
                 }`}
               />
@@ -227,7 +227,7 @@ export default function NewAssessmentPage() {
                 <span className={errors.description ? 'text-red-500' : 'text-transparent'}>
                   {errors.description?.message || ' '}
                 </span>
-                <span className={`text-gray-400 ${descriptionLength > 2000 ? 'text-red-500' : ''}`}>
+                <span className={`text-[var(--text-subtle)] ${descriptionLength > 2000 ? 'text-red-500' : ''}`}>
                   {descriptionLength}/2000
                 </span>
               </div>
@@ -237,16 +237,16 @@ export default function NewAssessmentPage() {
             <div className="w-full space-y-2">
               <label
                 htmlFor="templateId"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-[var(--text-body)] mb-1"
               >
                 <div className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   Template
-                  <span className="text-gray-400 font-normal">(optional)</span>
+                  <span className="text-[var(--text-subtle)] font-normal">(optional)</span>
                 </div>
               </label>
               {templatesLoading ? (
-                <div className="h-10 w-full rounded-md border border-gray-300 bg-gray-50 animate-pulse" />
+                <div className="h-10 w-full rounded-md border border-[var(--border-default)] bg-[var(--surface-sunken)] animate-pulse" />
               ) : templates.length > 0 ? (
                 <>
                   <Select
@@ -261,16 +261,16 @@ export default function NewAssessmentPage() {
 
                   {/* Selected Template Info */}
                   {selectedTemplate && watchedTemplateId && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-md space-y-2">
+                    <div className="p-3 bg-[var(--surface-sunken)] border border-[var(--border-subtle)] rounded-md space-y-2">
                       {selectedTemplate.description && (
-                        <p className="text-sm text-gray-700">
+                        <p className="text-sm text-[var(--text-strong)]">
                           {selectedTemplate.description}
                         </p>
                       )}
                       {getTemplateScopeText(selectedTemplate) && (
                         <div className="flex items-center gap-2 text-sm">
-                          <span className="font-medium text-blue-900">Scope:</span>
-                          <span className="text-blue-800">
+                          <span className="font-medium text-[var(--text-strong)]">Scope:</span>
+                          <span className="text-[var(--text-body)]">
                             {getTemplateScopeText(selectedTemplate)}
                           </span>
                         </div>
@@ -279,7 +279,7 @@ export default function NewAssessmentPage() {
                   )}
                 </>
               ) : (
-                <div className="flex items-center gap-2 px-3 py-2 text-sm text-gray-500 bg-gray-50 rounded-md border border-gray-200">
+                <div className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-muted)] bg-[var(--surface-sunken)] rounded-md border border-[var(--border-subtle)]">
                   <span>No templates available</span>
                 </div>
               )}
@@ -295,7 +295,7 @@ export default function NewAssessmentPage() {
             <div className="w-full">
               <label
                 htmlFor="auditType"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-[var(--text-body)] mb-1"
               >
                 Audit Type
               </label>
@@ -315,7 +315,7 @@ export default function NewAssessmentPage() {
               <div className="w-full">
                 <label
                   htmlFor="scheduledDate"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-[var(--text-body)] mb-1"
                 >
                   Scheduled Date
                 </label>
@@ -324,7 +324,7 @@ export default function NewAssessmentPage() {
                     {...register('scheduledDate')}
                     type="date"
                     id="scheduledDate"
-                    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 ${
+                    className={`flex h-10 w-full rounded-md border border-[var(--border-default)] bg-[var(--surface-card)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 ${
                       errors.scheduledDate ? 'border-red-400 focus:ring-red-500' : ''
                     }`}
                   />
@@ -337,7 +337,7 @@ export default function NewAssessmentPage() {
               <div className="w-full">
                 <label
                   htmlFor="dueDate"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-[var(--text-body)] mb-1"
                 >
                   Due Date
                 </label>
@@ -346,7 +346,7 @@ export default function NewAssessmentPage() {
                     {...register('dueDate')}
                     type="date"
                     id="dueDate"
-                    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 ${
+                    className={`flex h-10 w-full rounded-md border border-[var(--border-default)] bg-[var(--surface-card)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 ${
                       errors.dueDate ? 'border-red-400 focus:ring-red-500' : ''
                     }`}
                   />

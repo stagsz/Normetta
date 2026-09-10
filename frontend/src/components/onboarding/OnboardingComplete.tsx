@@ -23,11 +23,11 @@ export default function OnboardingComplete() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)] py-12 px-4">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
-          <div className="mx-auto w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle className="w-8 h-8 text-emerald-600" />
+          <div className="mx-auto w-14 h-14 bg-[var(--brand-soft)] rounded-full flex items-center justify-center mb-4">
+            <CheckCircle className="w-8 h-8 text-[var(--brand-strong)]" />
           </div>
           <CardTitle className="text-xl">Setup complete!</CardTitle>
           <CardDescription>
@@ -36,12 +36,12 @@ export default function OnboardingComplete() {
         </CardHeader>
         <CardContent className="space-y-4">
           {inviteUrl && (
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
-              <span className="flex-1 text-sm text-gray-700 truncate">{inviteUrl}</span>
+            <div className="flex items-center gap-2 bg-[var(--surface-sunken)] border border-[var(--border-subtle)] rounded-xl px-3 py-2">
+              <span className="flex-1 text-sm text-[var(--text-body)] truncate">{inviteUrl}</span>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="text-gray-400 hover:text-emerald-600 transition-colors flex-shrink-0"
+                className="text-[var(--text-subtle)] hover:text-[var(--brand-strong)] transition-colors flex-shrink-0"
                 aria-label="Copy invite link"
               >
                 <Copy size={16} />

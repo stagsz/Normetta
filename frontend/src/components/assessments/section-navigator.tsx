@@ -110,14 +110,14 @@ function StatusIcon({ status }: { status: CompletionStatus }) {
       );
     case 'empty':
       return (
-        <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
-          <Circle className="w-3 h-3 text-gray-400" />
+        <div className="w-5 h-5 rounded-full bg-[var(--surface-sunken)] flex items-center justify-center">
+          <Circle className="w-3 h-3 text-[var(--text-subtle)]" />
         </div>
       );
     case 'not-applicable':
       return (
-        <div className="w-5 h-5 rounded-full bg-gray-50 flex items-center justify-center">
-          <Minus className="w-3 h-3 text-gray-300" />
+        <div className="w-5 h-5 rounded-full bg-[var(--surface-sunken)] flex items-center justify-center">
+          <Minus className="w-3 h-3 text-[var(--text-subtle)]" />
         </div>
       );
     default:
@@ -171,8 +171,8 @@ function SectionItem({
         onClick={handleClick}
         className={clsx(
           'w-full flex items-center gap-2 px-2 py-2 text-left rounded-xl transition-colors',
-          'hover:bg-gray-50',
-          isActive && 'bg-emerald-50 border-l-2 border-emerald-600',
+          'hover:bg-[var(--surface-sunken)]',
+          isActive && 'bg-[var(--brand-soft)] border-l-2 border-[var(--brand)]',
           depth > 0 && 'ml-4'
         )}
       >
@@ -180,9 +180,9 @@ function SectionItem({
         <div className="w-4 flex-shrink-0">
           {hasChildren && (
             isExpanded ? (
-              <ChevronDown className="w-4 h-4 text-gray-400" />
+              <ChevronDown className="w-4 h-4 text-[var(--text-subtle)]" />
             ) : (
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+              <ChevronRight className="w-4 h-4 text-[var(--text-subtle)]" />
             )
           )}
         </div>
@@ -193,16 +193,16 @@ function SectionItem({
         {/* Section label */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2">
-            <span className="font-medium text-gray-900 text-sm">
+            <span className="font-medium text-[var(--text-strong)] text-sm">
               {section.sectionNumber}
             </span>
-            <span className="text-sm text-gray-600 truncate">
+            <span className="text-sm text-[var(--text-muted)] truncate">
               {section.title}
             </span>
           </div>
           {/* Progress count for leaf sections or parent aggregates */}
           {progress.total > 0 && (
-            <div className="text-xs text-gray-400 mt-0.5">
+            <div className="text-xs text-[var(--text-subtle)] mt-0.5">
               {progress.answered} / {progress.total} answered
             </div>
           )}
@@ -396,24 +396,24 @@ export function SectionNavigator({
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-base">ISO 9001 Sections</CardTitle>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-[var(--text-muted)]">
           {overallProgress.answered} of {overallProgress.total} questions answered
         </p>
       </CardHeader>
       <CardContent className="p-2">
         {/* Legend */}
-        <div className="flex items-center gap-4 px-2 py-2 mb-2 bg-gray-50 rounded-xl text-xs">
+        <div className="flex items-center gap-4 px-2 py-2 mb-2 bg-[var(--surface-sunken)] rounded-xl text-xs">
           <div className="flex items-center gap-1">
             <StatusIcon status="complete" />
-            <span className="text-gray-600">Complete</span>
+            <span className="text-[var(--text-muted)]">Complete</span>
           </div>
           <div className="flex items-center gap-1">
             <StatusIcon status="partial" />
-            <span className="text-gray-600">In Progress</span>
+            <span className="text-[var(--text-muted)]">In Progress</span>
           </div>
           <div className="flex items-center gap-1">
             <StatusIcon status="empty" />
-            <span className="text-gray-600">Not Started</span>
+            <span className="text-[var(--text-muted)]">Not Started</span>
           </div>
         </div>
 

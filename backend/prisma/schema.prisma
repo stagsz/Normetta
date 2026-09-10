@@ -72,6 +72,13 @@ enum InviteStatus {
   REJECTED
 }
 
+enum BetaInviteStatus {
+  ACTIVE
+  EXPIRED
+  USED_UP
+  REVOKED
+}
+
 enum Priority {
   LOW
   MEDIUM
@@ -85,6 +92,36 @@ enum EvidenceType {
   LINK
 }
 
+// Organization readiness profile — captured during onboarding, used to
+// tailor recommended assessment scope and guidance depth.
+enum CompanySize {
+  MICRO  // 1-10 employees
+  SMALL  // 11-50
+  MEDIUM // 51-200
+  LARGE  // 200+
+}
+
+enum QMSStatus {
+  NONE       // no quality management system yet
+  BUILDING   // actively building one
+  INFORMAL   // informal/ad-hoc practices, not documented
+  DOCUMENTED // documented QMS in place
+}
+
+enum CertificationStatus {
+  NOT_CERTIFIED
+  IN_PROGRESS
+  CERTIFIED_SURVEILLANCE  // certified, awaiting/undergoing surveillance audit
+  CERTIFIED_RECERTIFYING  // certified, due for recertification
+}
+
+enum StandardsKnowledgeLevel {
+  NONE
+  BASIC
+  TRAINED
+  CERTIFIED_AUDITOR
+}
+
 model Organization {
   id            String   @id @default(uuid())
   name          String
@@ -92,6 +129,9 @@ model Organization {
   updatedAt     DateTime @updatedAt
   slug          String?  @unique
   setupComplete Boolean  @default(false)
+  industry      String?
+  country       String?
+  allowedDomains Json?   @default("[]")
 
   users         User[]
   assessments   Assessment[]
@@ -100,8 +140,35 @@ model Organization {
   departments   Department[]
   orgRoles      OrgRole[]
   invites       UserOrgInvite[]
+  betaInvites   BetaInvite[]
+  profile       OrganizationProfile?
 
   @@map("organizations")
+}
+
+model OrganizationProfile {
+  id                      String                   @id @default(uuid())
+  companySize             CompanySize?             @map("company_size")
+  qmsStatus               QMSStatus?                @map("qms_status")
+  certificationStatus     CertificationStatus?     @map("certification_status")
+  lastAuditSummary        String?                  @map("last_audit_summary") // free text: when it was + how it went
+  improvementNotes        String?                  @map("improvement_notes") // free text: what they want to improve
+  standardsKnowledgeLevel StandardsKnowledgeLevel? @map("standards_knowledge_level")
+  hoursPerWeek            Int?                     @map("hours_per_week")
+
+  // Reserved for the future AI-interview phase — structured extraction from
+  // the free-text answers above (priority clauses, pain points, etc.) and
+  // the interview transcript. Unused until that phase ships.
+  aiProfile               Json?                    @map("ai_profile")
+  interviewTranscript     Json?                    @map("interview_transcript")
+
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               DateTime                 @updatedAt @map("updated_at")
+
+  organizationId          String                   @unique @map("organization_id")
+  organization            Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_profiles")
 }
 
 model AssessmentTemplate {
@@ -149,6 +216,7 @@ model ISOStandardSection {
 model User {
   id              String    @id @default(uuid())
   email           String    @unique
+  emailDomain     String   @default("") @db.VarChar(255)
   passwordHash    String
   firstName       String
   lastName        String
@@ -171,8 +239,16 @@ model User {
   orgRoleId         String?
   orgRole           OrgRole?       @relation(fields: [orgRoleId], references: [id])
   invites           UserOrgInvite[]
+  betaInvitesCreated BetaInvite[] @relation("BetaInviteCreatedBy")
+  betaInviteUsages   BetaInviteUsage[]
+
+  // Password reset (hashed token only; raw token is emailed to the user)
+  resetPasswordToken   String?   @map("reset_password_token")
+  resetPasswordExpires DateTime? @map("reset_password_expires")
 
   @@index([organizationId])
+  @@index([emailDomain])
+  @@index([resetPasswordToken])
   @@map("users")
 }
 
@@ -413,4 +489,65 @@ model UserOrgInvite {
   @@index([userId])
   @@index([organizationId])
   @@map("user_org_invites")
+}
+
+model BetaInvite {
+  id              String           @id @default(uuid())
+  code            String           @unique @map("code")
+  email           String?
+  status          BetaInviteStatus @default(ACTIVE)
+  expiresAt       DateTime
+  maxUses         Int              @default(1)
+  usedCount       Int              @default(0)
+  metadata        Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  createdById     String
+  createdBy       User             @relation("BetaInviteCreatedBy", fields: [createdById], references: [id])
+  organizationId  String?
+  organization    Organization?    @relation(fields: [organizationId], references: [id])
+  usages          BetaInviteUsage[]
+
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("beta_invites")
+}
+
+model BetaInviteUsage {
+  id            String      @id @default(uuid())
+  betaInviteId  String
+  betaInvite    BetaInvite  @relation(fields: [betaInviteId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id])
+  ipAddress     String?
+  userAgent     String?
+  referrer      String?
+  converted     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+
+  @@index([betaInviteId])
+  @@index([userId])
+  @@map("beta_invite_usages")
+}
+
+// Append-only audit trail for GDPR data-subject requests (export / anonymize).
+// Deliberately has no relation fields to User: it stores raw FK columns so the
+// User model needs no back-relation and anonymization never affects this table.
+model GdprAuditLog {
+  id           String   @id @default(uuid())
+  action       String
+  targetUserId String   @map("target_user_id")
+  targetEmail  String   @map("target_email")
+  actorId      String   @map("actor_id")
+  status       String
+  reason       String?
+  counts       Json?
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([targetUserId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("gdpr_audit_logs")
 }

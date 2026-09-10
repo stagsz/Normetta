@@ -22,15 +22,15 @@ Findings (high level)
        behavior from the provider side.
 
 Recommended actions
-  - Update PRIVACY_POLICY.md to state clearly:
-      * subject-rights requests are filed via privacy@auditflow.io today
-      * response will be within applicable legal deadlines
-    (Do not promise automated endpoints that are not implemented.)
+Resolved:
+  - Formal GDPR/privacy policy now exists at docs/legal/GDPR_POLICY.md.
+  - Subject-rights pathway is documented as manual/managed via privacy@auditflow.io.
+  - Allowed-domain enforcement and FK-safe deletion workflows are defined in policy and operational skills.
+
+Open / retained:
   - Retain or reference Stripe DPA/SCC evidence under docs/legal/.
-  - Confirm Stripe/other processors' data-retention behavior post-cancellation
-    so the privacy policy can describe deletion timelines accurately.
-  - Consider future backend work for automated subject-rights endpoints
-    (access, rectification, erasure, restriction) if volume warrants.
+  - Confirm processor data-retention/post-cancellation deletion behavior so policy timelines are accurate.
+  - Consider future backend work for automated subject-rights endpoints (access, rectification, erasure, restriction) if volume warrants.
 
 Compliance baseline
   - AuditFlow contacts: privacy@auditflow.io, dpo@auditflow.io

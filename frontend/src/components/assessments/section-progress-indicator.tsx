@@ -60,16 +60,16 @@ export function SectionProgressIndicator({
         {isComplete ? (
           <CheckCircle2 className={clsx(iconSizes[size], 'text-green-500')} />
         ) : hasProgress ? (
-          <ClipboardList className={clsx(iconSizes[size], 'text-emerald-500')} />
+          <ClipboardList className={clsx(iconSizes[size], 'text-[var(--brand)]')} />
         ) : (
-          <Circle className={clsx(iconSizes[size], 'text-gray-400')} />
+          <Circle className={clsx(iconSizes[size], 'text-[var(--text-subtle)]')} />
         )}
 
         <div className="flex-1 min-w-0">
           {sectionName && (
             <p
               className={clsx(
-                'font-medium text-gray-900 truncate',
+                'font-medium text-[var(--text-strong)] truncate',
                 textSizes[size]
               )}
             >
@@ -82,8 +82,8 @@ export function SectionProgressIndicator({
               isComplete
                 ? 'text-green-600 font-medium'
                 : hasProgress
-                ? 'text-emerald-600'
-                : 'text-gray-500'
+                ? 'text-[var(--brand-strong)]'
+                : 'text-[var(--text-muted)]'
             )}
           >
             {answered} of {total} question{total !== 1 ? 's' : ''} answered
@@ -99,8 +99,8 @@ export function SectionProgressIndicator({
             isComplete
               ? 'bg-green-50 text-green-700'
               : hasProgress
-              ? 'bg-emerald-100 text-emerald-700'
-              : 'bg-gray-100 text-gray-500'
+              ? 'bg-[var(--brand-soft)] text-[var(--brand)]'
+              : 'bg-[var(--surface-sunken)] text-[var(--text-muted)]'
           )}
         >
           {percentage}%
@@ -147,7 +147,7 @@ export function SectionProgressBadge({
           ? 'bg-green-50 text-green-700'
           : hasProgress
           ? 'bg-blue-50 text-blue-700'
-          : 'bg-gray-100 text-gray-600',
+          : 'bg-[var(--surface-sunken)] text-[var(--text-muted)]',
         className
       )}
     >
@@ -176,7 +176,7 @@ export function MiniProgress({ answered, total, className }: MiniProgressProps) 
     <span
       className={clsx(
         'text-xs',
-        isComplete ? 'text-green-600 font-medium' : 'text-gray-500',
+        isComplete ? 'text-green-600 font-medium' : 'text-[var(--text-muted)]',
         className
       )}
     >

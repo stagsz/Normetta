@@ -32,7 +32,7 @@ export default function Step3Departments() {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[var(--text-muted)]">
         Add departments to your company. You can assign them to a division.
       </p>
 
@@ -42,7 +42,7 @@ export default function Step3Departments() {
             key={s}
             type="button"
             onClick={() => handleAdd(s)}
-            className="px-3 py-1 text-xs rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
+            className="px-3 py-1 text-xs rounded-full border border-[var(--border-subtle)] bg-[var(--brand-soft)] text-[var(--brand)] hover:bg-[var(--brand-soft)] transition-colors"
           >
             + {s}
           </button>
@@ -76,17 +76,17 @@ export default function Step3Departments() {
           {departments.map((d) => {
             const div = divisions.find((div) => div.id === d.divisionId);
             return (
-              <li key={d.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+              <li key={d.id} className="flex items-center justify-between bg-[var(--surface-sunken)] rounded-lg px-3 py-2">
                 <div>
-                  <span className="text-sm text-gray-800">{d.name}</span>
+                  <span className="text-sm text-[var(--text-strong)]">{d.name}</span>
                   {div && (
-                    <span className="ml-2 text-xs text-gray-400">({div.name})</span>
+                    <span className="ml-2 text-xs text-[var(--text-subtle)]">({div.name})</span>
                   )}
                 </div>
                 <button
                   type="button"
                   onClick={() => removeDepartment(d.id)}
-                  className="text-gray-400 hover:text-red-500 transition-colors"
+                  className="text-[var(--text-subtle)] hover:text-red-500 transition-colors"
                   aria-label={`Remove ${d.name}`}
                 >
                   <X size={16} />
@@ -98,10 +98,10 @@ export default function Step3Departments() {
       )}
 
       <div className="flex gap-2 pt-2">
-        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(2)}>
+        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(3)}>
           Back
         </Button>
-        <Button type="button" className="flex-1" onClick={() => setStep(4)}>
+        <Button type="button" className="flex-1" onClick={() => setStep(5)}>
           Continue
         </Button>
       </div>

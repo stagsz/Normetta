@@ -1,0 +1,49 @@
+/* ==========================================================================
+   Normetta — Typography tokens
+   Display: Space Grotesk · UI/Body: IBM Plex Sans · Data/IDs: IBM Plex Mono
+   ========================================================================== */
+
+:root {
+  /* Families */
+  --font-display: 'Space Grotesk', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif:   'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Weights */
+  --fw-regular:  400;  /* @kind other */
+  --fw-medium:   500;  /* @kind other */
+  --fw-semibold: 600;  /* @kind other */
+  --fw-bold:     700;  /* @kind other */
+
+  /* Type scale (px → rem at 16px base) — modular ~1.2 */
+  --text-2xs: 0.6875rem;  /* 11px — micro labels, clause tags */
+  --text-xs:  0.75rem;    /* 12px — captions, metadata */
+  --text-sm:  0.8125rem;  /* 13px — secondary UI text */
+  --text-md:  0.9375rem;  /* 15px — body default */
+  --text-lg:  1.0625rem;  /* 17px — lead / emphasis */
+  --text-xl:  1.3125rem;  /* 21px — card titles */
+  --text-2xl: 1.625rem;   /* 26px — section headings */
+  --text-3xl: 2.125rem;   /* 34px — page titles */
+  --text-4xl: 2.75rem;    /* 44px — hero */
+  --text-5xl: 3.5rem;     /* 56px — display numerals */
+
+  /* Line heights */
+  --leading-tight:  1.12;
+  --leading-snug:   1.28;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  /* Letter spacing */
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.02em;
+  --tracking-caps:   0.08em;   /* uppercase eyebrows / labels */
+
+  /* Semantic roles */
+  --type-eyebrow-size:    var(--text-2xs);
+  --type-eyebrow-spacing: var(--tracking-caps);
+  --type-display-family:  var(--font-display);
+  --type-body-family:     var(--font-sans);
+  --type-data-family:     var(--font-mono);
+}

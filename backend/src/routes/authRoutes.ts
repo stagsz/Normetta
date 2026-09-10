@@ -6,14 +6,22 @@ import { userSchemas } from '../proxy/validationProxy';
 const router = Router();
 
 // Public routes
-router.post(
-  '/register',
-  withValidation({ body: userSchemas.create }, asyncHandler(authController.register.bind(authController)))
-);
-
+// Note: there is deliberately no POST /register here. Account creation goes
+// through /api/onboarding (Turnstile-verified trial signup) only.
 router.post(
   '/login',
   withValidation({ body: userSchemas.login }, asyncHandler(authController.login.bind(authController)))
+);
+
+// Public password-reset flow
+router.post(
+  '/forgot-password',
+  withValidation({ body: userSchemas.forgotPassword }, asyncHandler(authController.forgotPassword.bind(authController)))
+);
+
+router.post(
+  '/reset-password',
+  withValidation({ body: userSchemas.resetPassword }, asyncHandler(authController.resetPassword.bind(authController)))
 );
 
 router.post(

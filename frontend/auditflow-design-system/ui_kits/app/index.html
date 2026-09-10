@@ -1,0 +1,165 @@
+<!-- @dsCard group="App" viewport="1320x860" name="Normetta — self-assessment app" subtitle="Sign in → dashboard → assessment → findings (interactive)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Normetta</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; background: var(--surface-page); }
+  #root { height: 100vh; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--stone-300); border-radius: 99px; border: 2px solid var(--surface-page); }
+  /* When a tweak applies, kill transitions for one frame so var()-backed
+     properties (e.g. Button background) re-resolve instantly — works around a
+     Chromium quirk where changing a custom property doesn't repaint a
+     transitioned property that depends on it. */
+  .af-instant * { transition: none !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="TopBar.jsx"></script>
+<script type="text/babel" src="Login.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="Findings.jsx"></script>
+<script type="text/babel" src="Assessment.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// Curated natural brand ramps — each option recolors the whole app via --clay-*.
+const BRAND_RAMPS = {
+  '#9C4A2A': { 50:'#FBF1EB',100:'#F4DCCD',200:'#E8B89B',300:'#D89169',400:'#C66E43',500:'#B05630',600:'#9C4A2A',700:'#7E3B22',800:'#62301D',900:'#4A2517' }, // Terracotta
+  '#6B7340': { 50:'#F1F2E6',100:'#E1E3C6',200:'#C8CB98',300:'#ABB06C',400:'#919650',500:'#7C8347',600:'#6B7340',700:'#565C33',800:'#434829',900:'#32361E' }, // Olive
+  '#6E4B34': { 50:'#F4EFEA',100:'#E7DAD0',200:'#D2BBA8',300:'#B8977C',400:'#9E7657',500:'#835C40',600:'#6E4B34',700:'#583B29',800:'#432D20',900:'#322117' }, // Walnut
+  '#3E5C7E': { 50:'#EDF1F6',100:'#D5E0EA',200:'#ABC0D4',300:'#7E9CB8',400:'#56789B',500:'#436485',600:'#3E5C7E',700:'#314A66',800:'#26384E',900:'#1C2A39' }, // Denim
+  '#4C6845': { 50:'#EDF2EB',100:'#DAE4D5',200:'#B7C8B0',300:'#90A886',400:'#6E8A63',500:'#58724D',600:'#4C6845',700:'#3C5237',800:'#2F402B',900:'#23311F' }, // Sage
+};
+const RADII = {
+  sharp:   { sm:'2px', md:'4px',  lg:'6px',  xl:'9px'  },
+  default: { sm:'5px', md:'8px',  lg:'12px', xl:'16px' },
+  rounded: { sm:'8px', md:'12px', lg:'18px', xl:'24px' },
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "brand": "#9C4A2A",
+  "sidebar": "ink",
+  "radius": "default",
+  "showBanner": true
+}/*EDITMODE-END*/;
+
+const TITLES = {
+  dashboard:  { title: 'Dashboard', subtitle: 'Northwind Manufacturing · ISO 9001:2015' },
+  assessment: { title: 'Self-assessment', subtitle: 'Clause 7 — Support' },
+  findings:   { title: 'Findings', subtitle: 'Open nonconformities and observations' },
+  clauses:    { title: 'Clause library', subtitle: 'ISO 9001:2015 requirements' },
+  reports:    { title: 'Reports', subtitle: 'Management review & certification readiness' },
+  team:       { title: 'Team', subtitle: 'Roles and responsibilities' },
+  settings:   { title: 'Settings', subtitle: 'Organization & assessment configuration' },
+};
+
+function Placeholder({ view }) {
+  const Icon = window.AFIcon;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 14, color: 'var(--text-subtle)' }}>
+      <Icon name="book-open" size={40} strokeWidth={1.5} />
+      <div style={{ fontSize: 15, color: 'var(--text-muted)' }}>The <strong style={{ color: 'var(--text-body)' }}>{view}</strong> view is part of the full product.</div>
+    </div>
+  );
+}
+
+function App() {
+  const { useTweaks, TweaksPanel, TweakSection, TweakColor, TweakRadio, TweakToggle } = window;
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [signedIn, setSignedIn] = useState(false);
+  const [view, setView] = useState('dashboard');
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const ramp = BRAND_RAMPS[t.brand] || BRAND_RAMPS['#9C4A2A'];
+    [50,100,200,300,400,500,600,700,800,900].forEach((k) => root.style.setProperty('--clay-' + k, ramp[k]));
+    // Write the semantic brand aliases as literals too — updating the upstream
+    // ramp var alone doesn't reliably propagate through the alias indirection.
+    root.style.setProperty('--brand', ramp[600]);
+    root.style.setProperty('--brand-strong', ramp[700]);
+    root.style.setProperty('--brand-soft', ramp[50]);
+    root.style.setProperty('--text-link', ramp[600]);
+    root.style.setProperty('--border-focus', ramp[500]);
+    root.style.setProperty('--surface-brand', ramp[600]);
+    const r = RADII[t.radius] || RADII.default;
+    root.style.setProperty('--radius-sm', r.sm);
+    root.style.setProperty('--radius-md', r.md);
+    root.style.setProperty('--radius-lg', r.lg);
+    root.style.setProperty('--radius-xl', r.xl);
+    root.style.setProperty('--sidebar-bg', t.sidebar === 'espresso' ? ramp[900] : 'var(--stone-900)');
+    // Force transitioned, var()-backed properties to re-resolve immediately.
+    root.classList.add('af-instant');
+    void root.offsetWidth;
+    requestAnimationFrame(() => root.classList.remove('af-instant'));
+  }, [t.brand, t.radius, t.sidebar]);
+
+  const TopBar = window.AFTopBar;
+  const Sidebar = window.AFSidebar;
+  const DS = window.AuditFlowDesignSystem_900961;
+  const { Button } = DS;
+  const Icon = window.AFIcon;
+
+  const panel = (
+    <TweaksPanel>
+      <TweakSection label="Brand" />
+      <TweakColor label="Primary color" value={t.brand} options={Object.keys(BRAND_RAMPS)}
+        onChange={(v) => setTweak('brand', v)} />
+      <TweakRadio label="Sidebar" value={t.sidebar} options={['ink', 'espresso']}
+        onChange={(v) => setTweak('sidebar', v)} />
+      <TweakSection label="Shape" />
+      <TweakRadio label="Corner radius" value={t.radius} options={['sharp', 'default', 'rounded']}
+        onChange={(v) => setTweak('radius', v)} />
+      <TweakSection label="Content" />
+      <TweakToggle label="Blocking-findings banner" value={t.showBanner}
+        onChange={(v) => setTweak('showBanner', v)} />
+    </TweaksPanel>
+  );
+
+  if (!signedIn) return (<React.Fragment>
+    <window.AFLogin onSignIn={() => setSignedIn(true)} />
+    {panel}
+  </React.Fragment>);
+
+  let body;
+  if (view === 'dashboard') body = <window.AFDashboard showBanner={t.showBanner} onOpenFindings={() => setView('findings')} onStartAssessment={() => setView('assessment')} />;
+  else if (view === 'assessment') body = <window.AFAssessment />;
+  else if (view === 'findings') body = <window.AFFindings />;
+  else body = <Placeholder view={view} />;
+
+  const meta = TITLES[view] || TITLES.dashboard;
+  const actions = view === 'dashboard'
+    ? <Button variant="primary" iconLeft={<Icon name="download" size={16} />}>Export readiness report</Button>
+    : null;
+
+  return (
+    <React.Fragment>
+      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+        <Sidebar active={view} onNavigate={setView} />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <TopBar title={meta.title} subtitle={meta.subtitle} actions={actions} />
+          <main style={{ flex: 1, overflowY: 'auto', background: 'var(--surface-page)' }}>{body}</main>
+        </div>
+      </div>
+      {panel}
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

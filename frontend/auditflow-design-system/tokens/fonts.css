@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Normetta — Webfonts
+   --------------------------------------------------------------------------
+   "Precision instrument" identity:
+     • Fraunces       — editorial serif display (hero headings, big numerals;
+                        italic carries the brand voice)
+     • IBM Plex Sans  — body & UI (technical, highly legible, trustworthy)
+     • IBM Plex Mono  — clause numbers, IDs, metadata, scores (tabular feel)
+     • Space Grotesk  — retained for compact UI headings (h3–h5, card titles)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');

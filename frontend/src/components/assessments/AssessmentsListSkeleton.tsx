@@ -31,7 +31,7 @@ export function AssessmentsListSkeleton({ itemCount = 5 }: AssessmentsListSkelet
       <SkeletonFilters showExtraFilters={true} />
 
       {/* Sort controls skeleton */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <div className="py-3 px-6">
           <div className="flex items-center gap-6 text-sm">
             <Skeleton variant="text" width={60} />

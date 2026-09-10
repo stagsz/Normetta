@@ -1,8 +1,10 @@
-'use client';
+import type { Metadata } from 'next';
+import { landingPageMetadata, jsonLdStructuredData } from '@/lib/landing-page-metadata';
+import LandingPage from '@/components/landing/LandingPage';
 
-import Link from 'next/link';
+export const metadata: Metadata = landingPageMetadata as Metadata;
 
-export default function LandingPage() {
+export default function Page() {
   return (
     <div className="min-h-screen bg-[#f9f8f6] text-[#0e1117] antialiased">
 

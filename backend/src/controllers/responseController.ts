@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { responseService } from '../services/responseService';
-import { withValidation, commonSchemas, responseSchemas } from '../proxy/validationProxy';
+import { withValidation } from '../proxy/validationProxy';
 
 // -----------------------------------------------------------------------------
 // Validation Schemas

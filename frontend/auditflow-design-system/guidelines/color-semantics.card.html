@@ -1,0 +1,41 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Conformance semantics" subtitle="The four ISO finding outcomes — pass, observation, nonconformity, not assessed" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 18px 20px; background: var(--surface-card); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cell { border-radius: var(--radius-md); border: 1px solid; padding: 12px; }
+  .dot { width: 30px; height: 30px; border-radius: var(--radius-pill); margin-bottom: 10px; }
+  .name { font-family: var(--font-display); font-weight: 600; font-size: 14px; color: var(--text-strong); }
+  .hex { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
+  .pill { display:inline-block; margin-top:10px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:var(--radius-pill); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="cell" style="background:var(--status-pass-bg); border-color:var(--status-pass-line)">
+      <div class="dot" style="background:var(--status-pass-solid)"></div>
+      <div class="name">Conformant</div><div class="hex">--green-500 · #4E8A47</div>
+      <span class="pill" style="background:var(--status-pass-solid); color:#fff">Pass</span>
+    </div>
+    <div class="cell" style="background:var(--status-obs-bg); border-color:var(--status-obs-line)">
+      <div class="dot" style="background:var(--status-obs-solid)"></div>
+      <div class="name">Observation</div><div class="hex">--amber-500 · #C5891B</div>
+      <span class="pill" style="background:var(--status-obs-solid); color:#fff">Minor</span>
+    </div>
+    <div class="cell" style="background:var(--status-fail-bg); border-color:var(--status-fail-line)">
+      <div class="dot" style="background:var(--status-fail-solid)"></div>
+      <div class="name">Nonconformity</div><div class="hex">--red-500 · #B23246</div>
+      <span class="pill" style="background:var(--status-fail-solid); color:#fff">Major</span>
+    </div>
+    <div class="cell" style="background:var(--status-na-bg); border-color:var(--status-na-line)">
+      <div class="dot" style="background:var(--status-na-solid)"></div>
+      <div class="name">Not assessed</div><div class="hex">--stone-400 · #AB9E8B</div>
+      <span class="pill" style="background:var(--status-na-solid); color:#fff">N/A</span>
+    </div>
+  </div>
+</body>
+</html>

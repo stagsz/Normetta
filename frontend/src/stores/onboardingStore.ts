@@ -16,6 +16,25 @@ interface CompanyData {
   country?: string;
 }
 
+export type CompanySize = 'MICRO' | 'SMALL' | 'MEDIUM' | 'LARGE';
+export type QMSStatus = 'NONE' | 'BUILDING' | 'INFORMAL' | 'DOCUMENTED';
+export type CertificationStatus =
+  | 'NOT_CERTIFIED'
+  | 'IN_PROGRESS'
+  | 'CERTIFIED_SURVEILLANCE'
+  | 'CERTIFIED_RECERTIFYING';
+export type StandardsKnowledgeLevel = 'NONE' | 'BASIC' | 'TRAINED' | 'CERTIFIED_AUDITOR';
+
+interface ReadinessProfileData {
+  companySize?: CompanySize;
+  qmsStatus?: QMSStatus;
+  certificationStatus?: CertificationStatus;
+  lastAuditSummary?: string;
+  improvementNotes?: string;
+  standardsKnowledgeLevel?: StandardsKnowledgeLevel;
+  hoursPerWeek?: number;
+}
+
 interface Division {
   id: string;
   name: string;
@@ -37,14 +56,18 @@ interface OnboardingState {
   step: number;
   personal: PersonalData;
   company: CompanyData;
+  profile: ReadinessProfileData;
   divisions: Division[];
   departments: Department[];
   roles: OrgRole[];
   inviteUrl: string;
+  betaInviteCode: string | null;
+  betaInviteValidated: boolean;
 
   setStep: (step: number) => void;
   setPersonal: (data: PersonalData) => void;
   setCompany: (data: CompanyData) => void;
+  setProfile: (data: ReadinessProfileData) => void;
   addDivision: (name: string) => void;
   removeDivision: (id: string) => void;
   addDepartment: (name: string, divisionId?: string) => void;
@@ -54,11 +77,14 @@ interface OnboardingState {
   removeRole: (id: string) => void;
   updateRole: (id: string, patch: Partial<OrgRole>) => void;
   setInviteUrl: (url: string) => void;
+  setBetaInviteCode: (code: string | null) => void;
+  setBetaInviteValidated: (validated: boolean) => void;
   reset: () => void;
 }
 
 const defaultPersonal: PersonalData = { firstName: '', lastName: '', email: '', password: '' };
 const defaultCompany: CompanyData = { name: '', slug: '' };
+const defaultProfile: ReadinessProfileData = {};
 
 let _idCounter = 0;
 const uid = () => `local-${++_idCounter}`;
@@ -67,14 +93,18 @@ export const useOnboardingStore = create<OnboardingState>((set) => ({
   step: 1,
   personal: defaultPersonal,
   company: defaultCompany,
+  profile: defaultProfile,
   divisions: [],
   departments: [],
   roles: [],
   inviteUrl: '',
+  betaInviteCode: null,
+  betaInviteValidated: false,
 
   setStep: (step) => set({ step }),
   setPersonal: (personal) => set({ personal }),
   setCompany: (company) => set({ company }),
+  setProfile: (profile) => set({ profile }),
 
   addDivision: (name) => set((s) => ({ divisions: [...s.divisions, { id: uid(), name }] })),
   removeDivision: (id) => set((s) => ({
@@ -91,5 +121,7 @@ export const useOnboardingStore = create<OnboardingState>((set) => ({
   updateRole: (id, patch) => set((s) => ({ roles: s.roles.map((r) => r.id === id ? { ...r, ...patch } : r) })),
 
   setInviteUrl: (inviteUrl) => set({ inviteUrl }),
-  reset: () => set({ step: 1, personal: defaultPersonal, company: defaultCompany, divisions: [], departments: [], roles: [], inviteUrl: '' }),
+  setBetaInviteCode: (betaInviteCode) => set({ betaInviteCode }),
+  setBetaInviteValidated: (betaInviteValidated) => set({ betaInviteValidated }),
+  reset: () => set({ step: 1, personal: defaultPersonal, company: defaultCompany, profile: defaultProfile, divisions: [], departments: [], roles: [], inviteUrl: '', betaInviteCode: null, betaInviteValidated: false }),
 }));

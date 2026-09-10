@@ -30,11 +30,11 @@ import { SectionScoreSummary } from '@/components/assessments/section-score-summ
 import { SectionProgressIndicator } from '@/components/assessments/section-progress-indicator';
 
 const statusColors: Record<string, string> = {
-  DRAFT: 'bg-gray-100 text-gray-700',
+  DRAFT: 'bg-[var(--surface-sunken)] text-[var(--text-body)]',
   IN_PROGRESS: 'bg-blue-50 text-blue-700',
   UNDER_REVIEW: 'bg-amber-50 text-amber-700',
   COMPLETED: 'bg-green-50 text-green-700',
-  ARCHIVED: 'bg-gray-100 text-gray-500',
+  ARCHIVED: 'bg-[var(--surface-sunken)] text-[var(--text-muted)]',
 };
 
 const statusLabels: Record<string, string> = {
@@ -192,13 +192,13 @@ export default function AssessmentDetailPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Assessment Not Found</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Assessment Not Found</h1>
         </div>
         <Card>
           <CardContent className="py-12 text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <p className="text-gray-700 font-medium">Failed to load assessment</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-[var(--text-body)] font-medium">Failed to load assessment</p>
+            <p className="text-[var(--text-muted)] text-sm mt-1">
               The assessment may have been deleted or you don't have permission to view it.
             </p>
             <Link href="/assessments">
@@ -229,16 +229,16 @@ export default function AssessmentDetailPage() {
           </Link>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">{assessment.title}</h1>
+              <h1 className="text-2xl font-bold text-[var(--text-strong)]">{assessment.title}</h1>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full ${
-                  statusColors[assessment.status] || 'bg-gray-100 text-gray-700'
+                  statusColors[assessment.status] || 'bg-[var(--surface-sunken)] text-[var(--text-body)]'
                 }`}
               >
                 {statusLabels[assessment.status] || assessment.status}
               </span>
             </div>
-            <p className="text-gray-500 mt-1">
+            <p className="text-[var(--text-muted)] mt-1">
               {auditTypeLabels[assessment.auditType] || assessment.auditType}
             </p>
           </div>
@@ -305,12 +305,12 @@ export default function AssessmentDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <ClipboardList className="h-5 w-5 text-emerald-600" />
+                <ClipboardList className="h-5 w-5 text-[var(--brand-strong)]" />
                 Description
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 whitespace-pre-wrap">
+              <p className="text-[var(--text-muted)] whitespace-pre-wrap">
                 {assessment.description || 'No description provided.'}
               </p>
             </CardContent>
@@ -326,10 +326,10 @@ export default function AssessmentDetailPage() {
                 {/* Dates */}
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
+                    <Calendar className="h-5 w-5 text-[var(--text-subtle)] mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Scheduled Date</p>
-                      <p className="text-gray-600">
+                      <p className="text-sm font-medium text-[var(--text-body)]">Scheduled Date</p>
+                      <p className="text-[var(--text-muted)]">
                         {assessment.scheduledDate
                           ? format(new Date(assessment.scheduledDate), 'MMMM d, yyyy')
                           : 'Not scheduled'}
@@ -337,10 +337,10 @@ export default function AssessmentDetailPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Target className="h-5 w-5 text-gray-400 mt-0.5" />
+                    <Target className="h-5 w-5 text-[var(--text-subtle)] mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Due Date</p>
-                      <p className="text-gray-600">
+                      <p className="text-sm font-medium text-[var(--text-body)]">Due Date</p>
+                      <p className="text-[var(--text-muted)]">
                         {assessment.dueDate
                           ? format(new Date(assessment.dueDate), 'MMMM d, yyyy')
                           : 'No due date'}
@@ -351,8 +351,8 @@ export default function AssessmentDetailPage() {
                     <div className="flex items-start gap-3">
                       <Calendar className="h-5 w-5 text-green-500 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Completed Date</p>
-                        <p className="text-gray-600">
+                        <p className="text-sm font-medium text-[var(--text-body)]">Completed Date</p>
+                        <p className="text-[var(--text-muted)]">
                           {format(new Date(assessment.completedDate), 'MMMM d, yyyy')}
                         </p>
                       </div>
@@ -363,8 +363,8 @@ export default function AssessmentDetailPage() {
                 {/* Scope */}
                 {assessment.scope && (
                   <div>
-                    <p className="text-sm font-medium text-gray-700 mb-1">Scope</p>
-                    <p className="text-gray-600">{assessment.scope}</p>
+                    <p className="text-sm font-medium text-[var(--text-body)] mb-1">Scope</p>
+                    <p className="text-[var(--text-muted)]">{assessment.scope}</p>
                   </div>
                 )}
               </div>
@@ -390,29 +390,29 @@ export default function AssessmentDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-emerald-600" />
+                <Users className="h-5 w-5 text-[var(--brand-strong)]" />
                 Team Members
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 {/* Lead Auditor */}
-                <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
+                <div className="flex items-center justify-between p-3 bg-[var(--brand-soft)] rounded-xl">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-emerald-200 flex items-center justify-center">
-                      <span className="text-emerald-700 font-medium">
+                    <div className="h-10 w-10 rounded-full bg-[var(--brand-soft)] flex items-center justify-center">
+                      <span className="text-[var(--brand)] font-medium">
                         {assessment.leadAuditor.firstName[0]}
                         {assessment.leadAuditor.lastName[0]}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-[var(--text-strong)]">
                         {assessment.leadAuditor.firstName} {assessment.leadAuditor.lastName}
                       </p>
-                      <p className="text-sm text-gray-500">{(assessment.leadAuditor as any).email}</p>
+                      <p className="text-sm text-[var(--text-muted)]">{(assessment.leadAuditor as any).email}</p>
                     </div>
                   </div>
-                  <span className="px-2 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded">
+                  <span className="px-2 py-1 text-xs font-medium bg-[var(--brand-soft)] text-[var(--brand)] rounded">
                     Lead Auditor
                   </span>
                 </div>
@@ -426,23 +426,23 @@ export default function AssessmentDetailPage() {
                   }) => (
                     <div
                       key={member.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                      className="flex items-center justify-between p-3 bg-[var(--surface-sunken)] rounded-xl"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-600 font-medium">
+                        <div className="h-10 w-10 rounded-full bg-[var(--stone-200)] flex items-center justify-center">
+                          <span className="text-[var(--text-muted)] font-medium">
                             {member.user.firstName[0]}
                             {member.user.lastName[0]}
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-[var(--text-strong)]">
                             {member.user.firstName} {member.user.lastName}
                           </p>
-                          <p className="text-sm text-gray-500">{member.user.email}</p>
+                          <p className="text-sm text-[var(--text-muted)]">{member.user.email}</p>
                         </div>
                       </div>
-                      <span className="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded">
+                      <span className="px-2 py-1 text-xs font-medium bg-[var(--stone-200)] text-[var(--text-body)] rounded">
                         {member.role.replace('_', ' ')}
                       </span>
                     </div>
@@ -450,7 +450,7 @@ export default function AssessmentDetailPage() {
                 )}
 
                 {(!assessment.teamMembers || assessment.teamMembers.length === 0) && (
-                  <p className="text-gray-500 text-sm">No additional team members assigned.</p>
+                  <p className="text-[var(--text-muted)] text-sm">No additional team members assigned.</p>
                 )}
               </div>
             </CardContent>
@@ -473,7 +473,7 @@ export default function AssessmentDetailPage() {
                     size={160}
                     strokeWidth={12}
                   />
-                  <p className="mt-4 text-gray-600 text-center">Compliance Score</p>
+                  <p className="mt-4 text-[var(--text-muted)] text-center">Compliance Score</p>
                 </>
               ) : (
                 <>
@@ -498,26 +498,26 @@ export default function AssessmentDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Responses</span>
+                <span className="text-[var(--text-muted)]">Responses</span>
                 <span className="font-medium">{assessment.responses?.length || 0}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Non-Conformities</span>
+                <span className="text-[var(--text-muted)]">Non-Conformities</span>
                 <span className="font-medium text-red-600">
                   {assessment.nonConformities?.length || 0}
                 </span>
               </div>
               {assessment.template && (
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Template</span>
+                  <span className="text-[var(--text-muted)]">Template</span>
                   <span className="font-medium">{assessment.template.name}</span>
                 </div>
               )}
               <div className="pt-2 border-t">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[var(--text-muted)]">
                   Created {format(new Date(assessment.createdAt), 'MMM d, yyyy')}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[var(--text-muted)]">
                   Updated {format(new Date(assessment.updatedAt), 'MMM d, yyyy')}
                 </p>
               </div>

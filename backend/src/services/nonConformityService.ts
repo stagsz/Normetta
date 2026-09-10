@@ -679,7 +679,8 @@ export class NonConformityService {
   }
 
   /**
-   * Auto-create NCRs from score 1-2 responses (Non-Compliant and Initial)
+   * Auto-create NCRs from score 1-2 responses
+   * Score 1 = Non-Compliant (major), Score 2 = Initial/Minor
    * This can be called when finalizing an assessment or manually triggered
    */
   async createFromFailingResponses(

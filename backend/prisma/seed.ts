@@ -52,11 +52,11 @@ async function main() {
   });
   console.log(`  + Organization: ${defaultOrg.name} (${defaultOrg.id})`);
 
-  // 4. Create admin user (admin@example.com / admin123)
+  // 4. Create admin user (admin@greisz.se / admin123)
   const adminPasswordHash = await bcryptjs.hash("admin123", 10);
 
   const adminUser = await prisma.user.upsert({
-    where: { email: "admin@example.com" },
+    where: { email: "admin@greisz.se" },
     update: {
       passwordHash: adminPasswordHash,
       firstName: "System",
@@ -64,15 +64,17 @@ async function main() {
       role: "SYSTEM_ADMIN",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
     create: {
-      email: "admin@example.com",
+      email: "admin@greisz.se",
       passwordHash: adminPasswordHash,
       firstName: "System",
       lastName: "Administrator",
       role: "SYSTEM_ADMIN",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
   });
   console.log(`  + Admin user: ${adminUser.email} (role: ${adminUser.role})`);
@@ -81,7 +83,7 @@ async function main() {
   const qmPasswordHash = await bcryptjs.hash("quality123", 10);
 
   const qualityManager = await prisma.user.upsert({
-    where: { email: "quality.manager@example.com" },
+    where: { email: "quality.manager@greisz.se" },
     update: {
       passwordHash: qmPasswordHash,
       firstName: "Quality",
@@ -89,15 +91,17 @@ async function main() {
       role: "QUALITY_MANAGER",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
     create: {
-      email: "quality.manager@example.com",
+      email: "quality.manager@greisz.se",
       passwordHash: qmPasswordHash,
       firstName: "Quality",
       lastName: "Manager",
       role: "QUALITY_MANAGER",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
   });
   console.log(`  + Quality Manager: ${qualityManager.email} (role: ${qualityManager.role})`);
@@ -106,7 +110,7 @@ async function main() {
   const auditorPasswordHash = await bcryptjs.hash("auditor123", 10);
 
   const internalAuditor = await prisma.user.upsert({
-    where: { email: "auditor@example.com" },
+    where: { email: "auditor@greisz.se" },
     update: {
       passwordHash: auditorPasswordHash,
       firstName: "Internal",
@@ -114,15 +118,17 @@ async function main() {
       role: "INTERNAL_AUDITOR",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
     create: {
-      email: "auditor@example.com",
+      email: "auditor@greisz.se",
       passwordHash: auditorPasswordHash,
       firstName: "Internal",
       lastName: "Auditor",
       role: "INTERNAL_AUDITOR",
       organizationId: defaultOrg.id,
       isActive: true,
+      emailDomain: "greisz.se",
     },
   });
   console.log(`  + Internal Auditor: ${internalAuditor.email} (role: ${internalAuditor.role})`);

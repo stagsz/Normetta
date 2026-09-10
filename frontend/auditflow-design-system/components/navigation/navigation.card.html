@@ -1,0 +1,70 @@
+<!-- @dsCard group="Components" viewport="700x560" name="Carousel" subtitle="Page variant (swipe/keyboard/dots) + row variant (scroll-snap cards)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 24px; background: var(--surface-page); }
+  .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-subtle); margin: 0 0 12px; display:block; }
+  .hint { font-size: 12.5px; color: var(--text-muted); margin-top: 10px; text-align:center; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Carousel, Card, Badge, ConformanceBadge } = window.AuditFlowDesignSystem_900961;
+
+function Panel({ tone, k, title, body }) {
+  return (
+    <div style={{ background: `var(--status-${tone}-bg)`, border: `1px solid var(--status-${tone}-line)`, borderRadius: 'var(--radius-lg)', padding: '28px 26px', minHeight: 150 }}>
+      <ConformanceBadge status={k} />
+      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, margin: '14px 0 6px', color: 'var(--text-strong)' }}>{title}</h3>
+      <p style={{ fontSize: 14, color: 'var(--text-body)', margin: 0, lineHeight: 1.5 }}>{body}</p>
+    </div>
+  );
+}
+
+function Mini({ id, name, score }) {
+  return (
+    <Card padding="md" elevation="sm">
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 10 }}>
+        <span className="af-mono" style={{ fontSize: 12, color: 'var(--text-muted)' }}>{id}</span>
+        <Badge tone="brand">{score}%</Badge>
+      </div>
+      <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-strong)' }}>{name}</div>
+      <div style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 4 }}>Updated 2 days ago</div>
+    </Card>
+  );
+}
+
+function Demo() {
+  return (
+    <div>
+      <span className="lbl">Page variant — swipe · ← → keys · dots · arrows</span>
+      <Carousel variant="page" ariaLabel="Demo">
+        <Panel tone="pass" k="conformant" title="Clause 4 — Context" body="All controls met. Documented scope, interested parties, and QMS boundaries are current." />
+        <Panel tone="obs" k="observation" title="Clause 6 — Planning" body="Risk register not reviewed since the last management review. Minor gap to close." />
+        <Panel tone="fail" k="nonconformity" title="Clause 8 — Operation" body="Production work instructions are not available at the point of use. Major finding." />
+      </Carousel>
+      <div className="hint">Click in, then use ← → · or drag · or tap a dot</div>
+
+      <div style={{ height: 28 }} />
+      <span className="lbl">Row variant — scroll-snap cards, arrows on hover</span>
+      <Carousel variant="row" slideWidth={210} gap={14} ariaLabel="Recent assessments">
+        <Mini id="ASM-204" name="Q2 Internal audit" score={92} />
+        <Mini id="ASM-198" name="Supplier review" score={78} />
+        <Mini id="ASM-186" name="Calibration check" score={88} />
+        <Mini id="ASM-180" name="Document control" score={95} />
+      </Carousel>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script>
+</body>
+</html>

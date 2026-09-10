@@ -23,9 +23,9 @@ const statusConfig: Record<ActionStatus, {
 }> = {
   PENDING: {
     label: 'Pending',
-    color: 'text-gray-700',
-    bgColor: 'bg-gray-100',
-    hoverBgColor: 'hover:bg-gray-200',
+    color: 'text-[var(--text-body)]',
+    bgColor: 'bg-[var(--surface-sunken)]',
+    hoverBgColor: 'hover:bg-[var(--stone-200)]',
   },
   IN_PROGRESS: {
     label: 'In Progress',
@@ -106,7 +106,7 @@ export function ActionStatusDropdown({
           setIsOpen(!isOpen);
         }}
         disabled={updateStatus.isPending}
-        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors ${config.bgColor} ${config.color} ${config.hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-400`}
+        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors ${config.bgColor} ${config.color} ${config.hoverBgColor} focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[var(--brand)]`}
       >
         {updateStatus.isPending ? (
           <Loader2 className="h-3 w-3 animate-spin" />
@@ -124,9 +124,9 @@ export function ActionStatusDropdown({
           />
 
           {/* Dropdown menu */}
-          <div className="absolute left-0 top-full mt-1 z-20 bg-white rounded-md shadow-lg border border-gray-200 py-1 min-w-[160px]">
-            <div className="px-3 py-1.5 border-b border-gray-100">
-              <p className="text-xs text-gray-500">Change status to:</p>
+          <div className="absolute left-0 top-full mt-1 z-20 bg-[var(--surface-card)] rounded-md shadow-[var(--shadow-lg)] border border-[var(--border-subtle)] py-1 min-w-[160px]">
+            <div className="px-3 py-1.5 border-b border-[var(--border-subtle)]">
+              <p className="text-xs text-[var(--text-muted)]">Change status to:</p>
             </div>
 
             {allowedTransitions.map((status) => {
@@ -140,9 +140,9 @@ export function ActionStatusDropdown({
                     handleStatusChange(status);
                   }}
                   disabled={updateStatus.isPending}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-50"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--surface-sunken)] disabled:opacity-50"
                 >
-                  <ArrowRight className="h-3 w-3 text-gray-400" />
+                  <ArrowRight className="h-3 w-3 text-[var(--text-subtle)]" />
                   <span
                     className={`px-2 py-0.5 rounded text-xs font-medium ${targetConfig.bgColor} ${targetConfig.color}`}
                   >
@@ -153,7 +153,7 @@ export function ActionStatusDropdown({
             })}
 
             {allowedTransitions.length === 0 && (
-              <div className="px-3 py-2 text-xs text-gray-500">
+              <div className="px-3 py-2 text-xs text-[var(--text-muted)]">
                 No transitions available
               </div>
             )}

@@ -13,7 +13,7 @@ import {
 import { toast } from 'sonner';
 
 const priorityOptions = [
-  { value: 'LOW', label: 'Low', color: 'bg-gray-100 text-gray-600' },
+  { value: 'LOW', label: 'Low', color: 'bg-[var(--surface-sunken)] text-[var(--text-muted)]' },
   { value: 'MEDIUM', label: 'Medium', color: 'bg-amber-50 text-amber-700' },
   { value: 'HIGH', label: 'High', color: 'bg-orange-100 text-orange-700' },
   { value: 'CRITICAL', label: 'Critical', color: 'bg-red-50 text-red-700' },
@@ -185,13 +185,13 @@ export function CorrectiveActionFormModal({
       <Card className="w-full max-w-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-emerald-600" />
+            <AlertTriangle className="h-5 w-5 text-[var(--brand-strong)]" />
             {isEditing ? 'Edit Corrective Action' : 'Add Corrective Action'}
           </CardTitle>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             disabled={isSubmitting}
           >
             <X className="h-5 w-5" />
@@ -201,7 +201,7 @@ export function CorrectiveActionFormModal({
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Description */}
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="description" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 Description <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -210,14 +210,14 @@ export function CorrectiveActionFormModal({
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 placeholder="Describe the corrective action to be taken..."
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+                className="w-full rounded-md border border-[var(--border-default)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
                 disabled={isSubmitting}
               />
             </div>
 
             {/* Priority */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-body)] mb-2">
                 Priority
               </label>
               <div className="flex flex-wrap gap-2">
@@ -229,8 +229,8 @@ export function CorrectiveActionFormModal({
                     disabled={isSubmitting}
                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                       priority === option.value
-                        ? `${option.color} ring-2 ring-offset-1 ring-emerald-500`
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? `${option.color} ring-2 ring-offset-1 ring-[var(--brand)]`
+                        : 'bg-[var(--surface-sunken)] text-[var(--text-muted)] hover:bg-[var(--stone-200)]'
                     }`}
                   >
                     {option.label}
@@ -241,31 +241,31 @@ export function CorrectiveActionFormModal({
 
             {/* Assignee */}
             <div ref={userSearchRef}>
-              <label htmlFor="assignee" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="assignee" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
                   Assign To
-                  <span className="text-gray-400 font-normal">(optional)</span>
+                  <span className="text-[var(--text-subtle)] font-normal">(optional)</span>
                 </div>
               </label>
 
               {assignedUser ? (
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md border border-gray-200">
+                <div className="flex items-center justify-between p-3 bg-[var(--surface-sunken)] rounded-md border border-[var(--border-subtle)]">
                   <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm font-medium">
+                    <div className="h-8 w-8 rounded-full bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand-strong)] text-sm font-medium">
                       {assignedUser.firstName[0]}{assignedUser.lastName[0]}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-[var(--text-strong)]">
                         {assignedUser.firstName} {assignedUser.lastName}
                       </p>
-                      <p className="text-xs text-gray-500">{assignedUser.email}</p>
+                      <p className="text-xs text-[var(--text-muted)]">{assignedUser.email}</p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={handleClearUser}
-                    className="text-gray-400 hover:text-red-500 transition-colors"
+                    className="text-[var(--text-subtle)] hover:text-red-500 transition-colors"
                     disabled={isSubmitting}
                   >
                     <X className="h-5 w-5" />
@@ -273,20 +273,20 @@ export function CorrectiveActionFormModal({
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="flex items-center border border-gray-300 rounded-md bg-white px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent">
-                    <Search className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <div className="flex items-center border border-[var(--border-default)] rounded-md bg-[var(--surface-card)] px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-[var(--brand)] focus-within:border-transparent">
+                    <Search className="h-4 w-4 text-[var(--text-subtle)] flex-shrink-0" />
                     <input
                       type="text"
                       placeholder="Search users by name or email..."
                       value={userSearch}
                       onChange={(e) => setUserSearch(e.target.value)}
                       onFocus={() => setShowUserDropdown(true)}
-                      className="flex-1 text-sm outline-none placeholder:text-gray-400"
+                      className="flex-1 text-sm outline-none placeholder:text-[var(--text-subtle)]"
                       disabled={isSubmitting}
                     />
                     {isSearching && (
                       <svg
-                        className="h-4 w-4 animate-spin text-gray-400"
+                        className="h-4 w-4 animate-spin text-[var(--text-subtle)]"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -310,28 +310,28 @@ export function CorrectiveActionFormModal({
 
                   {/* User dropdown */}
                   {showUserDropdown && userSearch.length >= 2 && (
-                    <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-auto">
+                    <div className="absolute z-10 mt-1 w-full bg-[var(--surface-card)] border border-[var(--border-subtle)] rounded-md shadow-[var(--shadow-lg)] max-h-48 overflow-auto">
                       {userSearchResults.length > 0 ? (
                         userSearchResults.map((user) => (
                           <button
                             key={user.id}
                             type="button"
                             onClick={() => handleSelectUser(user)}
-                            className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                            className="w-full px-3 py-2 text-left hover:bg-[var(--surface-sunken)] flex items-center gap-2"
                           >
-                            <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm font-medium">
+                            <div className="h-8 w-8 rounded-full bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand-strong)] text-sm font-medium">
                               {user.firstName[0]}{user.lastName[0]}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">
+                              <p className="text-sm font-medium text-[var(--text-strong)] truncate">
                                 {user.firstName} {user.lastName}
                               </p>
-                              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                              <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
                             </div>
                           </button>
                         ))
                       ) : (
-                        <div className="px-3 py-4 text-sm text-gray-500 text-center">
+                        <div className="px-3 py-4 text-sm text-[var(--text-muted)] text-center">
                           No users found
                         </div>
                       )}
@@ -343,11 +343,11 @@ export function CorrectiveActionFormModal({
 
             {/* Target Date */}
             <div>
-              <label htmlFor="targetDate" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="targetDate" className="block text-sm font-medium text-[var(--text-body)] mb-1">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   Target Date
-                  <span className="text-gray-400 font-normal">(optional)</span>
+                  <span className="text-[var(--text-subtle)] font-normal">(optional)</span>
                 </div>
               </label>
               <input
@@ -356,7 +356,7 @@ export function CorrectiveActionFormModal({
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+                className="w-full rounded-md border border-[var(--border-default)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
                 disabled={isSubmitting}
               />
             </div>

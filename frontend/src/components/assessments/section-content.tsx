@@ -128,8 +128,8 @@ export function SectionContent({
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-500">Select a section to view questions</p>
+          <AlertCircle className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-4" />
+          <p className="text-[var(--text-muted)]">Select a section to view questions</p>
         </CardContent>
       </Card>
     );
@@ -141,7 +141,7 @@ export function SectionContent({
         <CardContent className="py-12 text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-4" />
           <p className="text-red-600 font-medium">Failed to load questions</p>
-          <p className="text-gray-500 text-sm mt-1">Please try again later</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1">Please try again later</p>
         </CardContent>
       </Card>
     );
@@ -151,9 +151,9 @@ export function SectionContent({
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-600 font-medium">No questions in this section</p>
-          <p className="text-gray-500 text-sm mt-1">
+          <AlertCircle className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-4" />
+          <p className="text-[var(--text-muted)] font-medium">No questions in this section</p>
+          <p className="text-[var(--text-muted)] text-sm mt-1">
             This section does not have any audit questions defined.
           </p>
         </CardContent>
@@ -166,13 +166,13 @@ export function SectionContent({
       {/* Section Header */}
       <div>
         <div className="flex items-baseline gap-3 mb-2">
-          <span className="text-lg font-bold text-emerald-600">
+          <span className="text-lg font-bold text-[var(--brand-strong)]">
             {section.sectionNumber}
           </span>
-          <h2 className="text-xl font-semibold text-gray-900">{section.title}</h2>
+          <h2 className="text-xl font-semibold text-[var(--text-strong)]">{section.title}</h2>
         </div>
         {section.description && (
-          <p className="text-gray-600">{section.description}</p>
+          <p className="text-[var(--text-muted)]">{section.description}</p>
         )}
       </div>
 
@@ -257,20 +257,20 @@ export function SectionQuestionList({
             onClick={() => onQuestionClick?.(q.id)}
             className={clsx(
               'w-full text-left p-3 rounded-xl border transition-colors',
-              'hover:bg-gray-50',
+              'hover:bg-[var(--surface-sunken)]',
               hasScore
                 ? response.score === 3
                   ? 'border-l-4 border-l-green-500 bg-green-50/30'
                   : response.score === 2
                   ? 'border-l-4 border-l-yellow-500 bg-amber-50/30'
                   : 'border-l-4 border-l-red-500 bg-red-50/30'
-                : 'border-gray-200'
+                : 'border-[var(--border-subtle)]'
             )}
           >
             <div className="flex items-center justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium bg-gray-100 px-2 py-0.5 rounded">
+                  <span className="text-xs font-medium bg-[var(--surface-sunken)] px-2 py-0.5 rounded">
                     {q.questionNumber}
                   </span>
                   {hasScore && (
@@ -288,18 +288,18 @@ export function SectionQuestionList({
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-700 truncate">{q.questionText}</p>
+                <p className="text-sm text-[var(--text-body)] truncate">{q.questionText}</p>
               </div>
               <div
                 className={clsx(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0',
-                  !hasScore && 'bg-gray-100 text-gray-400',
+                  !hasScore && 'bg-[var(--surface-sunken)] text-[var(--text-subtle)]',
                   hasScore &&
                     (response.score === 3
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-[var(--status-pass-solid)] text-white'
                       : response.score === 2
-                      ? 'bg-amber-500 text-white'
-                      : 'bg-red-500 text-white')
+                      ? 'bg-[var(--status-obs-solid)] text-white'
+                      : 'bg-[var(--status-fail-solid)] text-white')
                 )}
               >
                 {hasScore ? response.score : '-'}

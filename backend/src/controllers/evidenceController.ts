@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { evidenceService, EvidenceService } from '../services/evidenceService';
-import { withValidation, commonSchemas } from '../proxy/validationProxy';
+import { evidenceService } from '../services/evidenceService';
+import { withValidation } from '../proxy/validationProxy';
 import { EvidenceType } from '../types/enums';
 
 // -----------------------------------------------------------------------------

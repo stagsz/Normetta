@@ -1,0 +1,34 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Radii & elevation" subtitle="Corner radii and the soft layered shadow set" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--surface-page); }
+  .wrap { display:flex; gap: 26px; align-items:center; }
+  .group { display:flex; gap:16px; }
+  .box { width:74px; height:74px; background:var(--surface-card); border:1px solid var(--border-subtle); display:flex; align-items:flex-end; justify-content:center; padding-bottom:8px; }
+  .lab { font-family: var(--font-mono); font-size:10px; color:var(--text-muted); }
+  .div { width:1px; align-self:stretch; background:var(--border-subtle); }
+  .sbox { width:74px; height:74px; background:var(--surface-card); border-radius:var(--radius-md); display:flex; align-items:flex-end; justify-content:center; padding-bottom:8px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="group">
+      <div class="box" style="border-radius:var(--radius-sm)"><span class="lab">sm·5</span></div>
+      <div class="box" style="border-radius:var(--radius-md)"><span class="lab">md·8</span></div>
+      <div class="box" style="border-radius:var(--radius-lg)"><span class="lab">lg·12</span></div>
+      <div class="box" style="border-radius:var(--radius-xl)"><span class="lab">xl·16</span></div>
+    </div>
+    <div class="div"></div>
+    <div class="group">
+      <div class="sbox" style="box-shadow:var(--shadow-xs)"><span class="lab">xs</span></div>
+      <div class="sbox" style="box-shadow:var(--shadow-sm)"><span class="lab">sm</span></div>
+      <div class="sbox" style="box-shadow:var(--shadow-md)"><span class="lab">md</span></div>
+      <div class="sbox" style="box-shadow:var(--shadow-lg)"><span class="lab">lg</span></div>
+    </div>
+  </div>
+</body>
+</html>

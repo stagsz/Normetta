@@ -104,11 +104,11 @@ export function TeamMemberSelect({ value, onChange, error }: TeamMemberSelectPro
 
   return (
     <div className="w-full" ref={containerRef}>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-[var(--text-body)] mb-1">
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4" />
           Team Members
-          <span className="text-gray-400 font-normal">(optional)</span>
+          <span className="text-[var(--text-subtle)] font-normal">(optional)</span>
         </div>
       </label>
 
@@ -116,12 +116,12 @@ export function TeamMemberSelect({ value, onChange, error }: TeamMemberSelectPro
       <div className="relative">
         <div
           className={clsx(
-            'flex items-center border rounded-md bg-white px-3 py-2 gap-2',
-            error ? 'border-red-400' : 'border-gray-300',
-            'focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent'
+            'flex items-center border rounded-md bg-[var(--surface-card)] px-3 py-2 gap-2',
+            error ? 'border-[var(--status-fail-line)]' : 'border-[var(--border-default)]',
+            'focus-within:ring-2 focus-within:ring-[var(--brand)] focus-within:border-transparent'
           )}
         >
-          <Search className="h-4 w-4 text-gray-400 flex-shrink-0" />
+          <Search className="h-4 w-4 text-[var(--text-subtle)] flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -129,11 +129,11 @@ export function TeamMemberSelect({ value, onChange, error }: TeamMemberSelectPro
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setIsOpen(true)}
-            className="flex-1 text-sm outline-none placeholder:text-gray-400"
+            className="flex-1 text-sm outline-none bg-transparent text-[var(--text-strong)] placeholder:text-[var(--text-subtle)]"
           />
           {loading && (
             <svg
-              className="h-4 w-4 animate-spin text-gray-400"
+              className="h-4 w-4 animate-spin text-[var(--text-subtle)]"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -157,28 +157,28 @@ export function TeamMemberSelect({ value, onChange, error }: TeamMemberSelectPro
 
         {/* Dropdown */}
         {isOpen && search.length >= 2 && (
-          <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+          <div className="absolute z-10 mt-1 w-full bg-[var(--surface-card)] border border-[var(--border-subtle)] rounded-md shadow-[var(--shadow-lg)] max-h-60 overflow-auto">
             {availableUsers.length > 0 ? (
               availableUsers.map((user) => (
                 <button
                   key={user.id}
                   type="button"
                   onClick={() => addMember(user)}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                  className="w-full px-3 py-2 text-left hover:bg-[var(--surface-sunken)] flex items-center gap-2"
                 >
-                  <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm font-medium">
+                  <div className="h-8 w-8 rounded-full bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand-strong)] text-sm font-medium">
                     {user.firstName[0]}{user.lastName[0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-[var(--text-strong)] truncate">
                       {user.firstName} {user.lastName}
                     </p>
-                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
                   </div>
                 </button>
               ))
             ) : hasSearched ? (
-              <div className="px-3 py-4 text-sm text-gray-500 text-center">
+              <div className="px-3 py-4 text-sm text-[var(--text-muted)] text-center">
                 No users found
               </div>
             ) : null}
@@ -200,7 +200,7 @@ export function TeamMemberSelect({ value, onChange, error }: TeamMemberSelectPro
         </div>
       )}
 
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1 text-sm text-[var(--status-fail-fg)]">{error}</p>}
     </div>
   );
 }
@@ -232,10 +232,10 @@ function SelectedMember({ member, onRemove, onRoleChange }: SelectedMemberProps)
 
   if (loading) {
     return (
-      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md animate-pulse">
-        <div className="h-8 w-8 rounded-full bg-gray-200" />
+      <div className="flex items-center gap-3 p-3 bg-[var(--surface-sunken)] rounded-md animate-pulse">
+        <div className="h-8 w-8 rounded-full bg-[var(--surface-raised)]" />
         <div className="flex-1">
-          <div className="h-4 w-32 bg-gray-200 rounded" />
+          <div className="h-4 w-32 bg-[var(--surface-raised)] rounded" />
         </div>
       </div>
     );
@@ -248,21 +248,21 @@ function SelectedMember({ member, onRemove, onRoleChange }: SelectedMemberProps)
   const roleLabel = teamMemberRoleOptions.find((r) => r.value === member.role)?.label || member.role;
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
-      <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-sm font-medium flex-shrink-0">
+    <div className="flex items-center gap-3 p-3 bg-[var(--surface-sunken)] rounded-md">
+      <div className="h-8 w-8 rounded-full bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand-strong)] text-sm font-medium flex-shrink-0">
         {user.firstName[0]}{user.lastName[0]}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate">
+        <p className="text-sm font-medium text-[var(--text-strong)] truncate">
           {user.firstName} {user.lastName}
         </p>
-        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+        <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
       </div>
       <div className="relative">
         <select
           value={member.role}
           onChange={(e) => onRoleChange(e.target.value)}
-          className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-1.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+          className="appearance-none bg-[var(--surface-card)] text-[var(--text-strong)] border border-[var(--border-default)] rounded-md px-3 py-1.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
         >
           {teamMemberRoleOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -271,14 +271,14 @@ function SelectedMember({ member, onRemove, onRoleChange }: SelectedMemberProps)
           ))}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+          className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-subtle)]"
           aria-hidden="true"
         />
       </div>
       <button
         type="button"
         onClick={onRemove}
-        className="text-gray-400 hover:text-red-500 transition-colors"
+        className="text-[var(--text-subtle)] hover:text-[var(--status-fail-fg)] transition-colors"
         title="Remove member"
       >
         <X className="h-5 w-5" />

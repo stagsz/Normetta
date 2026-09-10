@@ -184,8 +184,8 @@ function StatusIcon({ status, size = 'sm' }: { status: CompletionStatus; size?: 
       );
     case 'empty':
       return (
-        <div className={clsx(containerSize, 'rounded-full bg-gray-100 flex items-center justify-center')}>
-          <Circle className={clsx(iconSize, 'text-gray-400')} />
+        <div className={clsx(containerSize, 'rounded-full bg-[var(--surface-sunken)] flex items-center justify-center')}>
+          <Circle className={clsx(iconSize, 'text-[var(--text-subtle)]')} />
         </div>
       );
     default:
@@ -310,7 +310,7 @@ export function SectionTabsNavigation({
   return (
     <div className={clsx('space-y-4', className)}>
       {/* Section Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-[var(--border-subtle)]">
         <nav className="-mb-px flex space-x-1 overflow-x-auto pb-px" aria-label="Sections">
           {sections.map((section) => {
             const progress = sectionProgress.get(section.id);
@@ -323,8 +323,8 @@ export function SectionTabsNavigation({
                 className={clsx(
                   'flex items-center gap-2 px-3 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
                   isActive
-                    ? 'border-emerald-500 text-emerald-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-[var(--brand)] text-[var(--brand-strong)]'
+                    : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-body)] hover:border-[var(--border-default)]'
                 )}
               >
                 {progress && progress.status !== 'not-applicable' && (
@@ -350,7 +350,7 @@ export function SectionTabsNavigation({
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Previous</span>
           {previousSection && (
-            <span className="hidden md:inline text-gray-500">
+            <span className="hidden md:inline text-[var(--text-muted)]">
               ({previousSection.sectionNumber})
             </span>
           )}
@@ -358,7 +358,7 @@ export function SectionTabsNavigation({
 
         {/* Current section indicator */}
         {activeSectionId && currentLeafIndex >= 0 && (
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-[var(--text-muted)]">
             Section {currentLeafIndex + 1} of {leafSections.length}
           </span>
         )}
@@ -371,7 +371,7 @@ export function SectionTabsNavigation({
           className="flex items-center gap-2"
         >
           {nextSection && (
-            <span className="hidden md:inline text-gray-500">
+            <span className="hidden md:inline text-[var(--text-muted)]">
               ({nextSection.sectionNumber})
             </span>
           )}
@@ -435,7 +435,7 @@ export function SectionNavButtons({
         <div className="text-left">
           <span className="text-sm">Previous</span>
           {previousSection && (
-            <p className="text-xs text-gray-500 truncate max-w-[150px]">
+            <p className="text-xs text-[var(--text-muted)] truncate max-w-[150px]">
               {previousSection.sectionNumber} {previousSection.title}
             </p>
           )}
@@ -443,7 +443,7 @@ export function SectionNavButtons({
       </Button>
 
       <div className="text-center">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-[var(--text-body)]">
           {currentLeafIndex + 1} / {leafSections.length}
         </span>
       </div>
@@ -457,7 +457,7 @@ export function SectionNavButtons({
         <div className="text-right">
           <span className="text-sm">Next</span>
           {nextSection && (
-            <p className="text-xs text-gray-500 truncate max-w-[150px]">
+            <p className="text-xs text-[var(--text-muted)] truncate max-w-[150px]">
               {nextSection.sectionNumber} {nextSection.title}
             </p>
           )}

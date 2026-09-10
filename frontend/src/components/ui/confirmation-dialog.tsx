@@ -117,7 +117,7 @@ export function ConfirmationDialog({
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors rounded-lg p-1 hover:bg-gray-100"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors rounded-lg p-1 hover:bg-[var(--surface-sunken)]"
             disabled={preventCloseOnLoading && isLoading}
             aria-label="Close dialog"
           >
@@ -125,7 +125,7 @@ export function ConfirmationDialog({
           </button>
         </CardHeader>
         <CardContent className="space-y-4 pt-4">
-          <div className="text-gray-600 leading-relaxed">
+          <div className="text-[var(--text-muted)] leading-relaxed">
             {typeof description === 'string' ? <p>{description}</p> : description}
           </div>
 

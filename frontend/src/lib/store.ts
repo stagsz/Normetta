@@ -21,8 +21,16 @@ interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  /**
+   * True once persisted auth state has been read back from localStorage.
+   * Route guards must wait for this before treating `isAuthenticated===false`
+   * as logged-out — otherwise a refresh reads the pre-hydration default and
+   * redirects to `/login` with a valid stored session.
+   */
+  hasHydrated: boolean;
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   clearAuth: () => void;
+  setHasHydrated: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -32,6 +40,7 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
+      hasHydrated: false,
       setAuth: (user, accessToken, refreshToken) => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
@@ -42,6 +51,7 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem('refreshToken');
         set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
       },
+      setHasHydrated: (value) => set({ hasHydrated: value }),
     }),
     {
       name: 'auth-storage',
@@ -49,6 +59,9 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

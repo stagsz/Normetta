@@ -129,7 +129,7 @@ export default function EditAssessmentPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Assessment Not Found</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-strong)]">Assessment Not Found</h1>
         </div>
       </div>
     );
@@ -144,7 +144,7 @@ export default function EditAssessmentPage() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Edit Assessment</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-strong)]">Edit Assessment</h1>
       </div>
 
       {/* Edit Form */}
@@ -156,7 +156,7 @@ export default function EditAssessmentPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Title */}
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                 Title *
               </label>
               <input
@@ -164,14 +164,14 @@ export default function EditAssessmentPage() {
                 id="title"
                 type="text"
                 placeholder="Assessment title"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
               />
               {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>}
             </div>
 
             {/* Description */}
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="description" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                 Description
               </label>
               <textarea
@@ -179,14 +179,14 @@ export default function EditAssessmentPage() {
                 id="description"
                 placeholder="Assessment description"
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
               />
               {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>}
             </div>
 
             {/* Scope */}
             <div>
-              <label htmlFor="scope" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="scope" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                 Scope
               </label>
               <textarea
@@ -194,14 +194,14 @@ export default function EditAssessmentPage() {
                 id="scope"
                 placeholder="Assessment scope"
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
               />
               {errors.scope && <p className="mt-1 text-sm text-red-600">{errors.scope.message}</p>}
             </div>
 
             {/* Objectives */}
             <div>
-              <label htmlFor="objectives" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="objectives" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                 Objectives
               </label>
               <textarea
@@ -209,7 +209,7 @@ export default function EditAssessmentPage() {
                 id="objectives"
                 placeholder="Assessment objectives"
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
               />
               {errors.objectives && <p className="mt-1 text-sm text-red-600">{errors.objectives.message}</p>}
             </div>
@@ -217,27 +217,27 @@ export default function EditAssessmentPage() {
             {/* Dates */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="scheduledDate" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="scheduledDate" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                   Scheduled Date
                 </label>
                 <input
                   {...register('scheduledDate')}
                   id="scheduledDate"
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
                 />
                 {errors.scheduledDate && <p className="mt-1 text-sm text-red-600">{errors.scheduledDate.message}</p>}
               </div>
 
               <div>
-                <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="dueDate" className="block text-sm font-medium text-[var(--text-body)] mb-2">
                   Due Date
                 </label>
                 <input
                   {...register('dueDate')}
                   id="dueDate"
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-400 focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-[var(--border-default)] rounded-md shadow-[var(--shadow-sm)] focus:outline-none focus:ring-[var(--brand)] focus:border-[var(--brand)]"
                 />
                 {errors.dueDate && <p className="mt-1 text-sm text-red-600">{errors.dueDate.message}</p>}
               </div>

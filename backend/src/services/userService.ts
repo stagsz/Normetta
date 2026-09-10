@@ -177,6 +177,19 @@ export class UserService {
       if (emailTaken) {
         throw new ValidationError('Email already in use');
       }
+
+      const domain = data.email.split('@')[1]?.toLowerCase();
+      const org = await prisma.organization.findUnique({
+        where: { id: existingUser.organizationId },
+        select: { allowedDomains: true },
+      });
+      if (!domain) {
+        throw new ValidationError('Invalid email domain');
+      }
+      const orgAllowedDomains = ((org?.allowedDomains ?? []) as string[]).map((entry) => String(entry).toLowerCase());
+      if (orgAllowedDomains.length > 0 && !orgAllowedDomains.includes(domain)) {
+        throw new ValidationError('Email domain is not allowed for this organization');
+      }
     }
 
     const updatedUser = await prisma.user.update({

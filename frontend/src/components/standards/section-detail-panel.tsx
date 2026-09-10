@@ -18,45 +18,52 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ISOSection, AuditQuestion, useQuestionsBySection } from '@/hooks/useStandards';
 
 interface ScoreCriteriaProps {
-  score1: string;
-  score2: string;
-  score3: string;
+  score1: string | null;
+  score2: string | null;
+  score3: string | null;
 }
 
 function ScoreCriteria({ score1, score2, score3 }: ScoreCriteriaProps) {
+  const criticityBadge = (score: number, colorKey: 'fail' | 'obs' | 'pass') => {
+    const map: Record<'fail' | 'obs' | 'pass', {solid: string; bg: string; fg: string}> = {
+      fail: {solid: 'var(--status-fail-solid)', bg: 'bg-red-50', fg: 'text-red-700'},
+      obs: {solid: 'var(--status-obs-solid)', bg: 'bg-amber-50', fg: 'text-amber-700'},
+      pass: {solid: 'var(--status-pass-solid)', bg: 'bg-green-50', fg: 'text-green-700'},
+    }[colorKey];
+    return (
+      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white`} style={{backgroundColor: map.solid}}>
+        {score}
+      </div>
+    );
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      {/* Score 1 - Non-compliant */}
+      {/* Score 1 – legacy minimum on a 1–5 scale */}
       <div className="rounded-xl border border-red-200 bg-red-50 p-3">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs font-bold">
-            1
-          </div>
+          {criticityBadge(1, 'fail')}
           <span className="text-sm font-medium text-red-700">Non-Compliant</span>
         </div>
-        <p className="text-xs text-red-600">{score1}</p>
+        <p className="text-xs text-red-600">{score1 ?? 'Critical gap — no evidence / not addressed.'}</p>
       </div>
 
-      {/* Score 2 - Partially compliant */}
+      {/* Score 2 – initial threshold on 1–5 scale */}
       <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">
-            2
-          </div>
-          <span className="text-sm font-medium text-amber-700">Partially Compliant</span>
+          {criticityBadge(2, 'obs')}
+          <span className="text-sm font-medium text-amber-700">Initial / Partial</span>
         </div>
-        <p className="text-xs text-amber-600">{score2}</p>
+        <p className="text-xs text-amber-600">{score2 ?? 'Initial implementation / partially meets requirement.'}</p>
       </div>
 
-      {/* Score 3 - Fully compliant */}
+      {/* Score 3+ – developing / established / optimizing bucket for UI clue */}
       <div className="rounded-xl border border-green-200 bg-green-50 p-3">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-bold">
-            3
-          </div>
-          <span className="text-sm font-medium text-green-700">Fully Compliant</span>
+          {criticityBadge(3, 'pass')}
+          <span className="text-sm font-medium text-green-700">Developing+ / Established</span>
         </div>
-        <p className="text-xs text-green-600">{score3}</p>
+        <p className="text-xs text-green-600">{score3 ?? 'Process is defined, functioning and monitored.'}</p>
       </div>
     </div>
   );
@@ -70,37 +77,37 @@ interface QuestionItemProps {
 
 function QuestionItem({ question, isExpanded, onToggle }: QuestionItemProps) {
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div className="border border-[var(--border-subtle)] rounded-xl overflow-hidden">
       {/* Question header */}
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-start gap-3 p-4 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-start gap-3 p-4 text-left hover:bg-[var(--surface-sunken)] transition-colors"
       >
         <div className="flex-shrink-0 mt-0.5">
           {isExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-400" />
+            <ChevronUp className="w-5 h-5 text-[var(--text-subtle)]" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-gray-400" />
+            <ChevronDown className="w-5 h-5 text-[var(--text-subtle)]" />
           )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[var(--brand-soft)] text-[var(--brand)]">
               {question.questionNumber}
             </span>
             {question.standardReference && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-[var(--text-muted)]">
                 Ref: {question.standardReference}
               </span>
             )}
             {!question.isActive && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[var(--surface-sunken)] text-[var(--text-muted)]">
                 Inactive
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-900">{question.questionText}</p>
+          <p className="text-sm text-[var(--text-strong)]">{question.questionText}</p>
         </div>
       </button>
 
@@ -125,7 +132,7 @@ function QuestionItem({ question, isExpanded, onToggle }: QuestionItemProps) {
 
             {/* Score criteria */}
             <div>
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+              <p className="text-xs font-medium text-[var(--text-body)] uppercase tracking-wide mb-2">
                 Scoring Criteria
               </p>
               <ScoreCriteria
@@ -145,7 +152,7 @@ function QuestionsLoadingSkeleton() {
   return (
     <div className="space-y-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="border border-gray-200 rounded-xl p-4">
+        <div key={i} className="border border-[var(--border-subtle)] rounded-xl p-4">
           <div className="flex items-start gap-3">
             <Skeleton width={20} height={20} />
             <div className="flex-1">
@@ -203,8 +210,8 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
     return (
       <Card className="h-full">
         <CardContent className="h-full flex items-center justify-center py-12">
-          <div className="text-center text-gray-500">
-            <BookOpen className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <div className="text-center text-[var(--text-muted)]">
+            <BookOpen className="w-12 h-12 mx-auto mb-4 text-[var(--text-subtle)]" />
             <p className="font-medium">Select a section</p>
             <p className="text-sm mt-1">
               Click on a section to view its details and questions
@@ -219,15 +226,15 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
     <Card className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-emerald-50 rounded-xl flex-shrink-0">
-            <BookOpen className="w-5 h-5 text-emerald-600" />
+          <div className="p-2 bg-[var(--brand-soft)] rounded-xl flex-shrink-0">
+            <BookOpen className="w-5 h-5 text-[var(--brand-strong)]" />
           </div>
           <div className="min-w-0">
             <CardTitle className="text-lg">
               {section.sectionNumber} {section.title}
             </CardTitle>
             {section.description && (
-              <p className="text-sm text-gray-500 mt-1">{section.description}</p>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{section.description}</p>
             )}
           </div>
         </div>
@@ -236,37 +243,37 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
         {/* Section metadata */}
         <div className="grid grid-cols-2 gap-4 pb-4 border-b">
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-[var(--text-muted)] uppercase tracking-wide">
               Section Number
             </p>
-            <p className="font-medium text-gray-900">{section.sectionNumber}</p>
+            <p className="font-medium text-[var(--text-strong)]">{section.sectionNumber}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-[var(--text-muted)] uppercase tracking-wide">
               Questions
             </p>
-            <p className="font-medium text-gray-900">{questionCount}</p>
+            <p className="font-medium text-[var(--text-strong)]">{questionCount}</p>
           </div>
         </div>
 
         {/* Subsections summary */}
         {section.children.length > 0 && (
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+            <p className="text-xs text-[var(--text-muted)] uppercase tracking-wide mb-2">
               Subsections ({section.children.length})
             </p>
             <div className="space-y-1">
               {section.children.map((child) => (
                 <div
                   key={child.id}
-                  className="flex items-center justify-between py-1.5 px-2 bg-gray-50 rounded"
+                  className="flex items-center justify-between py-1.5 px-2 bg-[var(--surface-sunken)] rounded"
                 >
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-[var(--text-body)]">
                     <span className="font-medium">{child.sectionNumber}</span>{' '}
                     {child.title}
                   </span>
                   {(child._count?.questions ?? 0) > 0 && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-[var(--text-muted)]">
                       {child._count?.questions} questions
                     </span>
                   )}
@@ -280,21 +287,21 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
         {questionCount > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">
+              <p className="text-xs text-[var(--text-muted)] uppercase tracking-wide">
                 Audit Questions
               </p>
               {questions.length > 1 && (
                 <div className="flex items-center gap-2 text-xs">
                   <button
                     onClick={expandAllQuestions}
-                    className="text-emerald-600 hover:text-emerald-700 font-medium"
+                    className="text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                   >
                     Expand All
                   </button>
-                  <span className="text-gray-300">|</span>
+                  <span className="text-[var(--text-subtle)]">|</span>
                   <button
                     onClick={collapseAllQuestions}
-                    className="text-emerald-600 hover:text-emerald-700 font-medium"
+                    className="text-[var(--brand-strong)] hover:text-[var(--brand)] font-medium"
                   >
                     Collapse All
                   </button>
@@ -316,8 +323,8 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 text-gray-500 border border-dashed border-gray-200 rounded-xl">
-                <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+              <div className="text-center py-6 text-[var(--text-muted)] border border-dashed border-[var(--border-subtle)] rounded-xl">
+                <AlertCircle className="w-8 h-8 mx-auto mb-2 text-[var(--text-subtle)]" />
                 <p className="text-sm">No questions found for this section</p>
               </div>
             )}
@@ -326,8 +333,8 @@ export function SectionDetailPanel({ section }: SectionDetailPanelProps) {
 
         {/* No content message */}
         {section.children.length === 0 && questionCount === 0 && (
-          <div className="text-center py-6 text-gray-500">
-            <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+          <div className="text-center py-6 text-[var(--text-muted)]">
+            <FileText className="w-8 h-8 mx-auto mb-2 text-[var(--text-subtle)]" />
             <p className="text-sm">No questions defined for this section</p>
           </div>
         )}

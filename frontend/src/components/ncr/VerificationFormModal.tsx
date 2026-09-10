@@ -81,17 +81,17 @@ export function VerificationFormModal({
             <button
               type="button"
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-500 transition-colors"
+              className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600 mb-4">
+            <p className="text-[var(--text-muted)] mb-4">
               Only completed actions can be verified. This action is currently{' '}
               <span className="font-medium">{action.status.replace('_', ' ').toLowerCase()}</span>.
             </p>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-[var(--text-muted)] mb-4">
               Please ensure the corrective action has been marked as completed before attempting verification.
             </p>
             <div className="flex justify-end">
@@ -116,7 +116,7 @@ export function VerificationFormModal({
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             disabled={isSubmitting}
           >
             <X className="h-5 w-5" />
@@ -125,11 +125,11 @@ export function VerificationFormModal({
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Action Summary */}
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-              <p className="text-sm font-medium text-gray-500 mb-1">Action to Verify</p>
-              <p className="text-gray-800">{action.description}</p>
+            <div className="bg-[var(--surface-sunken)] rounded-xl p-4 border border-[var(--border-subtle)]">
+              <p className="text-sm font-medium text-[var(--text-muted)] mb-1">Action to Verify</p>
+              <p className="text-[var(--text-strong)]">{action.description}</p>
               {action.assignedTo && (
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-[var(--text-muted)] mt-2">
                   Assigned to: {action.assignedTo.firstName} {action.assignedTo.lastName}
                 </p>
               )}
@@ -139,10 +139,10 @@ export function VerificationFormModal({
             <div>
               <label
                 htmlFor="effectivenessNotes"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-[var(--text-body)] mb-1"
               >
                 Effectiveness Notes
-                <span className="text-gray-400 font-normal ml-1">(recommended)</span>
+                <span className="text-[var(--text-subtle)] font-normal ml-1">(recommended)</span>
               </label>
               <textarea
                 id="effectivenessNotes"
@@ -150,10 +150,10 @@ export function VerificationFormModal({
                 onChange={(e) => setEffectivenessNotes(e.target.value)}
                 rows={4}
                 placeholder="Document how you verified the effectiveness of this corrective action. Include any follow-up observations, testing results, or evidence of improvement..."
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent resize-none"
+                className="w-full rounded-md border border-[var(--border-default)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent resize-none"
                 disabled={isSubmitting}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[var(--text-muted)] mt-1">
                 Describe how the corrective action addressed the non-conformity and prevented recurrence.
               </p>
             </div>
@@ -165,7 +165,7 @@ export function VerificationFormModal({
                   type="checkbox"
                   checked={confirmed}
                   onChange={(e) => setConfirmed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                  className="mt-0.5 h-4 w-4 rounded border-[var(--border-default)] text-green-600 focus:ring-green-500"
                   disabled={isSubmitting}
                 />
                 <div>

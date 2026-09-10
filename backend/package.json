@@ -1,7 +1,7 @@
 {
-  "name": "@auditflow/backend",
+  "name": "@normetta/backend",
   "version": "1.0.0",
-  "description": "AuditFlow - Backend API for ISO 9001 Quality Management",
+  "description": "Normetta - Backend API for ISO 9001 Quality Management",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -23,7 +23,9 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
     "@prisma/client": "^5.22.0",
+    "@types/nodemailer": "^8.0.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.3",
@@ -34,6 +36,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "9.0.3",
     "pdfkit": "^0.17.2",
     "pptxgenjs": "^3.12.0",
     "uuid": "^14.0.0",

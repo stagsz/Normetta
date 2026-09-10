@@ -1,4 +1,4 @@
-# AuditFlow
+# Normetta
 
 ISO 9001:2015 Quality Management & Audit Platform.
 
@@ -9,4 +9,5 @@ ISO 9001:2015 Quality Management & Audit Platform.
 - `shared/` — shared types/utilities across packages
 - `docs/` — product, setup, payment/legal, and operations docs
 - `supabase/migrations/` — database migrations
-- `landing/` — marketing landing page source
+
+The landing page now lives in `frontend/src/components/landing/` (ported into the Next.js app).

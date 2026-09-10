@@ -60,10 +60,8 @@ export class UserController {
         pageSize: number;
       };
 
-      // Non-admin users can only see users in their own organization
-      const organizationId = req.user!.role === UserRole.SYSTEM_ADMIN
-        ? undefined
-        : req.user!.organizationId;
+      // Always restrict by organization to prevent cross-org user leakage
+      const organizationId = req.user!.organizationId;
 
       const result = await userService.list(
         { role, isActive, search, organizationId },

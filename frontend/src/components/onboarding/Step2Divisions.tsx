@@ -26,7 +26,7 @@ export default function Step2Divisions() {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[var(--text-muted)]">
         Add the divisions (business units) in your company. You can skip this step.
       </p>
 
@@ -46,12 +46,12 @@ export default function Step2Divisions() {
       {divisions.length > 0 && (
         <ul className="space-y-2">
           {divisions.map((d) => (
-            <li key={d.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
-              <span className="text-sm text-gray-800">{d.name}</span>
+            <li key={d.id} className="flex items-center justify-between bg-[var(--surface-sunken)] rounded-lg px-3 py-2">
+              <span className="text-sm text-[var(--text-strong)]">{d.name}</span>
               <button
                 type="button"
                 onClick={() => removeDivision(d.id)}
-                className="text-gray-400 hover:text-red-500 transition-colors"
+                className="text-[var(--text-subtle)] hover:text-red-500 transition-colors"
                 aria-label={`Remove ${d.name}`}
               >
                 <X size={16} />
@@ -62,13 +62,13 @@ export default function Step2Divisions() {
       )}
 
       <div className="flex gap-2 pt-2">
-        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(1)}>
+        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(2)}>
           Back
         </Button>
-        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(3)}>
+        <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(4)}>
           Skip
         </Button>
-        <Button type="button" className="flex-1" onClick={() => setStep(3)}>
+        <Button type="button" className="flex-1" onClick={() => setStep(4)}>
           Continue
         </Button>
       </div>

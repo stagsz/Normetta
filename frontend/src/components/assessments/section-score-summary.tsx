@@ -35,8 +35,9 @@ type ChartType = 'bar' | 'radar';
 
 /**
  * Calculates the compliance score for a section and its children.
- * Score is based on responses where each response has a score of 1, 2, or 3.
- * The percentage is calculated as (actual score / max possible score) * 100.
+ * Responses are scored 1–5 (0 = N/A and is excluded, matching the backend
+ * assessmentService semantics). The percentage is
+ * (actual score / max possible score) * 100, capped at 100 per question.
  */
 function calculateSectionScore(
   section: ISOSection,
@@ -48,9 +49,9 @@ function calculateSectionScore(
   // Get responses for this section
   const sectionResponses = responseBySectionId.get(section.id) || [];
   for (const response of sectionResponses) {
-    if (response.score !== null) {
+    if (response.score !== null && response.score !== 0) {
       totalScore += response.score;
-      maxScore += 3; // Max score is 3 per question
+      maxScore += 5; // Scoring scale is 1–5
     }
   }
 
@@ -171,8 +172,8 @@ export function SectionScoreSummary({ responses }: SectionScoreSummaryProps) {
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <BarChart3 className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-            <p className="text-gray-500 text-sm">
+            <BarChart3 className="mx-auto h-12 w-12 text-[var(--text-subtle)] mb-3" />
+            <p className="text-[var(--text-muted)] text-sm">
               No scored responses yet. Complete questions to see section scores.
             </p>
           </div>
@@ -187,7 +188,7 @@ export function SectionScoreSummary({ responses }: SectionScoreSummaryProps) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-base">Section Scores</CardTitle>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-[var(--text-muted)] mt-1">
               Overall: {overallScore}% compliance
             </p>
           </div>
@@ -221,16 +222,16 @@ export function SectionScoreSummary({ responses }: SectionScoreSummaryProps) {
         {/* Score Legend */}
         <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-green-500" />
-            <span className="text-gray-600">≥70% Compliant</span>
+            <div className="w-3 h-3 rounded bg-[var(--status-pass-solid)]" />
+            <span className="text-[var(--text-muted)]">≥70% Compliant</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-amber-500" />
-            <span className="text-gray-600">50-69% Partial</span>
+            <div className="w-3 h-3 rounded bg-[var(--status-obs-solid)]" />
+            <span className="text-[var(--text-muted)]">50-69% Partial</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-red-500" />
-            <span className="text-gray-600">&lt;50% Non-Compliant</span>
+            <div className="w-3 h-3 rounded bg-[var(--status-fail-solid)]" />
+            <span className="text-[var(--text-muted)]">&lt;50% Non-Compliant</span>
           </div>
         </div>
       </CardContent>

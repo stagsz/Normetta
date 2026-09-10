@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import { userController } from '../controllers/userController';
+import { GdprController } from '../controllers/gdprController';
 import { withAuth, withRoles, asyncHandler } from '../proxy';
 import { UserRole } from '../types/enums';
 
 const router = Router();
+
+const gdprController = new GdprController();
 
 // All routes require authentication
 router.use(withAuth((req, res, next) => next()));
@@ -42,6 +45,13 @@ router.post(
 router.post(
   '/:id/change-role',
   asyncHandler(userController.changeRole.bind(userController))
+);
+
+// POST /api/users/:id/export-or-erase
+// GDPR export/erase access is enforced inside the controller
+router.post(
+  '/:id/export-or-erase',
+  asyncHandler(gdprController.exportOrErase.bind(gdprController))
 );
 
 export default router;

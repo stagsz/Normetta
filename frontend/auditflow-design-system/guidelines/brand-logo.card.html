@@ -1,0 +1,35 @@
+<!-- @dsCard group="Brand" viewport="700x190" name="Logo" subtitle="Logomark + wordmark, on light and on petrol" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--surface-card); }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; min-height:190px; }
+  .panel { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px; }
+  .light { background: var(--surface-page); }
+  .dark { background: var(--surface-brand); }
+  img { height: 38px; }
+  .mk { height: 44px; }
+  .cap { font-family: var(--font-mono); font-size:10.5px; }
+  .light .cap { color: var(--text-muted); }
+  .dark .cap { color: var(--clay-100); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="panel light">
+      <div style="display:flex; align-items:center; gap:18px;">
+        <img class="mk" src="../assets/logo-mark.svg" alt="mark">
+        <img src="../assets/logo-full.svg" alt="Normetta">
+      </div>
+      <span class="cap">logo-mark.svg · logo-full.svg</span>
+    </div>
+    <div class="panel dark">
+      <img src="../assets/logo-full-dark.svg" alt="Normetta">
+      <span class="cap">logo-full-dark.svg · on --surface-brand</span>
+    </div>
+  </div>
+</body>
+</html>

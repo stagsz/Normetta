@@ -8,6 +8,7 @@ import { connectDatabase, disconnectDatabase } from './config/database';
 import { logger } from './utils/logger';
 import { globalErrorHandler, notFoundHandler } from './proxy/errorProxy';
 import routes from './routes';
+import { tenantContext } from './middleware';
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.set('trust proxy', 1);
 // Security middleware
 app.use(helmet());
 app.use(cors(config.cors));
+
+app.use(tenantContext);
 
 // Rate limiting (disabled in test environment)
 if (process.env.NODE_ENV !== 'test') {

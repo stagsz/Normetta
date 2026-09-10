@@ -8,7 +8,7 @@ import {
 /** Skeleton for a single user table row */
 function SkeletonUserRow() {
   return (
-    <tr className="border-b border-gray-100">
+    <tr className="border-b border-[var(--border-subtle)]">
       {/* User column with avatar */}
       <td className="px-6 py-4">
         <div className="flex items-center">
@@ -65,7 +65,7 @@ export function UsersListSkeleton({ rowCount = 5 }: UsersListSkeletonProps) {
       </div>
 
       {/* Filters skeleton */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <div className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -80,10 +80,10 @@ export function UsersListSkeleton({ rowCount = 5 }: UsersListSkeletonProps) {
       </div>
 
       {/* Users table skeleton */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-[var(--surface-sunken)] border-b border-[var(--border-subtle)]">
               <tr>
                 <th className="px-6 py-3 text-left">
                   <Skeleton variant="text" width={50} height={14} />
@@ -105,7 +105,7 @@ export function UsersListSkeleton({ rowCount = 5 }: UsersListSkeletonProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-[var(--border-subtle)]">
               {Array.from({ length: rowCount }).map((_, i) => (
                 <SkeletonUserRow key={i} />
               ))}

@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../config/database';
-import { NotFoundError, ConflictError, AuthorizationError } from '../utils/errors';
+import { NotFoundError, ConflictError, AuthorizationError, ValidationError } from '../utils/errors';
 import { UserRole } from '../types/enums';
 
 export class OrgInviteService {
@@ -17,12 +17,20 @@ export class OrgInviteService {
     const existing = await prisma.user.findUnique({ where: { email: data.email } });
     if (existing) throw new ConflictError('Email already registered');
 
+    const domain = data.email.split('@')[1]?.toLowerCase();
+    const orgAllowedDomains = ((org.allowedDomains ?? []) as string[]).map((entry) => String(entry).toLowerCase());
+    if (!domain) throw new ValidationError('Invalid invite email domain');
+    if (orgAllowedDomains.length > 0 && !orgAllowedDomains.includes(domain)) {
+      throw new AuthorizationError('This invite is not available for this email domain');
+    }
+
     const passwordHash = await bcrypt.hash(data.password, 12);
 
     return prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
         data: {
           email: data.email,
+          emailDomain: domain,
           passwordHash,
           firstName: data.firstName,
           lastName: data.lastName,

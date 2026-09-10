@@ -1,24 +1,18 @@
-# CLAUDE.md
+# Normetta
 
-This file provides guidance to Claude Code and Hermes agents when working with the AuditFlow codebase.
+ISO 9001:2015 Quality Management & Audit Platform for SMEs in Europe.
 
-## Project Overview
-
-AuditFlow is an ISO 9001 Quality Management & Audit Platform for SMEs in Europe.
-It helps quality managers prepare for and manage internal/external audits, track NCRs, and run
-self-assessments mapped to ISO 9001:2015 clause structure.
-
-**Live app:** https://audit-flow-zeta.vercel.app  
-**Backend base URL:** https://audit-flow-zeta.vercel.app/_/backend/api  
+**Live app:** https://www.normetta.com  
+**Backend base URL:** https://www.normetta.com/_/backend/api  
 **Supabase project:** fqnorsqggyshqfmihivw (Pro plan — pgvector available)  
-**GitHub:** https://github.com/stagsz/AuditFlow
+**GitHub:** https://github.com/stagsz/Normetta
 
 ---
 
 ## Monorepo Structure
 
 ```
-AuditFlow/
+Normetta/
 ├── backend/          # Express + TypeScript API (deployed as Vercel serverless)
 │   ├── prisma/       # Prisma schema + migrations
 │   ├── src/
@@ -37,15 +31,19 @@ AuditFlow/
 │   │   │   ├── onboarding/   # /onboarding wizard (4 steps)
 │   │   │   └── join/         # /join/[token] invite flow
 │   │   ├── components/       # React components
+│   │   │   ├── landing/      # Marketing landing page (LandingPage.tsx + landing.css, served at /)
 │   │   │   └── onboarding/   # Step1–Step4 wizard components
 │   │   ├── lib/
 │   │   │   ├── api.ts        # All API calls (axios client)
 │   │   │   └── store/        # Zustand stores
 │   │   └── providers.tsx     # React Query + auth providers
-├── shared/           # Shared types between frontend and backend
-└── landing/          # Standalone landing page HTML (index.html)
-    └── index.html    # NOT yet integrated into Next.js — lives separately
+└── shared/           # Shared types between frontend and backend
 ```
+
+Note: the old standalone `landing/index.html` was ported into the Next.js app
+(July 2026) — the landing page is now `frontend/src/components/landing/LandingPage.tsx`,
+rendered by `frontend/src/app/page.tsx` with metadata from `lib/landing-page-metadata.ts`.
+All landing styles are scoped under the `.lp` class in `landing.css`.
 
 ---
 
@@ -183,22 +181,40 @@ DATABASE_URL          # Supabase connection pooling URL
 DIRECT_URL            # Supabase direct connection URL (for migrations)
 JWT_SECRET            # JWT signing secret
 NODE_ENV              # production
+TURNSTILE_SECRET_KEY  # Cloudflare Turnstile secret; unset = signup bot check disabled (warning logged)
+TURNSTILE_ALLOWED_HOSTNAMES  # optional, comma list; default normetta.com,www.normetta.com
 ```
 
 ### Frontend (Vercel env)
 ```
-NEXT_PUBLIC_API_URL   # Backend API base URL
+NEXT_PUBLIC_API_URL             # Backend API base URL
+NEXT_PUBLIC_TURNSTILE_SITE_KEY  # Cloudflare Turnstile site key; unset = widget hidden
 ```
+
+### Turnstile on signup
+- Widget renders in the last onboarding step (`Step4Roles.tsx`), only for the
+  new-account path. Token is sent as `turnstileToken` with `POST /onboarding/setup`.
+- Backend verifies in `onboardingController.setup` via `services/turnstileService.ts`
+  before any account is created. It requires `success`, action `signup`, and a hostname
+  in the allowlist. Rejected token = 403, Cloudflare unreachable = 503.
+- Both keys must be set together in Vercel or signups fail with "Human verification required".
+- Secret key lives only in `backend/.env` locally and in Vercel project env. Never in a
+  `NEXT_PUBLIC_` variable, never committed. Site key is public and goes in `frontend/.env.local`.
 
 ---
 
 ## Test Accounts
-- System admin: hermes@greisz.se / Sidvolt2
-- App URL: https://audit-flow-zeta.vercel.app
+- Credentials are never stored in this repo. Test logins live in the password manager /
+  local `backend/.env` only. (The previous admin credentials committed here were rotated
+  after the repo was public — treat anything in git history as burned.)
+- App URL: https://normetta-zeta.vercel.app
 
 ---
 
 ## Company OS
 Strategy, marketing plans, and operational documents live in:
-`C:\Users\staff\anthropicFun\Boarder_room\AuditFlow\`
+`C:\Users\staff\anthropicFun\Boarder_room\GreiszConsulting\`
 (separate from this codebase — that's the "board room" layer)
+
+Normetta branding/boardroom docs:
+`C:\Users\staff\anthropicFun\Boarder_room\Normetta\`

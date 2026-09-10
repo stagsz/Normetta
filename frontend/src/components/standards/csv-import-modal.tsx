@@ -184,13 +184,13 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
       <Card className="w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 flex-shrink-0">
           <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5 text-emerald-600" />
+            <Upload className="h-5 w-5 text-[var(--brand-strong)]" />
             Import Questions from CSV
           </CardTitle>
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             disabled={isUploading}
           >
             <X className="h-5 w-5" />
@@ -223,8 +223,8 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
               onDrop={handleDrop}
               className={`relative border-2 border-dashed rounded-xl p-8 transition-colors text-center ${
                 isDragActive
-                  ? 'border-emerald-500 bg-emerald-50'
-                  : 'border-gray-300 bg-white hover:border-gray-400'
+                  ? 'border-[var(--brand)] bg-[var(--brand-soft)]'
+                  : 'border-[var(--border-default)] bg-[var(--surface-card)] hover:border-[var(--border-strong)]'
               }`}
             >
               <input
@@ -240,12 +240,12 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
               <div className="flex flex-col items-center gap-3">
                 <div
                   className={`p-3 rounded-full ${
-                    isDragActive ? 'bg-emerald-100' : 'bg-gray-100'
+                    isDragActive ? 'bg-[var(--brand-soft)]' : 'bg-[var(--surface-sunken)]'
                   }`}
                 >
                   <Upload
                     className={`h-8 w-8 ${
-                      isDragActive ? 'text-emerald-600' : 'text-gray-400'
+                      isDragActive ? 'text-[var(--brand-strong)]' : 'text-[var(--text-subtle)]'
                     }`}
                   />
                 </div>
@@ -253,14 +253,14 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
                 <div className="text-sm">
                   <label
                     htmlFor="csv-import-input"
-                    className="font-medium text-emerald-600 hover:text-emerald-700 cursor-pointer"
+                    className="font-medium text-[var(--brand-strong)] hover:text-[var(--brand)] cursor-pointer"
                   >
                     Click to upload
                   </label>
-                  <span className="text-gray-500"> or drag and drop</span>
+                  <span className="text-[var(--text-muted)]"> or drag and drop</span>
                 </div>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   CSV files only (max {formatFileSize(MAX_FILE_SIZE)})
                 </p>
               </div>
@@ -277,22 +277,22 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
 
           {/* Selected File */}
           {selectedFile && !importResult && (
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
-              <div className="flex-shrink-0 p-2 bg-white rounded">
-                <FileText className="h-5 w-5 text-gray-400" />
+            <div className="flex items-center gap-3 p-3 bg-[var(--surface-sunken)] rounded-xl border border-[var(--border-subtle)]">
+              <div className="flex-shrink-0 p-2 bg-[var(--surface-card)] rounded">
+                <FileText className="h-5 w-5 text-[var(--text-subtle)]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-[var(--text-strong)] truncate">
                   {selectedFile.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   {formatFileSize(selectedFile.size)}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleRemoveFile}
-                className="text-gray-400 hover:text-red-500 transition-colors"
+                className="text-[var(--text-subtle)] hover:text-red-500 transition-colors"
                 disabled={isUploading}
               >
                 <X className="h-5 w-5" />
@@ -328,29 +328,29 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
               {/* Statistics */}
               {importResult.success && (
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-gray-50 rounded-xl p-2 text-center">
-                    <p className="text-lg font-semibold text-gray-900">
+                  <div className="bg-[var(--surface-sunken)] rounded-xl p-2 text-center">
+                    <p className="text-lg font-semibold text-[var(--text-strong)]">
                       {importResult.sectionsCreated}
                     </p>
-                    <p className="text-xs text-gray-500">Sections Created</p>
+                    <p className="text-xs text-[var(--text-muted)]">Sections Created</p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-2 text-center">
-                    <p className="text-lg font-semibold text-gray-900">
+                  <div className="bg-[var(--surface-sunken)] rounded-xl p-2 text-center">
+                    <p className="text-lg font-semibold text-[var(--text-strong)]">
                       {importResult.sectionsUpdated}
                     </p>
-                    <p className="text-xs text-gray-500">Sections Updated</p>
+                    <p className="text-xs text-[var(--text-muted)]">Sections Updated</p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-2 text-center">
-                    <p className="text-lg font-semibold text-gray-900">
+                  <div className="bg-[var(--surface-sunken)] rounded-xl p-2 text-center">
+                    <p className="text-lg font-semibold text-[var(--text-strong)]">
                       {importResult.questionsCreated}
                     </p>
-                    <p className="text-xs text-gray-500">Questions Created</p>
+                    <p className="text-xs text-[var(--text-muted)]">Questions Created</p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-2 text-center">
-                    <p className="text-lg font-semibold text-gray-900">
+                  <div className="bg-[var(--surface-sunken)] rounded-xl p-2 text-center">
+                    <p className="text-lg font-semibold text-[var(--text-strong)]">
                       {importResult.questionsUpdated}
                     </p>
-                    <p className="text-xs text-gray-500">Questions Updated</p>
+                    <p className="text-xs text-[var(--text-muted)]">Questions Updated</p>
                   </div>
                 </div>
               )}

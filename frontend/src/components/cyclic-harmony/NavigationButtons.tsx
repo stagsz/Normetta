@@ -35,10 +35,10 @@ export function NavigationButtons({
         disabled={!hasPrevious}
         className={cn(
           'group flex items-center gap-3 px-6 py-3 rounded-xl transition-all duration-300',
-          'font-medium text-harmony-dark-text',
+          'font-medium text-[var(--text-strong)]',
           hasPrevious
-            ? 'bg-white border-2 border-harmony-sage hover:border-harmony-olive hover:bg-harmony-warm-white hover:-translate-x-1 shadow-crown hover:shadow-crown-hover'
-            : 'bg-harmony-light-beige text-gray-400 cursor-not-allowed opacity-50'
+            ? 'bg-[var(--surface-card)] border-2 border-[var(--border-default)] hover:border-[var(--brand)] hover:bg-[var(--surface-raised)] hover:-translate-x-1 shadow-soft-1 hover:shadow-soft-2'
+            : 'bg-[var(--surface-sunken)] text-[var(--text-subtle)] cursor-not-allowed opacity-50'
         )}
       >
         <ChevronLeft
@@ -58,8 +58,8 @@ export function NavigationButtons({
           'group flex items-center gap-3 px-6 py-3 rounded-xl transition-all duration-300',
           'font-medium',
           hasNext
-            ? 'bg-gradient-to-r from-harmony-lime to-harmony-sage text-harmony-dark-text hover:from-harmony-sage hover:to-harmony-olive hover:translate-x-1 shadow-crown hover:shadow-crown-hover'
-            : 'bg-harmony-light-beige text-gray-400 cursor-not-allowed opacity-50'
+            ? 'bg-gradient-to-r from-mint-500 to-mint-600 text-[var(--text-on-brand)] hover:from-mint-400 hover:to-mint-500 hover:translate-x-1 shadow-soft-1 hover:shadow-mint-glow'
+            : 'bg-[var(--surface-sunken)] text-[var(--text-subtle)] cursor-not-allowed opacity-50'
         )}
       >
         <span>{nextLabel}</span>

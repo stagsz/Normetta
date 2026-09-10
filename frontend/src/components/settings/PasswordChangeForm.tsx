@@ -115,11 +115,11 @@ export function PasswordChangeForm() {
     if (/[^A-Za-z0-9]/.test(password)) strength++;
 
     if (strength <= 2) {
-      return { label: 'Weak', color: 'bg-red-500', width: '33%' };
+      return { label: 'Weak', color: 'bg-[var(--status-fail-solid)]', width: '33%' };
     } else if (strength <= 4) {
-      return { label: 'Medium', color: 'bg-amber-500', width: '66%' };
+      return { label: 'Medium', color: 'bg-[var(--status-obs-solid)]', width: '66%' };
     } else {
-      return { label: 'Strong', color: 'bg-green-500', width: '100%' };
+      return { label: 'Strong', color: 'bg-[var(--status-pass-solid)]', width: '100%' };
     }
   };
 
@@ -129,8 +129,8 @@ export function PasswordChangeForm() {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gray-100 flex items-center justify-center">
-            <Lock className="h-5 w-5 text-gray-500" />
+          <div className="h-10 w-10 rounded-xl bg-[var(--surface-sunken)] flex items-center justify-center">
+            <Lock className="h-5 w-5 text-[var(--text-muted)]" />
           </div>
           <div>
             <CardTitle>Change Password</CardTitle>
@@ -153,7 +153,7 @@ export function PasswordChangeForm() {
             />
             <button
               type="button"
-              className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-8 text-[var(--text-subtle)] hover:text-[var(--text-muted)]"
               onClick={() => setShowCurrentPassword(!showCurrentPassword)}
               tabIndex={-1}
             >
@@ -179,7 +179,7 @@ export function PasswordChangeForm() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-8 text-[var(--text-subtle)] hover:text-[var(--text-muted)]"
                 onClick={() => setShowNewPassword(!showNewPassword)}
                 tabIndex={-1}
               >
@@ -194,26 +194,26 @@ export function PasswordChangeForm() {
             {/* Password Strength Indicator */}
             {formData.newPassword && (
               <div className="space-y-1">
-                <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[var(--stone-200)] rounded-full overflow-hidden">
                   <div
                     className={`h-full ${passwordStrength.color} transition-all duration-300`}
                     style={{ width: passwordStrength.width }}
                   />
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   Password strength: <span className="font-medium">{passwordStrength.label}</span>
                 </p>
               </div>
             )}
 
             {/* Password Requirements */}
-            <ul className="text-xs text-gray-500 space-y-1 mt-2">
+            <ul className="text-xs text-[var(--text-muted)] space-y-1 mt-2">
               <li className="flex items-center gap-1.5">
                 <Check
                   className={`h-3.5 w-3.5 ${
                     formData.newPassword.length >= MIN_PASSWORD_LENGTH
                       ? 'text-green-500'
-                      : 'text-gray-300'
+                      : 'text-[var(--text-subtle)]'
                   }`}
                 />
                 At least {MIN_PASSWORD_LENGTH} characters
@@ -234,7 +234,7 @@ export function PasswordChangeForm() {
             />
             <button
               type="button"
-              className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-8 text-[var(--text-subtle)] hover:text-[var(--text-muted)]"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               tabIndex={-1}
             >

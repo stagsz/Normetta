@@ -82,7 +82,7 @@ export function StatusToggleConfirmationDialog({
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
             disabled={isSubmitting}
             aria-label="Close dialog"
           >
@@ -93,30 +93,30 @@ export function StatusToggleConfirmationDialog({
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* User Info */}
             <div className="flex items-center gap-3 pb-4 border-b">
-              <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                <span className="text-lg font-medium text-emerald-600">
+              <div className="h-12 w-12 rounded-full bg-[var(--brand-soft)] flex items-center justify-center">
+                <span className="text-lg font-medium text-[var(--brand-strong)]">
                   {user.firstName?.[0]?.toUpperCase() || ''}
                   {user.lastName?.[0]?.toUpperCase() || ''}
                 </span>
               </div>
               <div>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-[var(--text-strong)]">
                   {user.firstName} {user.lastName}
                 </p>
-                <p className="text-sm text-gray-500">{user.email}</p>
+                <p className="text-sm text-[var(--text-muted)]">{user.email}</p>
               </div>
             </div>
 
             {/* Current Status */}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Current status:</span>
+              <span className="text-sm text-[var(--text-muted)]">Current status:</span>
               {user.isActive ? (
                 <span className="inline-flex items-center gap-1 text-sm font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded">
                   <UserCheck className="h-4 w-4" />
                   Active
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-[var(--text-muted)] bg-[var(--surface-sunken)] px-2 py-0.5 rounded">
                   <UserX className="h-4 w-4" />
                   Inactive
                 </span>
@@ -159,20 +159,20 @@ export function StatusToggleConfirmationDialog({
             </div>
 
             {/* Confirmation Checkbox */}
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+            <div className="bg-[var(--surface-sunken)] rounded-xl p-4 border border-[var(--border-subtle)]">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={confirmed}
                   onChange={(e) => setConfirmed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-400"
+                  className="mt-0.5 h-4 w-4 rounded border-[var(--border-default)] text-[var(--brand-strong)] focus:ring-[var(--brand)]"
                   disabled={isSubmitting}
                 />
                 <div>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm font-medium text-[var(--text-strong)]">
                     Are you sure you want to {actionVerbLower} this user?
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
                     {isDeactivating
                       ? 'I understand that this user will be unable to access the system until reactivated.'
                       : 'I understand that this user will regain access to the system with their assigned role permissions.'}

@@ -6,12 +6,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ChevronDown } from 'lucide-react';
 
 const selectVariants = cva(
-  'appearance-none w-full rounded-xl border bg-white text-sm text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 pr-10',
+  'appearance-none w-full rounded-xl border bg-[var(--surface-card)] text-sm text-[var(--text-strong)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--surface-sunken)] pr-10',
   {
     variants: {
       variant: {
-        default: 'border-gray-300 hover:border-gray-400 focus:border-transparent',
-        error: 'border-red-400 focus:ring-red-400 bg-red-50/30',
+        default: 'border-[var(--border-default)] hover:border-[var(--border-strong)] focus:border-transparent',
+        error: 'border-[var(--status-fail-line)] focus:ring-[var(--status-fail-solid)] bg-[var(--status-fail-bg)]',
       },
       size: {
         default: 'h-10 px-3.5 py-2',
@@ -58,7 +58,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ))}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-subtle)]"
           aria-hidden="true"
         />
       </div>

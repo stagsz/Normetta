@@ -97,7 +97,7 @@ function getFileIcon(mimeType: string, fileName: string) {
     case 'webp':
       return <ImageIcon className="h-5 w-5 text-purple-500" />;
     default:
-      return <File className="h-5 w-5 text-gray-500" />;
+      return <File className="h-5 w-5 text-[var(--text-muted)]" />;
   }
 }
 
@@ -168,12 +168,12 @@ export function EvidenceList({
         {[1, 2].map((i) => (
           <div
             key={i}
-            className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50 animate-pulse"
+            className="flex items-center gap-3 p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-sunken)] animate-pulse"
           >
-            <div className="h-10 w-10 bg-gray-200 rounded" />
+            <div className="h-10 w-10 bg-[var(--stone-200)] rounded" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-1/3" />
-              <div className="h-3 bg-gray-200 rounded w-1/4" />
+              <div className="h-4 bg-[var(--stone-200)] rounded w-1/3" />
+              <div className="h-3 bg-[var(--stone-200)] rounded w-1/4" />
             </div>
           </div>
         ))}
@@ -184,8 +184,8 @@ export function EvidenceList({
   if (evidence.length === 0) {
     return (
       <div className={clsx('text-center py-6', className)}>
-        <File className="mx-auto h-8 w-8 text-gray-300" />
-        <p className="mt-2 text-sm text-gray-500">No evidence uploaded</p>
+        <File className="mx-auto h-8 w-8 text-[var(--text-subtle)]" />
+        <p className="mt-2 text-sm text-[var(--text-muted)]">No evidence uploaded</p>
       </div>
     );
   }
@@ -196,23 +196,23 @@ export function EvidenceList({
         <div
           key={item.id}
           className={clsx(
-            'flex items-center gap-3 p-3 rounded-xl border bg-white transition-colors',
+            'flex items-center gap-3 p-3 rounded-xl border bg-[var(--surface-card)] transition-colors',
             disabled
-              ? 'border-gray-100 opacity-60'
-              : 'border-gray-200 hover:border-gray-300'
+              ? 'border-[var(--border-subtle)] opacity-60'
+              : 'border-[var(--border-subtle)] hover:border-[var(--border-default)]'
           )}
         >
           {/* File Icon */}
-          <div className="flex-shrink-0 p-2 bg-gray-50 rounded">
+          <div className="flex-shrink-0 p-2 bg-[var(--surface-sunken)] rounded">
             {getFileIcon(item.mimeType, item.fileName)}
           </div>
 
           {/* File Info */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-[var(--text-strong)] truncate">
               {item.fileName}
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
+            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
               <span>{getFileTypeLabel(item.mimeType, item.fileName)}</span>
               <span>•</span>
               <span>{formatFileSize(item.fileSize)}</span>
@@ -220,7 +220,7 @@ export function EvidenceList({
               <span>{formatDate(item.uploadedAt)}</span>
             </div>
             {item.description && (
-              <p className="text-xs text-gray-600 mt-1 truncate">
+              <p className="text-xs text-[var(--text-muted)] mt-1 truncate">
                 {item.description}
               </p>
             )}

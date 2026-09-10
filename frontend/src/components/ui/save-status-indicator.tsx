@@ -25,8 +25,8 @@ const statusConfig: Record<
   idle: {
     icon: Cloud,
     label: 'All changes saved',
-    iconClass: 'text-gray-400',
-    textClass: 'text-gray-500',
+    iconClass: 'text-[var(--text-subtle)]',
+    textClass: 'text-[var(--text-muted)]',
   },
   unsaved: {
     icon: CloudOff,
@@ -86,7 +86,7 @@ export function SaveStatusIndicator({
       <span className={config.textClass}>
         {displayLabel}
         {showLastSaved && (
-          <span className="text-gray-400 ml-1">
+          <span className="text-[var(--text-subtle)] ml-1">
             ({formatDistanceToNow(lastSaved, { addSuffix: true })})
           </span>
         )}
@@ -109,7 +109,7 @@ export function SaveStatusBadge({ status, className }: SaveStatusBadgeProps) {
     <div
       className={clsx(
         'inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium',
-        status === 'idle' && 'bg-gray-100 text-gray-600',
+        status === 'idle' && 'bg-[var(--surface-sunken)] text-[var(--text-muted)]',
         status === 'unsaved' && 'bg-amber-100 text-amber-700',
         status === 'saving' && 'bg-blue-50 text-blue-700',
         status === 'saved' && 'bg-green-50 text-green-700',

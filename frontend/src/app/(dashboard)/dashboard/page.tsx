@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CircularProgress } from '@/components/ui/progress-bar';
+import { CircularProgress, ProgressBar } from '@/components/ui/progress-bar';
 import {
   ComplianceBarChart,
   ComplianceRadarChart,
@@ -59,109 +59,132 @@ export default function DashboardPage() {
   const overviewData = overview.data;
   const complianceScore = overviewData?.complianceScore || 0;
   const ncrCounts = overviewData?.ncrCounts;
-  const majorCount = ncrCounts?.bySeverity?.MAJOR || 0;
-  const minorCount = ncrCounts?.bySeverity?.MINOR || 0;
   const openNCRs = ncrCounts?.open || 0;
+  const closedNCRs = ncrCounts?.closed || 0;
+
+  const statCards = [
+    { label: 'Overall Compliance', value: `${complianceScore.toFixed(1)}%`, trend: trendInfo },
+    { label: 'Total Assessments', value: overviewData?.assessmentCounts?.total || 0 },
+    { label: 'Active Non-Conformities', value: openNCRs },
+    { label: 'NCRs Closed', value: closedNCRs },
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-5xl font-display font-extrabold tracking-tight text-navy-900">
-            Dashboard
-          </h1>
-          <p className="text-base font-medium text-muted-foreground mt-1">
-            ISO 9001:2015 Quality Management System Overview
-          </p>
-        </div>
-        <Link href="/assessments/new">
-          <Button className="h-11 px-6 text-sm font-semibold rounded-full">
-            <ClipboardCheck className="mr-2 h-4 w-4" />
-            New Assessment
-          </Button>
-        </Link>
-      </div>
+      {/* Hero: Score gauge + system overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-5">
+        {/* Left — readiness card */}
+        <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
+          <CardContent className="flex flex-col items-center gap-4 p-6">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">
+              Audit readiness
+            </span>
+            <CircularProgress value={complianceScore} size={156} strokeWidth={14} colorScheme="compliance" />
+            <div className="flex items-center gap-2 text-sm font-semibold text-[var(--status-pass-fg)]">
+              {trendInfo.direction === 'UP' ? (
+                <TrendingUp className="h-4 w-4" />
+              ) : (
+                <TrendingDown className="h-4 w-4" />
+              )}
+              <span>+{trendInfo.change} pts since last review</span>
+            </div>
+            <Link href="/assessments/new" className="w-full">
+              <Button className="w-full" iconLeft={<ClipboardCheck className="h-4 w-4" />}>
+                Continue self-assessment
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {/* Overall Compliance */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
-          <CardContent className="flex items-center justify-between p-5">
-            <div>
-              <p className="text-sm font-semibold text-slate-500">Overall Compliance</p>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-5xl font-extrabold tracking-tight text-navy-900">
+        {/* Right — stats overview */}
+        <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base font-semibold text-[var(--text-strong)]">
+              This management system at a glance
+            </CardTitle>
+            <p className="text-xs text-[var(--text-muted)]">
+              {overviewData?.assessmentCounts?.total || 0} assessments across ISO 9001:2015
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {statCards.map((item) => (
+                <div key={item.label} className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <div className="text-2xl font-bold text-[var(--text-strong)] leading-none tracking-tight">
+                      {item.value}
+                    </div>
+                    <div className="text-xs text-[var(--text-muted)] mt-1">{item.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Conformity breakdown */}
+            <div className="mt-5 pt-5 border-t border-[var(--border-subtle)]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-[var(--text-body)]">Overall conformity</span>
+                <span className="text-sm font-bold text-[var(--text-strong)]">
                   {complianceScore.toFixed(1)}%
                 </span>
-                {trendInfo.change > 0 && (
-                  <span
-                    className={`text-sm font-semibold ${
-                      trendInfo.direction === 'UP' ? 'text-emerald-600' : 'text-red-600'
-                    }`}
-                  >
-                    {trendInfo.direction === 'UP' ? (
-                      <TrendingUp className="inline h-4 w-4 mr-0.5" />
-                    ) : (
-                      <TrendingDown className="inline h-4 w-4 mr-0.5" />
-                    )}
-                    {trendInfo.change}%
-                  </span>
-                )}
               </div>
-            </div>
-            <CircularProgress value={complianceScore} size={64} colorScheme="compliance" />
-          </CardContent>
-        </Card>
-
-        {/* Assessments */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
-          <CardContent className="flex items-center justify-between p-5">
-            <div>
-              <p className="text-sm font-semibold text-slate-500">Total Assessments</p>
-              <p className="mt-2 text-5xl font-extrabold tracking-tight text-navy-900">
-                {overviewData?.assessmentCounts?.total || 0}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-sky-50 p-3">
-              <ClipboardCheck className="h-7 w-7 text-sky-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Non-Conformities */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
-          <CardContent className="flex items-center justify-between p-5">
-            <div>
-              <p className="text-sm font-semibold text-slate-500">Active Non-Conformities</p>
-              <p className="mt-2 text-5xl font-extrabold tracking-tight text-navy-900">{openNCRs}</p>
-            </div>
-            <div className="rounded-2xl bg-amber-50 p-3">
-              <AlertTriangle className="h-7 w-7 text-amber-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Closed NCRs */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
-          <CardContent className="flex items-center justify-between p-5">
-            <div>
-              <p className="text-sm font-semibold text-slate-500">NCRs Closed</p>
-              <p className="mt-2 text-5xl font-extrabold tracking-tight text-navy-900">
-                {ncrCounts?.closed || 0}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-emerald-50 p-3">
-              <CheckCircle className="h-7 w-7 text-emerald-600" />
+              <ProgressBar
+                value={complianceScore}
+                showPercentage={false}
+                size="lg"
+                colorScheme="compliance"
+              />
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Assessment Status Breakdown */}
+      {overviewData?.assessmentCounts && (
+        <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
+          <CardHeader>
+            <CardTitle>Assessment Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {Object.entries(overviewData.assessmentCounts.byStatus).map(([status, count]) => (
+                <div key={status} className="p-4 bg-[var(--surface-sunken)] rounded-xl text-center border border-[var(--border-subtle)]">
+                  <p className="text-2xl font-bold text-[var(--text-strong)]">{count}</p>
+                  <p className="text-sm text-[var(--text-muted)] capitalize mt-1">
+                    {status.toLowerCase().replace('_', ' ')}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* NCR Status Breakdown */}
+      {overviewData?.ncrCounts && overviewData.ncrCounts.total > 0 && (
+        <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
+          <CardHeader>
+            <CardTitle>Non-Conformity Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Object.entries(overviewData.ncrCounts.byStatus).map(([status, count]) => (
+                <div key={status} className="p-4 bg-[var(--surface-sunken)] rounded-xl text-center border border-[var(--border-subtle)]">
+                  <p className="text-2xl font-bold text-[var(--text-strong)]">{count}</p>
+                  <p className="text-sm text-[var(--text-muted)] capitalize mt-1">
+                    {status.toLowerCase().replace('_', ' ')}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Charts Row */}
       {sectionScores.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <Card>
+          <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
             <CardHeader>
               <CardTitle>Compliance by Section</CardTitle>
             </CardHeader>
@@ -170,7 +193,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
             <CardHeader>
               <CardTitle>Compliance Overview</CardTitle>
             </CardHeader>
@@ -183,54 +206,12 @@ export default function DashboardPage() {
 
       {/* Trend Chart */}
       {trendData.length > 0 && (
-        <Card>
+        <Card className="border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]">
           <CardHeader>
             <CardTitle>Compliance Trend (Last 6 Months)</CardTitle>
           </CardHeader>
           <CardContent>
             <TrendLineChart data={trendData} height={250} />
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Assessment Status Breakdown */}
-      {overviewData?.assessmentCounts && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Assessment Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {Object.entries(overviewData.assessmentCounts.byStatus).map(([status, count]) => (
-                <div key={status} className="p-4 bg-gray-50 rounded-xl text-center border border-gray-100">
-                  <p className="text-2xl font-bold text-gray-900">{count}</p>
-                  <p className="text-sm text-gray-500 capitalize mt-1">
-                    {status.toLowerCase().replace('_', ' ')}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* NCR Status Breakdown */}
-      {overviewData?.ncrCounts && overviewData.ncrCounts.total > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Non-Conformity Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(overviewData.ncrCounts.byStatus).map(([status, count]) => (
-                <div key={status} className="p-4 bg-gray-50 rounded-xl text-center border border-gray-100">
-                  <p className="text-2xl font-bold text-gray-900">{count}</p>
-                  <p className="text-sm text-gray-500 capitalize mt-1">
-                    {status.toLowerCase().replace('_', ' ')}
-                  </p>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       )}
