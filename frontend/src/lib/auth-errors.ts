@@ -170,8 +170,14 @@ export function getAuthErrorInfo(error: unknown): AuthErrorInfo {
     return BACKEND_ERROR_MESSAGES[backendMessage];
   }
 
-  // Fall back to status-based error info
   const status = err.response?.status;
+
+  // Rate limits: the server message carries the retry window
+  if (status === 429 && backendMessage) {
+    return { message: backendMessage, title: 'Rate Limited' };
+  }
+
+  // Fall back to status-based error info
   if (status) {
     return getErrorByStatus(status);
   }
