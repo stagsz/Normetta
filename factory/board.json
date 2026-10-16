@@ -1,0 +1,40 @@
+{
+  "jobs": [
+    {
+      "id": "001-login-rate-limit",
+      "title": "Rate-limit POST /auth/login (5 attempts / 15 min per IP + email)",
+      "branch": "factory/001-login-rate-limit",
+      "stage": "approve",
+      "round": 1,
+      "reviews": {
+        "security": "PASS",
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+      },
+      "files": [
+        "spec.md",
+        "build.md",
+        "round-1/review-security.md",
+        "round-1/review-ux.md",
+        "round-1/review-ui.md",
+        "round-1/review-code.md",
+        "decision.md"
+      ],
+      "worktree": "../Normetta-wt/001-login-rate-limit"
+    },
+    {
+      "id": "002-ncr-severity-filter",
+      "title": "NCR list: filter by severity (MINOR | MAJOR | CRITICAL)",
+      "branch": "factory/002-ncr-severity-filter",
+      "stage": "build",
+      "round": 0,
+      "reviews": {},
+      "files": [
+        "spec.md",
+        "build.md"
+      ],
+      "worktree": "../Normetta-wt/002-ncr-severity-filter"
+    }
+  ]
+}
