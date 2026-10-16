@@ -1,15 +1,19 @@
 import { Router } from 'express';
 import { authController } from '../controllers/authController';
-import { withAuth, withValidation, asyncHandler } from '../proxy';
+import { withAuth, withValidation, asyncHandler, createLoginRateLimiter } from '../proxy';
 import { userSchemas } from '../proxy/validationProxy';
 
 const router = Router();
+
+// Login attempt limiter (disabled in test environment, same rule as the global limiter)
+const loginLimiters = process.env.NODE_ENV !== 'test' ? [createLoginRateLimiter()] : [];
 
 // Public routes
 // Note: there is deliberately no POST /register here. Account creation goes
 // through /api/onboarding (Turnstile-verified trial signup) only.
 router.post(
   '/login',
+  ...loginLimiters,
   withValidation({ body: userSchemas.login }, asyncHandler(authController.login.bind(authController)))
 );
 
