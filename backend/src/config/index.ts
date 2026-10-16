@@ -59,6 +59,12 @@ export const config = {
     maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
   },
 
+  // Login rate limiting (per client IP + email)
+  loginRateLimit: {
+    windowMs: parseInt(process.env.LOGIN_RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 minutes
+    maxAttempts: parseInt(process.env.LOGIN_RATE_LIMIT_MAX || '5', 10),
+  },
+
   // Encryption
   encryptionKey: process.env.ENCRYPTION_KEY || '',
 
