@@ -4,4 +4,4 @@
 
 - [x] Rate-limit POST /auth/login (5 attempts / 15 min per IP + email)
 - [x] NCR list: filter by severity (MINOR | MAJOR | CRITICAL)
-- [ ] Empty state on /audits when the organization has no audits
+- [x] Empty state on /audits when the organization has no audits
